@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { Context } from "../store/appContext";
+import { DeleteModal } from "../dashboardComponent/deleteModal";
 
 export class Carddashboard extends React.Component {
 	render() {
@@ -25,12 +26,17 @@ export class Carddashboard extends React.Component {
 											className="btn btn-primary"
 											data-toggle="modal"
 											data-target="#exampleModalScrollable"
-											onClick={() => actions.editCardModal(item)}>
+											onClick={() => actions.setEditCard(item, i)}>
 											Editar
 										</a>
-										<a href="#" className="btn btn-primary">
+										<button
+											type="button"
+											className="btn btn-primary"
+											data-toggle="modal"
+											data-target="#deleteAlert"
+											onClick={e => actions.deleteCard(i)}>
 											Eliminar
-										</a>
+										</button>
 									</div>
 								);
 							});

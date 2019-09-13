@@ -45,19 +45,25 @@ export class Modaldashboard extends React.Component {
 								<FormModalDashboard />
 							</div>
 							<div className="modal-footer">
-								<button type="button" className="btn btn-secondary" data-dismiss="modal">
-									Cerrar
-								</button>
 								<Context.Consumer>
 									{({ store, actions }) => {
 										return (
-											<button
-												type="button"
-												className="btn btn-primary"
-												data-dismiss="modal"
-												onClick={e => actions.setCard(e)}>
-												Guardar
-											</button>
+											<div>
+												<button
+													type="button"
+													className="btn btn-secondary"
+													data-dismiss="modal"
+													onClick={e => actions.deleteForm(e)}>
+													Cerrar
+												</button>
+												<button
+													type="button"
+													className="btn btn-primary"
+													data-dismiss="modal"
+													onClick={e => actions.setCard(e)}>
+													Guardar
+												</button>
+											</div>
 										);
 									}}
 								</Context.Consumer>
