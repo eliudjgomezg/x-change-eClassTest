@@ -34,7 +34,8 @@ export class Carddashboard extends React.Component {
 											type="button"
 											className="btn btn-primary"
 											data-toggle="modal"
-											data-target="#exampleModal">
+											data-target="#exampleModal"
+											onClick={e => actions.indextodeleteClassroon(i)}>
 											Eliminar
 										</button>
 
@@ -49,7 +50,7 @@ export class Carddashboard extends React.Component {
 												<div className="modal-content">
 													<div className="modal-header">
 														<h5 className="modal-title" id="exampleModalLabel">
-															Modal title
+															ALERTA!!!
 														</h5>
 														<button
 															type="button"
@@ -72,7 +73,7 @@ export class Carddashboard extends React.Component {
 														<button
 															type="button"
 															className="btn btn-primary"
-															onClick={e => actions.deleteCard(i)}
+															onClick={e => actions.deleteCard()}
 															data-dismiss="modal">
 															Eliminar
 														</button>

@@ -11,6 +11,7 @@ const getState = ({ getStore, setStore }) => {
 			horarioDesde: "",
 			horarioHasta: "",
 			index: 0,
+			index2: "",
 			disabledButton: "",
 			cardEdited: true,
 			getName: "",
@@ -108,13 +109,20 @@ const getState = ({ getStore, setStore }) => {
 					horarioHasta: ""
 				});
 			},
-			deleteCard: index => {
+			indextodeleteClassroon: index => {
+				setStore({
+					index: index
+				});
+			},
+
+			deleteCard: () => {
 				//Boton eliminar: Borra el aula seleccionada
 				const store = getStore();
 				let deleteCard = store.cardArray;
-				deleteCard.splice(index, 1);
+				deleteCard.splice(store.index, 1);
 				setStore({
-					cardArray: deleteCard
+					cardArray: deleteCard,
+					index: ""
 				});
 			}
 		}
