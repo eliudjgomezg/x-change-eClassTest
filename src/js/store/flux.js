@@ -11,21 +11,25 @@ const getState = ({ getStore, setStore }) => {
 			horarioDesde: "",
 			horarioHasta: "",
 			index: 0,
+			disabledButton: "",
 			cardEdited: true,
+			getName: "",
 			cardArray: []
 		},
 
 		actions: {
 			getData: e => {
-				//get the store
+				//Toma la data del Input y la coloca en las variables del store
 				const store = getStore();
 				const { name, value } = e.target;
 				setStore({ [name]: value });
 			},
 
-			setEditCard: (item, index) => {
+			setEditCard: (item, itemPosition) => {
+				// Boton de editar: Toma el valos del Item correspondiente
+				// del map en el form para ser editado.
 				setStore({
-					index: index,
+					index: itemPosition,
 					cardEdited: false,
 					nombreDeSala: item.nombreDeSala,
 					rangoDesde: item.rangoDesde,
@@ -39,7 +43,8 @@ const getState = ({ getStore, setStore }) => {
 
 			setCard: e => {
 				const store = getStore();
-
+				//Boton de guardar: Guarda una nueva aula en un card. Puede diferenciar entre editar
+				// un aula y guardar una nueva. Tamnien, verifica que los campos estes escritos
 				if (store.cardEdited) {
 					let data = {
 						nombreDeSala: store.nombreDeSala,
@@ -93,6 +98,7 @@ const getState = ({ getStore, setStore }) => {
 
 			deleteForm: e => {
 				setStore({
+					//Boton cerrar: Limpia los input del form
 					nombreDeSala: "",
 					rangoDesde: "",
 					rangoHasta: "",
@@ -103,6 +109,7 @@ const getState = ({ getStore, setStore }) => {
 				});
 			},
 			deleteCard: index => {
+				//Boton eliminar: Borra el aula seleccionada
 				const store = getStore();
 				let deleteCard = store.cardArray;
 				deleteCard.splice(index, 1);
