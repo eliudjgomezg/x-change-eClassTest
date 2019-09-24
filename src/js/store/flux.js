@@ -15,7 +15,10 @@ const getState = ({ getStore, setStore }) => {
 			disabledButton: "",
 			cardEdited: true,
 			getName: "",
-			cardArray: []
+			addNovedades: "",
+
+			cardArray: [],
+			novedadesArray: []
 		},
 
 		actions: {
@@ -43,6 +46,7 @@ const getState = ({ getStore, setStore }) => {
 			},
 
 			setCard: e => {
+				e.preventDefault();
 				const store = getStore();
 				//Boton de guardar: Guarda una nueva aula en un card. Puede diferenciar entre editar
 				// un aula y guardar una nueva. Tamnien, verifica que los campos estes escritos
@@ -123,6 +127,15 @@ const getState = ({ getStore, setStore }) => {
 				setStore({
 					cardArray: deleteCard,
 					index: ""
+				});
+			},
+
+			setNovedad: e => {
+				const store = getStore();
+				let newAddNovedad = store.novedadesArray.concat(store.addNovedades);
+				setStore({
+					novedadesArray: newAddNovedad,
+					addNovedades: ""
 				});
 			}
 		}

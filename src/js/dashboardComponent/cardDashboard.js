@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import { Context } from "../store/appContext";
-import { DeleteModal } from "../dashboardComponent/deleteModal";
 
 export class Carddashboard extends React.Component {
 	render() {

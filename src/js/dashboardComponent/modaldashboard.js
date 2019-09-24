@@ -37,37 +37,35 @@ export class Modaldashboard extends React.Component {
 									aria-hidden="true">
 									<div className="modal-dialog modal-dialog-scrollable" role="document">
 										<div className="modal-content">
-											<div className="modal-header">
-												<h5 className="modal-title" id="exampleModalScrollableTitle">
-													Agregar Sala
-												</h5>
-												<button
-													type="button"
-													className="close"
-													data-dismiss="modal"
-													aria-label="Close">
-													<span aria-hidden="true">&times;</span>
-												</button>
-											</div>
-											<div className="modal-body">
-												<FormModalDashboard />
-											</div>
-											<div className="modal-footer">
-												<button
-													type="button"
-													className="btn btn-secondary"
-													data-dismiss="modal"
-													onClick={e => actions.deleteForm(e)}>
-													Cerrar
-												</button>
-												<button
-													type="button"
-													className="btn btn-primary"
-													data-dismiss="modal"
-													onClick={e => actions.setCard(e)}>
-													Guardar
-												</button>
-											</div>
+											<form onSubmit={e => actions.setCard(e)}>
+												<div className="modal-header">
+													<h5 className="modal-title" id="exampleModalScrollableTitle">
+														Agregar Sala
+													</h5>
+													<button
+														type="button"
+														className="close"
+														data-dismiss="modal"
+														aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div className="modal-body">
+													<FormModalDashboard />
+												</div>
+												<div className="modal-footer">
+													<button
+														type="button"
+														className="btn btn-secondary"
+														data-dismiss="modal"
+														onClick={e => actions.deleteForm(e)}>
+														Cerrar
+													</button>
+													<button type="submit" className="btn btn-primary">
+														Guardar
+													</button>
+												</div>
+											</form>
 										</div>
 									</div>
 								</div>
