@@ -44,31 +44,33 @@ export class ModalNovedades extends React.Component {
 												<span aria-hidden="true">&times;</span>
 											</button>
 										</div>
-										<div className="modal-body">
-											<div className="form-group">
-												<label HtmlFor="exampleFormControlTextarea1">Ingresa Novedad</label>
-												<textarea
-													className="form-control"
-													id="exampleFormControlTextarea1"
-													rows="3"
-													onChange={e => actions.getData(e)}
-													name="addNovedades"
-													value={store.addNovedades}
-												/>
+										<form onSubmit={e => actions.setNovedad(e)}>
+											<div className="modal-body">
+												<div className="form-group">
+													<label htmlFor="exampleFormControlTextarea1">Ingresa Novedad</label>
+													<textarea
+														className="form-control"
+														id="exampleFormControlTextarea1"
+														rows="3"
+														onChange={e => actions.getData(e)}
+														name="addNovedades"
+														value={store.addNovedades}
+														required
+													/>
+												</div>
 											</div>
-										</div>
-										<div className="modal-footer">
-											<button type="button" className="btn btn-secondary" data-dismiss="modal">
-												Cerrar
-											</button>
-											<button
-												type="button"
-												className="btn btn-primary"
-												data-dismiss="modal"
-												onClick={e => actions.setNovedad(e)}>
-												Guardar
-											</button>
-										</div>
+											<div className="modal-footer">
+												<button
+													type="button"
+													className="btn btn-secondary"
+													data-dismiss="modal">
+													Cerrar
+												</button>
+												<button type="submit" className="btn btn-primary">
+													Guardar
+												</button>
+											</div>
+										</form>
 									</div>
 								</div>
 							</div>

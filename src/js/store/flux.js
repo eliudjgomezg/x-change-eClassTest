@@ -131,6 +131,8 @@ const getState = ({ getStore, setStore }) => {
 			},
 
 			setNovedad: e => {
+				//Agrega la novedad al arreglo addNovedades
+				e.preventDefault();
 				const store = getStore();
 				let newAddNovedad = store.novedadesArray.concat(store.addNovedades);
 				setStore({
