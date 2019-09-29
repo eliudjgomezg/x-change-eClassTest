@@ -27,7 +27,7 @@ export class NovedadesList extends React.Component {
 														data-target={"#collapsePanel" + i}
 														aria-expanded="false"
 														aria-controls="collapseThree">
-														Collapsible Group Item #3
+														Profesor: Aula: Fecha:
 													</button>
 												</h2>
 											</div>

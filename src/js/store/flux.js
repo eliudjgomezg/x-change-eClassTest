@@ -15,10 +15,22 @@ const getState = ({ getStore, setStore }) => {
 			disabledButton: "",
 			cardEdited: true,
 			getName: "",
-			addNovedades: "",
-
 			cardArray: [],
-			novedadesArray: []
+
+			addNovedades: "",
+			novedadesArray: [],
+
+			nombreApoderado: "",
+			apellidoApoderado: "",
+			rutApoderado: "",
+			emailApoderado: "",
+			telefonoApoderado: "",
+			apoderadoArray: [],
+
+			nombreHijo: "",
+			ApellidoHijo: "",
+			fnacimientoHijo: "",
+			observacionesHijo: ""
 		},
 
 		actions: {
@@ -138,6 +150,77 @@ const getState = ({ getStore, setStore }) => {
 				setStore({
 					novedadesArray: newAddNovedad,
 					addNovedades: ""
+				});
+			},
+
+			setApoderado: e => {
+				e.preventDefault();
+				const store = getStore();
+				if (store.cardEdited) {
+					const store = getStore();
+					let data = {
+						nombreApoderado: store.nombreApoderado,
+						apellidoApoderado: store.apellidoApoderado,
+						rutApoderado: store.rutApoderado,
+						emailApoderado: store.emailApoderado,
+						telefonoApoderado: store.telefonoApoderado
+					};
+
+					let newApoderado = store.apoderadoArray.concat(data);
+
+					setStore({
+						apoderadoArray: newApoderado,
+						nombreApoderado: "",
+						apellidoApoderado: "",
+						rutApoderado: "",
+						emailApoderado: "",
+						telefonoApoderado: ""
+					});
+				} else {
+					let dataEdited = {
+						nombreApoderado: store.nombreApoderado,
+						apellidoApoderado: store.apellidoApoderado,
+						rutApoderado: store.rutApoderado,
+						emailApoderado: store.emailApoderado,
+						telefonoApoderado: store.telefonoApoderado
+					};
+					let newDataEdited = store.apoderadoArray;
+					newDataEdited[store.index] = dataEdited;
+
+					setStore({
+						apoderadoArray: newDataEdited,
+						index: 0,
+						cardEdited: true,
+						nombreApoderado: "",
+						apellidoApoderado: "",
+						rutApoderado: "",
+						emailApoderado: "",
+						telefonoApoderado: ""
+					});
+				}
+			},
+
+			EditApoderado: (item, itemPosition) => {
+				// Boton de editar: Toma el valos del Item correspondiente
+				// del map en el form para ser editado.
+				setStore({
+					index: itemPosition,
+					cardEdited: false,
+					nombreApoderado: item.nombreApoderado,
+					apellidoApoderado: item.apellidoApoderado,
+					rutApoderado: item.rutApoderado,
+					emailApoderado: item.emailApoderado,
+					telefonoApoderado: item.telefonoApoderado
+				});
+			},
+			deleteAddApoderado: e => {
+				setStore({
+					nombreApoderado: "",
+					apellidoApoderado: "",
+					rutApoderado: "",
+					emailApoderado: "",
+					telefonoApoderado: "",
+					cardEdited: true
 				});
 			}
 		}
