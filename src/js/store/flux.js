@@ -25,12 +25,18 @@ const getState = ({ getStore, setStore }) => {
 			rutApoderado: "",
 			emailApoderado: "",
 			telefonoApoderado: "",
+			checkApoderado: "",
 			apoderadoArray: [],
 
 			nombreHijo: "",
-			ApellidoHijo: "",
+			apellidoHijo: "",
 			fnacimientoHijo: "",
-			observacionesHijo: ""
+			observacionesHijo: "",
+			checkHijo: "",
+			hijoArray: [],
+
+			familiaArray: [],
+			lastNameFamilia: ""
 		},
 
 		actions: {
@@ -165,6 +171,7 @@ const getState = ({ getStore, setStore }) => {
 						emailApoderado: store.emailApoderado,
 						telefonoApoderado: store.telefonoApoderado
 					};
+					let checkApoderado = store.nombreApoderado;
 
 					let newApoderado = store.apoderadoArray.concat(data);
 
@@ -174,7 +181,8 @@ const getState = ({ getStore, setStore }) => {
 						apellidoApoderado: "",
 						rutApoderado: "",
 						emailApoderado: "",
-						telefonoApoderado: ""
+						telefonoApoderado: "",
+						checkApoderado: checkApoderado
 					});
 				} else {
 					let dataEdited = {
@@ -184,6 +192,8 @@ const getState = ({ getStore, setStore }) => {
 						emailApoderado: store.emailApoderado,
 						telefonoApoderado: store.telefonoApoderado
 					};
+					let checkApoderado = store.nombreApoderado;
+
 					let newDataEdited = store.apoderadoArray;
 					newDataEdited[store.index] = dataEdited;
 
@@ -195,7 +205,8 @@ const getState = ({ getStore, setStore }) => {
 						apellidoApoderado: "",
 						rutApoderado: "",
 						emailApoderado: "",
-						telefonoApoderado: ""
+						telefonoApoderado: "",
+						checkApoderado: checkApoderado
 					});
 				}
 			},
@@ -222,9 +233,161 @@ const getState = ({ getStore, setStore }) => {
 					telefonoApoderado: "",
 					cardEdited: true
 				});
+			},
+			deleteApoderado: index => {
+				//Boton eliminar: Borra el aula seleccionada
+				const store = getStore();
+				let deleteCard = store.apoderadoArray;
+				deleteCard.splice(index, 1);
+				setStore({
+					cardArray: deleteCard,
+					index: ""
+				});
+			},
+			deleteAddHijo: e => {
+				setStore({
+					nombreHijo: "",
+					apellidoHijo: "",
+					fnacimientoHijo: "",
+					observacionesHijo: "",
+					cardEdited: true
+				});
+			},
+			setHijo: e => {
+				e.preventDefault();
+				const store = getStore();
+				if (store.cardEdited) {
+					const store = getStore();
+					let data = {
+						nombreHijo: store.nombreHijo,
+						apellidoHijo: store.apellidoHijo,
+						fnacimientoHijo: store.fnacimientoHijo,
+						observacionesHijo: store.observacionesHijo
+					};
+					let checkHijo = store.nombreHijo;
+
+					let newHijo = store.hijoArray.concat(data);
+
+					setStore({
+						hijoArray: newHijo,
+						nombreHijo: "",
+						apellidoHijo: "",
+						fnacimientoHijo: "",
+						observacionesHijo: "",
+						checkHijo: checkHijo
+					});
+				} else {
+					let dataEdited = {
+						nombreHijo: store.nombreHijo,
+						apellidoHijo: store.apellidoHijo,
+						fnacimientoHijo: store.fnacimientoHijo,
+						observacionesHijo: store.observacionesHijo
+					};
+					let checkHijo = store.nombreHijo;
+					let newDataEdited = store.hijoArray;
+					newDataEdited[store.index] = dataEdited;
+
+					setStore({
+						apoderadoArray: newDataEdited,
+						index: 0,
+						cardEdited: true,
+						nombreHijo: "",
+						apellidoHijo: "",
+						fnacimientoHijo: "",
+						observacionesHijo: "",
+						checkHijo: checkHijo
+					});
+				}
+			},
+			editHijo: (item, itemPosition) => {
+				// Boton de editar: Toma el valos del Item correspondiente
+				// del map en el form para ser editado.
+				setStore({
+					index: itemPosition,
+					cardEdited: false,
+					nombreHijo: item.nombreHijo,
+					apellidoHijo: item.apellidoHijo,
+					fnacimientoHijo: item.fnacimientoHijo,
+					observacionesHijo: item.observacionesHijo
+				});
+			},
+			deleteHijo: index => {
+				//Boton eliminar: Borra el aula seleccionada
+				const store = getStore();
+				let deleteCard = store.hijoArray;
+				deleteCard.splice(index, 1);
+				setStore({
+					hijoArray: deleteCard,
+					index: ""
+				});
+			},
+			deleteAddFamilia: e => {
+				const store = getStore();
+				setStore({
+					nombreApoderado: "",
+					apellidoApoderado: "",
+					rutApoderado: "",
+					emailApoderado: "",
+					telefonoApoderado: "",
+					nombreHijo: "",
+					apellidoHijo: "",
+					fnacimientoHijo: "",
+					observacionesHijo: "",
+					checkApoderado: "",
+					checkHijo: "",
+					lastNameFamilia: ""
+				});
+			},
+			setFamilia: e => {
+				const store = getStore();
+				e.preventDefault();
+				if (store.checkApoderado != undefined && store.checkHijo != undefined) {
+					if (store.cardEdited) {
+						let newFamilia = store.familiaArray.concat(store.lastNameFamilia);
+
+						setStore({
+							familiaArray: newFamilia,
+							nombreApoderado: "",
+							apellidoApoderado: "",
+							rutApoderado: "",
+							emailApoderado: "",
+							telefonoApoderado: "",
+							nombreHijo: "",
+							apellidoHijo: "",
+							fnacimientoHijo: "",
+							observacionesHijo: "",
+							checkApoderado: "",
+							checkHijo: "",
+							lastNameFamilia: ""
+						});
+					} else {
+						let newDataEdited = store.familiaArray;
+						newDataEdited[store.index] = dataEdited;
+
+						setStore({
+							familiaArray: newDataEdited,
+							index: 0,
+							cardEdited: true,
+							familiaArray: newFamilia,
+							nombreApoderado: "",
+							apellidoApoderado: "",
+							rutApoderado: "",
+							emailApoderado: "",
+							telefonoApoderado: "",
+							nombreHijo: "",
+							apellidoHijo: "",
+							fnacimientoHijo: "",
+							observacionesHijo: "",
+							checkApoderado: "",
+							checkHijo: "",
+							lastNameFamilia: ""
+						});
+					}
+				} else {
+					console.log("llenar todos los campos");
+				}
 			}
 		}
 	};
 };
-
 export default getState;

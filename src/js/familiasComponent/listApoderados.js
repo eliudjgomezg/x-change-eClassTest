@@ -6,13 +6,14 @@ export class ListApoderados extends React.Component {
 		return (
 			<Fragment>
 				<div className="card card-body">
+					<p>Apoderados agregados:</p>
 					<ul className="list-group">
 						<Context.Consumer>
 							{({ store, actions }) => {
 								if (store.apoderadoArray.length > 0) {
 									return store.apoderadoArray.map((item, i) => {
 										return (
-											<div className="container" key={i}>
+											<div key={i}>
 												<div className="row">
 													<div className="col-8">
 														<li className="list-group-item">
@@ -32,7 +33,14 @@ export class ListApoderados extends React.Component {
 														</button>
 													</div>
 													<div className="col-2">
-														<button type="submit">Eliminar</button>
+														<button
+															type="button"
+															className="btn btn-primarybtn btn-primary"
+															data-toggle="modal"
+															data-target="#exampleModal1"
+															onClick={() => actions.deleteApoderado(i)}>
+															Eliminar
+														</button>
 													</div>
 												</div>
 											</div>
