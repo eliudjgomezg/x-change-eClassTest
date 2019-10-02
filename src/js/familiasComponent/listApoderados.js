@@ -24,7 +24,7 @@ export class ListApoderados extends React.Component {
 														<button
 															type="button"
 															className="btn btn-primary"
-															onClick={() => actions.EditApoderado(item, i)}
+															onClick={() => actions.editApoderado(item, i)}
 															data-toggle="collapse"
 															data-target="#collapseExample"
 															aria-expanded="false"

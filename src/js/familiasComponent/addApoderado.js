@@ -19,7 +19,7 @@ export class AddApoderado extends React.Component {
 									Agregar Apoderado
 								</button>
 							</p>
-							<form onSubmit={e => actions.setApoderado(e)}>
+							<form onSubmit={e => actions.setApoderado(e)} id="addApoderado">
 								<div className="collapse" id="collapseExample">
 									<div className="card card-body">
 										<div className="container">
@@ -98,7 +98,7 @@ export class AddApoderado extends React.Component {
 											onClick={e => actions.deleteAddApoderado(e)}>
 											Cancelar
 										</button>
-										<button type="submit" className="btn btn-primary">
+										<button type="submit" className="btn btn-primary" data-target="#addApoderado">
 											Guardar
 										</button>
 									</div>

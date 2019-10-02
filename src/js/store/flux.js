@@ -27,6 +27,7 @@ const getState = ({ getStore, setStore }) => {
 			telefonoApoderado: "",
 			checkApoderado: "",
 			apoderadoArray: [],
+			apoderadoRenderArray: [],
 
 			nombreHijo: "",
 			apellidoHijo: "",
@@ -34,6 +35,7 @@ const getState = ({ getStore, setStore }) => {
 			observacionesHijo: "",
 			checkHijo: "",
 			hijoArray: [],
+			hijoRenderArray: [],
 
 			familiaArray: [],
 			lastNameFamilia: ""
@@ -174,9 +176,11 @@ const getState = ({ getStore, setStore }) => {
 					let checkApoderado = store.nombreApoderado;
 
 					let newApoderado = store.apoderadoArray.concat(data);
+					let newRenderApoderado = store.apoderadoRenderArray.concat(data);
 
 					setStore({
 						apoderadoArray: newApoderado,
+						apoderadoRenderArray: newRenderApoderado,
 						nombreApoderado: "",
 						apellidoApoderado: "",
 						rutApoderado: "",
@@ -197,8 +201,12 @@ const getState = ({ getStore, setStore }) => {
 					let newDataEdited = store.apoderadoArray;
 					newDataEdited[store.index] = dataEdited;
 
+					let newRenderDataEdited = store.apoderadoRenderArray;
+					newRenderDataEdited[store.index] = dataEdited;
+
 					setStore({
 						apoderadoArray: newDataEdited,
+						apoderadoRenderArray: newRenderDataEdited,
 						index: 0,
 						cardEdited: true,
 						nombreApoderado: "",
@@ -211,7 +219,7 @@ const getState = ({ getStore, setStore }) => {
 				}
 			},
 
-			EditApoderado: (item, itemPosition) => {
+			editApoderado: (item, itemPosition) => {
 				// Boton de editar: Toma el valos del Item correspondiente
 				// del map en el form para ser editado.
 				setStore({
@@ -237,10 +245,13 @@ const getState = ({ getStore, setStore }) => {
 			deleteApoderado: index => {
 				//Boton eliminar: Borra el aula seleccionada
 				const store = getStore();
-				let deleteCard = store.apoderadoArray;
-				deleteCard.splice(index, 1);
+				let deleteApoderado = store.apoderadoArray;
+				deleteApoderado.splice(index, 1);
+				let deleteRenderApoderado = store.apoderadoRenderArray;
+				deleteRenderApoderado.splice(index, 1);
 				setStore({
-					cardArray: deleteCard,
+					apoderadoArray: deleteApoderado,
+					apoderadoRenderArray: deleteRenderApoderado,
 					index: ""
 				});
 			},
@@ -267,9 +278,11 @@ const getState = ({ getStore, setStore }) => {
 					let checkHijo = store.nombreHijo;
 
 					let newHijo = store.hijoArray.concat(data);
+					let newRenderHijo = store.hijoRenderArray.concat(data);
 
 					setStore({
 						hijoArray: newHijo,
+						hijoRenderArray: newRenderHijo,
 						nombreHijo: "",
 						apellidoHijo: "",
 						fnacimientoHijo: "",
@@ -287,8 +300,12 @@ const getState = ({ getStore, setStore }) => {
 					let newDataEdited = store.hijoArray;
 					newDataEdited[store.index] = dataEdited;
 
+					let newRenderDataEdited = store.hijoRenderArray;
+					newRenderDataEdited[store.index] = dataEdited;
+
 					setStore({
-						apoderadoArray: newDataEdited,
+						hijoArray: newDataEdited,
+						hijoRenderArray: newRenderDataEdited,
 						index: 0,
 						cardEdited: true,
 						nombreHijo: "",
@@ -314,75 +331,47 @@ const getState = ({ getStore, setStore }) => {
 			deleteHijo: index => {
 				//Boton eliminar: Borra el aula seleccionada
 				const store = getStore();
-				let deleteCard = store.hijoArray;
-				deleteCard.splice(index, 1);
+				let deleteHijo = store.hijoArray;
+				deleteHijo.splice(index, 1);
+				let deleteRenderhijo = store.hijoRenderArray;
+				deleteRenderhijo.splice(index, 1);
 				setStore({
-					hijoArray: deleteCard,
+					hijoArray: deleteHijo,
+					hijoRenderArray: deleteRenderhijo,
 					index: ""
 				});
 			},
 			deleteAddFamilia: e => {
 				const store = getStore();
 				setStore({
-					nombreApoderado: "",
-					apellidoApoderado: "",
-					rutApoderado: "",
-					emailApoderado: "",
-					telefonoApoderado: "",
-					nombreHijo: "",
-					apellidoHijo: "",
-					fnacimientoHijo: "",
-					observacionesHijo: "",
-					checkApoderado: "",
-					checkHijo: "",
-					lastNameFamilia: ""
+					lastNameFamilia: "",
+					hijoArray: "",
+					apoderadoArray: ""
 				});
 			},
+			setFamilialastName: e => {
+				const store = getStore();
+				let data = e.target.value;
+				setStore({
+					lastNameFamilia: data
+				});
+			},
+
 			setFamilia: e => {
 				const store = getStore();
 				e.preventDefault();
-				if (store.checkApoderado != undefined && store.checkHijo != undefined) {
-					if (store.cardEdited) {
-						let newFamilia = store.familiaArray.concat(store.lastNameFamilia);
+				if (store.checkApoderado != "" && store.checkHijo != "" && store.lastNameFamilia != "") {
+					console.log("campos llenos");
+					let newFamiliaArray = store.familiaArray.concat(store.lastNameFamilia);
 
-						setStore({
-							familiaArray: newFamilia,
-							nombreApoderado: "",
-							apellidoApoderado: "",
-							rutApoderado: "",
-							emailApoderado: "",
-							telefonoApoderado: "",
-							nombreHijo: "",
-							apellidoHijo: "",
-							fnacimientoHijo: "",
-							observacionesHijo: "",
-							checkApoderado: "",
-							checkHijo: "",
-							lastNameFamilia: ""
-						});
-					} else {
-						let newDataEdited = store.familiaArray;
-						newDataEdited[store.index] = dataEdited;
-
-						setStore({
-							familiaArray: newDataEdited,
-							index: 0,
-							cardEdited: true,
-							familiaArray: newFamilia,
-							nombreApoderado: "",
-							apellidoApoderado: "",
-							rutApoderado: "",
-							emailApoderado: "",
-							telefonoApoderado: "",
-							nombreHijo: "",
-							apellidoHijo: "",
-							fnacimientoHijo: "",
-							observacionesHijo: "",
-							checkApoderado: "",
-							checkHijo: "",
-							lastNameFamilia: ""
-						});
-					}
+					setStore({
+						familiaArray: newFamiliaArray,
+						lastNameFamilia: "",
+						hijoArray: [],
+						apoderadoArray: [],
+						checkApoderado: [],
+						checkHijo: []
+					});
 				} else {
 					console.log("llenar todos los campos");
 				}
