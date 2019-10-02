@@ -348,7 +348,16 @@ const getState = ({ getStore, setStore }) => {
 				setStore({
 					lastNameFamilia: "",
 					hijoArray: "",
-					apoderadoArray: ""
+					apoderadoArray: "",
+					nombreHijo: "",
+					apellidoHijo: "",
+					fnacimientoHijo: "",
+					observacionesHijo: "",
+					nombreApoderado: "",
+					apellidoApoderado: "",
+					rutApoderado: "",
+					emailApoderado: "",
+					telefonoApoderado: ""
 				});
 			},
 			setFamilialastName: e => {
