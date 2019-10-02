@@ -38,7 +38,9 @@ const getState = ({ getStore, setStore }) => {
 			hijoRenderArray: [],
 
 			familiaArray: [],
-			lastNameFamilia: ""
+			lastNameFamilia: "",
+
+			alert: false
 		},
 
 		actions: {
@@ -353,7 +355,8 @@ const getState = ({ getStore, setStore }) => {
 				const store = getStore();
 				let data = e.target.value;
 				setStore({
-					lastNameFamilia: data
+					lastNameFamilia: data,
+					alert: false
 				});
 			},
 
@@ -370,10 +373,13 @@ const getState = ({ getStore, setStore }) => {
 						hijoArray: [],
 						apoderadoArray: [],
 						checkApoderado: [],
-						checkHijo: []
+						checkHijo: [],
+						alert: false
 					});
 				} else {
-					console.log("llenar todos los campos");
+					setStore({
+						alert: true
+					});
 				}
 			}
 		}
