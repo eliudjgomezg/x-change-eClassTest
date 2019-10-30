@@ -54,7 +54,7 @@ const getState = ({ getStore, setStore }) => {
 			rol: false,
 			dashboard: true,
 			novedades: false,
-			familias: false,
+			familiass: false,
 			roles: false,
 			estadistica: false
 		},
@@ -71,7 +71,7 @@ const getState = ({ getStore, setStore }) => {
 			},
 			familias: e => {
 				const store = getStore();
-				setStore({ dashboard: false, novedades: false, familias: true, roles: false, estadistica: false });
+				setStore({ dashboard: false, novedades: false, familiass: true, roles: false, estadistica: false });
 			},
 			roles: e => {
 				const store = getStore();
