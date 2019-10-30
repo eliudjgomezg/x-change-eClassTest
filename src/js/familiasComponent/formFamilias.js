@@ -14,27 +14,41 @@ export class FormFamilias extends React.Component {
 				{({ store, actions }) => {
 					return (
 						<Fragment>
+							<div className="form-group container">
+								<div className="row">
+									<div className="col-3">
+										<label htmlFor="exampleFormControlInput1">Apellidos de la familia:</label>
+									</div>
+									<div className="col-9">
+										<input
+											className="form-control ml-0"
+											id="exampleFormControlInput1"
+											placeholder="Ejemplo: Perez Gonzalez"
+											onChange={e => actions.setFamilialastName(e)}
+											value={store.familia.lastName}
+											name="lastNameFamilia"
+											required
+										/>
+									</div>
+								</div>
+							</div>
+							<div className="container">
+								<div className="row">
+									<div className="col-6">
+										<AddApoderado />
+										<ListApoderados />
+									</div>
+									<div className="col-6">
+										<AddHijos />
+										<ListHijos />
+									</div>
+								</div>
+							</div>
 							{!!store.alert && (
 								<div className="alert alert-danger" role="alert">
 									Llenar todos los campos.
 								</div>
 							)}
-							<div className="form-group">
-								<label htmlFor="exampleFormControlInput1">Apellidos de familia</label>
-								<input
-									className="form-control"
-									id="exampleFormControlInput1"
-									placeholder="Ejemplo: Perez Gonzalez"
-									onChange={e => actions.setFamilialastName(e)}
-									value={store.lastNameFamilia}
-									name="lastNameFamilia"
-									required
-								/>
-							</div>
-							<AddApoderado />
-							<ListApoderados />
-							<AddHijos />
-							<ListHijos />
 						</Fragment>
 					);
 				}}

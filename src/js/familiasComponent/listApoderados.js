@@ -10,14 +10,14 @@ export class ListApoderados extends React.Component {
 					<ul className="list-group">
 						<Context.Consumer>
 							{({ store, actions }) => {
-								if (store.apoderadoArray.length > 0) {
-									return store.apoderadoArray.map((item, i) => {
+								if (store.familia.apoderados.length > 0) {
+									return store.familia.apoderados.map((item, i) => {
 										return (
 											<div key={i}>
 												<div className="row">
 													<div className="col-8">
 														<li className="list-group-item">
-															{item.nombreApoderado + " " + item.apellidoApoderado}
+															{item.nombre + " " + item.apellido}
 														</li>
 													</div>
 													<div className="col-2">
@@ -36,9 +36,7 @@ export class ListApoderados extends React.Component {
 														<button
 															type="button"
 															className="btn btn-primarybtn btn-primary"
-															data-toggle="modal"
-															data-target="#exampleModal1"
-															onClick={() => actions.deleteApoderado(i)}>
+															onClick={e => actions.deleteApoderado(i)}>
 															Eliminar
 														</button>
 													</div>

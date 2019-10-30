@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Context } from "../store/appContext";
 import { FormFamilias } from "../familiasComponent/formFamilias";
+import { FamiliasList } from "../familiasComponent/familiasList";
 
 export class Familias extends React.Component {
 	render() {
@@ -15,6 +16,7 @@ export class Familias extends React.Component {
 				{({ store, actions }) => {
 					return (
 						<Fragment>
+							<FamiliasList />
 							<button
 								type="button"
 								className="btn btn-primary"
@@ -25,13 +27,13 @@ export class Familias extends React.Component {
 							</button>
 
 							<div
-								className="modal fade"
+								className="modal fade "
 								id="exampleModalScrollable"
 								tabIndex="-1"
 								role="dialog"
 								aria-labelledby="exampleModalScrollableTitle"
 								aria-hidden="true">
-								<div className="modal-dialog modal-dialog-scrollable" role="document">
+								<div className="modal-dialog modal-dialog-scrollable modal-lg" role="document">
 									<div className="modal-content">
 										<div className="modal-header">
 											<h5 className="modal-title" id="exampleModalScrollableTitle">
@@ -41,7 +43,8 @@ export class Familias extends React.Component {
 												type="button"
 												className="close"
 												data-dismiss="modal"
-												aria-label="Close">
+												aria-label="Close"
+												onClick={e => actions.deleteAddFamilia(e)}>
 												<span aria-hidden="true">&times;</span>
 											</button>
 										</div>

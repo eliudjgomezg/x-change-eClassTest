@@ -4,31 +4,23 @@ import { Context } from "../store/appContext";
 export class ListHijos extends React.Component {
 	render() {
 		return (
-			<Fragment>
-				<div className="card card-body">
-					<p>Hijos agregados:</p>
-					<ul className="list-group">
-						<Context.Consumer>
-							{({ store, actions }) => {
-								if (store.hijoArray.length > 0) {
-									return store.hijoArray.map((item, i) => {
-										return (
-											<div className="container" key={i}>
+			<div className="card card-body">
+				<p>Hijos agregados:</p>
+				<ul className="list-group">
+					<Context.Consumer>
+						{({ store, actions }) => {
+							if (store.familia.hijos.length > 0) {
+								return store.familia.hijos.map((item, i) => {
+									return (
+										<Fragment key={i}>
+											<li className="list-group-item">
 												<div className="row">
-													<div className="col-8">
-														<li className="list-group-item">
-															{item.nombreHijo + " " + item.apellidoHijo}
-														</li>
-													</div>
+													<div className="col-8">{item.nombre + " " + item.apellido}</div>
 													<div className="col-2">
 														<button
 															type="button"
 															className="btn btn-primary"
-															onClick={() => actions.editHijo(item, i)}
-															data-toggle="collapse"
-															data-target="#collapseExample"
-															aria-expanded="false"
-															aria-controls="collapseExample">
+															onClick={() => actions.editHijo(item, i)}>
 															Editar
 														</button>
 													</div>
@@ -43,15 +35,15 @@ export class ListHijos extends React.Component {
 														</button>
 													</div>
 												</div>
-											</div>
-										);
-									});
-								}
-							}}
-						</Context.Consumer>
-					</ul>
-				</div>
-			</Fragment>
+											</li>
+										</Fragment>
+									);
+								});
+							}
+						}}
+					</Context.Consumer>
+				</ul>
+			</div>
 		);
 	}
 }

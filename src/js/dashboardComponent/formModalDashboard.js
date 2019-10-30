@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { Context } from "../store/appContext";
+import { Select } from "../dashboardComponent/select";
 
 export class FormModalDashboard extends React.Component {
 	render() {
@@ -49,19 +50,17 @@ export class FormModalDashboard extends React.Component {
 										</div>
 									</div>
 								</div>
-								<div className="form-group">
-									<label htmlFor="exampleFormControlSelect2">Example multiple select</label>
+								<div className="form-group ">
+									<label htmlFor="exampleFormControlSelect1">Seleccionar Profesores</label>
 									<select
-										multiple
-										className="form-control select-checkbox"
-										id="exampleFormControlSelect2">
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
+										className="form-control selectpicker"
+										id="exampleFormControlSelect1"
+										required
+										multiple>
+										<Select />
 									</select>
 								</div>
+
 								<div className="form-group">
 									<div className="row">
 										<div className="col">
