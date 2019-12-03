@@ -4,33 +4,38 @@ const getState = ({ getStore, setStore }) => {
 	return {
 		store: {
 			//Variables para creacion de aula
-			nombreDeSala: "",
-			rangoDesde: "",
-			rangoHasta: "",
-			capacidad: "",
-			diaUso: "",
-			horarioDesde: "",
-			horarioHasta: "",
+			id: "",
+			classroomName: "",
+			startAgeRank: "",
+			finaltAgeRank: "",
+			teachers: "",
+			capacity: "",
+			dayUse: "",
+			startScheduleRank: "",
+			finalScheduleRank: "",
 			cardArray: [],
+
 			//Variables para creacion de novedades
-			addNovedades: "",
+			news: "",
 			novedadesArray: [],
 			//Variables para creacion de familias
+			familyName: "",
 			apoderado: {
-				nombre: "",
-				apellido: "",
+				id: "",
+				parentName: "",
 				rut: "",
 				email: "",
-				telefono: ""
+				phone: ""
 			},
+			apoderados: [],
 			hijo: {
-				nombre: "",
-				apellido: "",
-				fNacimiento: "",
-				observaciones: ""
+				id: "",
+				sonName: "",
+				birthDate: "",
+				notes: ""
 			},
+			hijos: [],
 			familia: {
-				lastName: "",
 				apoderados: [],
 				hijos: []
 			},
@@ -55,31 +60,153 @@ const getState = ({ getStore, setStore }) => {
 			dashboard: true,
 			novedades: false,
 			familiass: false,
+			familiasss: true,
 			roles: false,
-			estadistica: false
+			estadistica: false,
+			hiddeModal: "",
+			familyLastName: false,
+			familiasss: true,
+			addApoderado: false,
+			familyOptions: false,
+			addHijo: false,
+			menu: true,
+			editNewFamilia: true
 		},
 
 		actions: {
 			//Funciones para renderizado condicional
 			dashboard: e => {
 				const store = getStore();
-				setStore({ dashboard: true, novedades: false, familias: false, roles: false, estadistica: false });
+				fetch("http://localhost:3000/api/v1/classrooms", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						setStore({
+							dashboard: true,
+							novedades: false,
+							familiass: false,
+							roles: false,
+							estadistica: false,
+							cardArray: data,
+							familiasss: false,
+							addApoderado: false,
+							familyOptions: false,
+							addHijo: false,
+							menu: false,
+							editNewFamilia: false
+						});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			novedades: e => {
 				const store = getStore();
-				setStore({ dashboard: false, novedades: true, familias: false, roles: false, estadistica: false });
+				fetch("http://localhost:3000/api/v1/news", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						setStore({
+							dashboard: false,
+							novedades: true,
+							familiass: false,
+							roles: false,
+							estadistica: false,
+							novedadesArray: data,
+							familiasss: false,
+							addApoderado: false,
+							familyOptions: false,
+							addHijo: false,
+							menu: false,
+							editNewFamilia: false
+						});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			familias: e => {
 				const store = getStore();
-				setStore({ dashboard: false, novedades: false, familiass: true, roles: false, estadistica: false });
+				fetch("http://localhost:3000/api/v1/families", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						setStore({
+							dashboard: false,
+							novedades: false,
+							familiass: true,
+							roles: false,
+							estadistica: false,
+							familias: data,
+							familiasss: true,
+							familyLastName: false,
+							addApoderado: false,
+							familyOptions: false,
+							addHijo: false,
+							menu: true,
+							editNewFamilia: false,
+							familyName: ""
+						});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			roles: e => {
 				const store = getStore();
-				setStore({ dashboard: false, novedades: false, familias: false, roles: true, estadistica: false });
+				setStore({
+					dashboard: false,
+					novedades: false,
+					familiass: false,
+					roles: true,
+					estadistica: false,
+					familiasss: false,
+					addApoderado: false,
+					familyOptions: false,
+					addHijo: false,
+					menu: false,
+					editNewFamilia: false
+				});
 			},
 			estadistica: e => {
 				const store = getStore();
-				setStore({ dashboard: false, novedades: false, familias: false, roles: false, estadistica: true });
+				setStore({
+					dashboard: false,
+					novedades: false,
+					familiass: false,
+					roles: false,
+					estadistica: true,
+					familiasss: false,
+					addApoderado: false,
+					familyOptions: false,
+					addHijo: false,
+					menu: false,
+					editNewFamilia: false
+				});
 			},
 			//Funciones para la creacion de aulas
 			getData: e => {
@@ -88,112 +215,222 @@ const getState = ({ getStore, setStore }) => {
 				const { name, value } = e.target;
 				setStore({ [name]: value });
 			},
+			getDataSelect: e => {
+				//Toma la data del Input y la coloca en las variables del store
+				console.log(e.target.selectOption);
+			},
 			setEditCard: (item, itemPosition) => {
 				// Boton de editar: Toma el valos del Item correspondiente
 				// del map en el form para ser editado.
 				setStore({
-					index: itemPosition,
+					id: item._id,
 					cardEdited: false,
-					nombreDeSala: item.nombreDeSala,
-					rangoDesde: item.rangoDesde,
-					rangoHasta: item.rangoHasta,
-					capacidad: item.capacidad,
-					diaUso: item.diaUso,
-					horarioDesde: item.horarioDesde,
-					horarioHasta: item.horarioHasta
+					classroomName: item.classroomName,
+					startAgeRank: item.startAgeRank,
+					finaltAgeRank: item.finaltAgeRank,
+					teachers: "",
+					capacity: item.capacity,
+					dayUse: item.dayUse,
+					startScheduleRank: item.startScheduleRank,
+					finalScheduleRank: item.finalScheduleRank
 				});
 			},
 			setCard: e => {
 				e.preventDefault();
 				const store = getStore();
+
 				//Boton de guardar: Guarda una nueva aula en un card. Puede diferenciar entre editar
 				// un aula y guardar una nueva. Tamnien, verifica que los campos estes escritos
 				if (store.cardEdited) {
-					let data = {
-						nombreDeSala: store.nombreDeSala,
-						rangoDesde: store.rangoDesde,
-						rangoHasta: store.rangoHasta,
-						capacidad: store.capacidad,
-						diaUso: store.diaUso,
-						horarioDesde: store.horarioDesde,
-						horarioHasta: store.horarioHasta
-					};
-					let newCard = store.cardArray.concat(data);
-					setStore({
-						cardArray: newCard,
-						nombreDeSala: "",
-						rangoDesde: "",
-						rangoHasta: "",
-						capacidad: "",
-						diaUso: "",
-						horarioDesde: "",
-						horarioHasta: ""
-					});
+					fetch("http://localhost:3000/api/v1/classrooms", {
+						method: "POST",
+						body: JSON.stringify({
+							classroomName: store.classroomName,
+							startAgeRank: store.startAgeRank,
+							finaltAgeRank: store.finaltAgeRank,
+							teachers: store.teachers,
+							capacity: store.capacity,
+							dayUse: store.dayUse,
+							startScheduleRank: store.startScheduleRank,
+							finalScheduleRank: store.finalScheduleRank
+						}),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					})
+						.then(resp => {
+							//console.log(resp.ok); // will be true if the response is successfull
+							//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
+							//console.log(resp.text()); // will try return the exact result as string
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							//here is were your code should start after the fetch finishes
+							console.log(data);
+							setStore({
+								classroomName: "",
+								startAgeRank: "",
+								finaltAgeRank: "",
+								teachers: "",
+								capacity: "",
+								dayUse: "",
+								startScheduleRank: "",
+								finalScheduleRank: ""
+							});
+							actions.dashboard();
+							//this will print on the console the exact object received from the server
+						})
+						.catch(error => {
+							//error handling
+							console.log(error);
+						});
 				} else {
-					let dataEdited = {
-						nombreDeSala: store.nombreDeSala,
-						rangoDesde: store.rangoDesde,
-						rangoHasta: store.rangoHasta,
-						capacidad: store.capacidad,
-						diaUso: store.diaUso,
-						horarioDesde: store.horarioDesde,
-						horarioHasta: store.horarioHasta
-					};
-					let newDataEdited = store.cardArray;
-					newDataEdited[store.index] = dataEdited;
-					setStore({
-						cardArray: newDataEdited,
-						index: 0,
-						cardEdited: true,
-						nombreDeSala: "",
-						rangoDesde: "",
-						rangoHasta: "",
-						capacidad: "",
-						diaUso: "",
-						horarioDesde: "",
-						horarioHasta: ""
-					});
+					fetch("http://localhost:3000/api/v1/classroom/" + store.id, {
+						method: "PUT",
+						body: JSON.stringify({
+							classroomName: store.classroomName,
+							startAgeRank: store.startAgeRank,
+							finaltAgeRank: store.finaltAgeRank,
+							teachers: store.teachers,
+							capacity: store.capacity,
+							dayUse: store.dayUse,
+							startScheduleRank: store.startScheduleRank,
+							finalScheduleRank: store.finalScheduleRank
+						}),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					})
+						.then(resp => {
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							//here is were your code should start after the fetch finishes
+							console.log(data); //this will print on the console the exact object received from the server
+							setStore({
+								classroomName: "",
+								startAgeRank: "",
+								finaltAgeRank: "",
+								teachers: "",
+								capacity: "",
+								dayUse: "",
+								startScheduleRank: "",
+								finalScheduleRank: "",
+								id: "",
+								cardEdited: true
+							});
+						})
+						.catch(error => {
+							//error handling
+							console.log(error);
+						});
 				}
+			},
+			showClassrooms: e => {
+				fetch("https://assets.breatheco.de/apis/fake/todos/user/" + user, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						setStore({ cardArray: data });
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			deleteForm: e => {
 				setStore({
 					//Boton cerrar: Limpia los input del form
-					nombreDeSala: "",
-					rangoDesde: "",
-					rangoHasta: "",
-					capacidad: "",
-					diaUso: "",
-					horarioDesde: "",
-					horarioHasta: ""
+					classroomName: "",
+					startAgeRank: "",
+					finaltAgeRank: "",
+					teachers: "",
+					capacity: "",
+					dayUse: "",
+					startScheduleRank: "",
+					finalScheduleRank: "",
+					id: ""
 				});
 			},
-			indextodeleteClassroon: index => {
+			indextodeleteClassroon: item => {
 				setStore({
-					index: index
+					id: item._id
 				});
 			},
 			deleteCard: () => {
 				//Boton eliminar: Borra el aula seleccionada
 				const store = getStore();
-				let deleteCard = store.cardArray;
-				deleteCard.splice(store.index, 1);
-				setStore({
-					cardArray: deleteCard,
-					index: ""
-				});
+				fetch("http://localhost:3000/api/v1/classroom/" + store.id, {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log(resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data); //this will print on the console the exact object received from the server
+						setStore({ id: "" });
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
-			//Funciones para agregar novedad
+			//Funciones para agregar novedad...............................................................................
 			setNovedad: e => {
-				//Agrega la novedad al arreglo addNovedades
 				e.preventDefault();
 				const store = getStore();
-				let newAddNovedad = store.novedadesArray.concat(store.addNovedades);
+
+				//Agrega la novedad al arreglo addNovedades
+				fetch("http://localhost:3000/api/v1/news", {
+					method: "POST",
+					body: JSON.stringify({
+						news: store.news
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data);
+						setStore({
+							news: ""
+						});
+
+						//this will print on the console the exact object received from the server
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
+			deleteNovedad: e => {
+				const store = getStore();
 				setStore({
-					novedadesArray: newAddNovedad,
-					addNovedades: ""
+					news: ""
 				});
 			},
-			//Funciones para llenar formulario de familia
+			//Funciones para llenar formulario de familia......................................................
 			handleChangeApoderado: e => {
 				const store = getStore();
 				const { name, value } = e.target;
@@ -213,69 +450,111 @@ const getState = ({ getStore, setStore }) => {
 				});
 			},
 			//Funciones para crear, editar y eliminar apoderado
+
 			setApoderado: e => {
 				e.preventDefault();
 				const store = getStore();
 				if (store.cardEdited) {
-					let familia = store.familia;
-					familia.apoderados.push(store.apoderado);
-					setStore({
-						familia,
-						apoderado: {
-							nombre: "",
-							apellido: "",
-							rut: "",
-							email: "",
-							telefono: ""
+					fetch("http://localhost:3000/api/v1/parents", {
+						method: "POST",
+						body: JSON.stringify({
+							parentName: store.apoderado.parentName,
+							rut: store.apoderado.rut,
+							email: store.apoderado.email,
+							phone: store.apoderado.phone,
+							families: store.id
+						}),
+						headers: {
+							"Content-Type": "application/json"
 						}
-					});
+					})
+						.then(resp => {
+							//console.log(resp.ok); // will be true if the response is successfull
+							//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
+							//console.log(resp.text()); // will try return the exact result as string
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							//here is were your code should start after the fetch finishes
+							console.log(data);
+							let apoderados = store.apoderados;
+							apoderados.push(data);
+							setStore({
+								apoderado: {
+									parentName: "",
+									rut: "",
+									email: "",
+									phone: "",
+									id: ""
+								},
+								apoderados
+							});
+
+							//this will print on the console the exact object received from the server
+						})
+						.catch(error => {
+							//error handling
+							console.log(error);
+						});
 				} else {
-					let apoderado = {
-						nombre: store.apoderado.nombre,
-						apellido: store.apoderado.apellido,
-						rut: store.apoderado.rut,
-						email: store.apoderado.email,
-						telefono: store.apoderado.telefono
-					};
-					let familia = store.familia;
-					familia.apoderados[store.index] = apoderado;
-					setStore({
-						familia,
-						index: 0,
-						cardEdited: true,
-						apoderado: {
-							nombre: "",
-							apellido: "",
-							rut: "",
-							email: "",
-							telefono: ""
+					fetch("http://localhost:3000/api/v1/parent/" + store.id, {
+						method: "PUT",
+						body: JSON.stringify({
+							parentName: store.apoderado.parentName,
+							rut: store.apoderado.rut,
+							email: store.apoderado.email,
+							phone: store.apoderado.phone
+						}),
+						headers: {
+							"Content-Type": "application/json"
 						}
-					});
+					})
+						.then(resp => {
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							//here is were your code should start after the fetch finishes
+							console.log(data); //this will print on the console the exact object received from the server
+							let apoderados = store.apoderados;
+							apoderados[store.index] = data;
+							setStore({
+								apoderado: {
+									parentName: "",
+									rut: "",
+									email: "",
+									phone: ""
+								},
+								cardEdited: true,
+								id: "",
+								index: "",
+								apoderados
+							});
+						});
 				}
 			},
-			editApoderado: (item, itemPosition) => {
+			editApoderado: (item, i) => {
 				// Boton de editar: Toma el valos del Item correspondiente
 				// del map en el form para ser editado.
 				setStore({
-					index: itemPosition,
+					id: item._id,
+					index: i,
 					cardEdited: false,
 					apoderado: {
-						nombre: item.nombre,
-						apellido: item.apellido,
+						parentName: item.parentName,
 						rut: item.rut,
 						email: item.email,
-						telefono: item.telefono
+						phone: item.phone
 					}
 				});
 			},
 			deleteAddApoderado: e => {
 				setStore({
 					apoderado: {
-						nombre: "",
-						apellido: "",
+						parentName: "",
+
 						rut: "",
 						email: "",
-						telefono: ""
+						phone: ""
 					},
 					cardEdited: true
 				});
@@ -293,10 +572,10 @@ const getState = ({ getStore, setStore }) => {
 			deleteAddHijo: e => {
 				setStore({
 					hijo: {
-						nombre: "",
-						apellido: "",
-						fNacimiento: "",
-						observaciones: ""
+						sonName: "",
+
+						birthDate: "",
+						notes: ""
 					},
 					cardEdited: true
 				});
@@ -305,50 +584,88 @@ const getState = ({ getStore, setStore }) => {
 				e.preventDefault();
 				const store = getStore();
 				if (store.cardEdited) {
-					const store = getStore();
-					let familia = store.familia;
-					familia.hijos.push(store.hijo);
+					fetch("http://localhost:3000/api/v1/sons", {
+						method: "POST",
+						body: JSON.stringify({
+							sonName: store.hijo.sonName,
+							birthDate: store.hijo.birthDate,
+							notes: store.hijo.notes,
+							families: store.id
+						}),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					})
+						.then(resp => {
+							//console.log(resp.ok); // will be true if the response is successfull
+							//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
+							//console.log(resp.text()); // will try return the exact result as string
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							//here is were your code should start after the fetch finishes
+							console.log(data);
+							let hijos = store.hijos;
+							hijos.push(data);
+							setStore({
+								hijo: {
+									sonName: "",
+									birthDate: "",
+									notes: "",
+									families: ""
+								},
+								hijos
+							});
 
-					setStore({
-						familia,
-						hijo: {
-							nombre: "",
-							apellido: "",
-							fNacimiento: "",
-							observaciones: ""
-						}
-					});
+							//this will print on the console the exact object received from the server
+						})
+						.catch(error => {
+							//error handling
+							console.log(error);
+						});
 				} else {
-					let hijo = {
-						nombre: store.hijo.nombre,
-						apellido: store.hijo.apellido,
-						fNacimiento: store.hijo.fNacimiento,
-						observaciones: store.hijo.observaciones
-					};
-					let familia = store.familia;
-					familia.hijos[store.index] = hijo;
-					setStore({
-						familia,
-						index: 0,
-						cardEdited: true,
-						hijo: {
-							nombre: "",
-							apellido: "",
-							fNacimiento: "",
-							observaciones: ""
+					fetch("http://localhost:3000/api/v1/son/" + store.id, {
+						method: "PUT",
+						body: JSON.stringify({
+							sonName: store.hijo.sonName,
+							birthDate: store.hijo.birthDate,
+							notes: store.hijo.notes
+						}),
+						headers: {
+							"Content-Type": "application/json"
 						}
-					});
+					})
+						.then(resp => {
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							//here is were your code should start after the fetch finishes
+							console.log(data); //this will print on the console the exact object received from the server
+							let hijos = store.hijos;
+							hijos[store.index] = data;
+							setStore({
+								hijo: {
+									sonName: "",
+									birthDate: "",
+									notes: ""
+								},
+								cardEdited: true,
+								id: "",
+								index: "",
+								hijos
+							});
+						});
 				}
 			},
-			editHijo: (item, itemPosition) => {
+			editHijo: (item, i) => {
 				setStore({
-					index: itemPosition,
+					id: item._id,
+					index: i,
 					cardEdited: false,
 					hijo: {
-						nombre: item.nombre,
-						apellido: item.apellido,
-						fNacimiento: item.fNacimiento,
-						observaciones: item.observaciones
+						sonName: item.sonName,
+						birthDate: item.birthDate,
+						notes: item.notes
 					}
 				});
 			},
@@ -366,24 +683,7 @@ const getState = ({ getStore, setStore }) => {
 			deleteAddFamilia: e => {
 				const store = getStore();
 				setStore({
-					apoderado: {
-						nombre: "",
-						apellido: "",
-						rut: "",
-						email: "",
-						telefono: ""
-					},
-					hijo: {
-						nombre: "",
-						apellido: "",
-						fNacimiento: "",
-						observaciones: ""
-					},
-					familia: {
-						lastName: "",
-						apoderados: [],
-						hijos: []
-					}
+					id: ""
 				});
 			},
 
@@ -391,10 +691,9 @@ const getState = ({ getStore, setStore }) => {
 				const store = getStore();
 				let data = e.target.value;
 				let familia = store.familia;
-				familia["lastName"] = data;
+				familia["familyName"] = data;
 				setStore({
-					familia,
-					alert: false
+					familia
 				});
 			},
 
@@ -404,18 +703,43 @@ const getState = ({ getStore, setStore }) => {
 				if (
 					store.familia.apoderados.length > 0 &&
 					store.familia.hijos.length > 0 &&
-					store.familia.lastName != ""
+					store.familia.familyName != ""
 				) {
-					let familias = store.familias.concat(store.familia);
-					setStore({
-						familias,
-						alert: false,
-						familia: {
-							lastName: "",
-							apoderados: [],
-							hijos: []
+					fetch("http://localhost:3000/api/v1/families", {
+						method: "POST",
+						body: JSON.stringify({
+							familyName: store.familia.familyName,
+							parents: store.familia.apoderados,
+							sons: store.familia.hijos
+						}),
+						headers: {
+							"Content-Type": "application/json"
 						}
-					});
+					})
+						.then(resp => {
+							//console.log(resp.ok); // will be true if the response is successfull
+							//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
+							//console.log(resp.text()); // will try return the exact result as string
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							//here is were your code should start after the fetch finishes
+							console.log(data);
+							setStore({
+								alert: false,
+								familia: {
+									lastName: "",
+									apoderados: [],
+									hijos: []
+								}
+							});
+
+							//this will print on the console the exact object received from the server
+						})
+						.catch(error => {
+							//error handling
+							console.log(error);
+						});
 				} else {
 					setStore({
 						alert: true
@@ -423,34 +747,101 @@ const getState = ({ getStore, setStore }) => {
 				}
 			},
 
-			verFamilia: (e, item, i) => {
+			verFamilia: item => {
 				const store = getStore();
-				setStore({
-					index: i,
-					familia: {
-						lastName: item.lastName,
-						apoderados: item.apoderados,
-						hijos: item.hijos
+				setStore({ id: item._id });
+				fetch("http://localhost:3000/api/v1/parentEdit/" + store.id, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
 					}
-				});
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						setStore({
+							apoderados: data,
+							familyOptions: false,
+							familyLastName: false,
+							addApoderado: true,
+							addHijo: false,
+							menu: false,
+							editNewFamilia: true,
+							familiasss: false,
+							familyName: item.familyName
+						});
+						fetch("http://localhost:3000/api/v1/sonEdit/" + store.id, {
+							method: "GET",
+							headers: {
+								"Content-Type": "application/json"
+							}
+						})
+							.then(resp => {
+								return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+							})
+							.then(data => {
+								console.log(data);
+								setStore({
+									hijos: data
+								});
+							})
+							.catch(error => {
+								//error handling
+								console.log(error);
+							});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			alert: e => {
+				//fetch put for edit family
 				const store = getStore();
 				if (
 					store.familia.apoderados.length > 0 &&
 					store.familia.hijos.length > 0 &&
-					store.familia.lastName != ""
+					store.familia.familyName != ""
 				) {
+					let familias = store.familias;
+					familias[store.index] = store.familia;
+					setStore({
+						hiddeModal: "modal",
+						familias,
+						familia: {
+							familyName: "",
+							apoderados: "",
+							hijos: ""
+						},
+						index: ""
+					});
 				} else setStore({ alert: true });
 			},
 			deleteFamilia: (e, item, i) => {
 				const store = getStore();
-				let familias = store.familias;
-				familias.splice(i, 1);
-				setStore({
-					familias,
-					index: ""
-				});
+				fetch("http://localhost:3000/api/v1/family/" + store.id, {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log(resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data); //this will print on the console the exact object received from the server
+						setStore({ id: "" });
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			//Funciones para creacion de profesores
 			setUsuarios: e => {
@@ -554,7 +945,116 @@ const getState = ({ getStore, setStore }) => {
 					cardEdited: false
 				});
 			},
-			deleteUsuarios: i => {}
+			familyLastName: e => {
+				setStore({
+					familyLastName: true,
+					familiasss: false,
+					addApoderado: false,
+					familyOptions: false,
+					addHijo: false
+				});
+			},
+			addFamily: e => {
+				const store = getStore();
+				e.preventDefault();
+				fetch("http://localhost:3000/api/v1/families", {
+					method: "POST",
+					body: JSON.stringify({
+						familyName: store.familyName
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data);
+						setStore({
+							familyLastName: false,
+							addApoderado: true,
+							familyOptions: true,
+							addHijo: false,
+							menu: false,
+							familyName: "",
+							id: data._id
+						});
+
+						//this will print on the console the exact object received from the server
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
+			addHijo: e => {
+				setStore({
+					familyLastName: false,
+					addApoderado: false,
+					familyOptions: true,
+					addHijo: true,
+					menu: false,
+					apoderado: {
+						parentName: "",
+						rut: "",
+						email: "",
+						phone: "",
+						id: ""
+					}
+				});
+			},
+			goBack: e => {
+				setStore({
+					familyLastName: false,
+					addApoderado: false,
+					familyOptions: false,
+					addHijo: false,
+					menu: true,
+					familiasss: true,
+					editNewFamilia: false,
+					apoderado: {
+						parentName: "",
+						rut: "",
+						email: "",
+						phone: "",
+						id: ""
+					},
+					hijo: {
+						sonName: "",
+						birthDate: "",
+						notes: "",
+						families: ""
+					},
+					apoderados: [],
+					hijos: [],
+					id: ""
+				});
+			},
+			editNewApoderados: e => {
+				setStore({
+					familyOptions: false,
+					familyLastName: false,
+					addApoderado: true,
+					addHijo: false,
+					menu: false,
+					editNewFamilia: true
+				});
+			},
+			editNewHijo: e => {
+				setStore({
+					familyOptions: false,
+					familyLastName: false,
+					addApoderado: false,
+					addHijo: true,
+					menu: false,
+					editNewFamilia: true
+				});
+			}
 		}
 	};
 };

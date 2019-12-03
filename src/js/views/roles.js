@@ -24,14 +24,14 @@ export class Roles extends React.Component {
 									type="button"
 									className="btn btn-primary"
 									data-toggle="modal"
-									data-target="#exampleModalScrollable"
+									data-target="#exampleModalScrollablexx"
 									style={verticalPosition}>
 									Agregar usuario
 								</button>
 
 								<div
 									className="modal fade"
-									id="exampleModalScrollable"
+									id="exampleModalScrollablexx"
 									tabIndex="-1"
 									role="dialog"
 									aria-labelledby="exampleModalScrollableTitle"

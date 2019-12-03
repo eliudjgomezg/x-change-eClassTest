@@ -36,7 +36,7 @@ export class NovedadesList extends React.Component {
 												className="collapse"
 												aria-labelledby="headingThree"
 												data-parent="#accordionExample">
-												<div className="card-body">{item}</div>
+												<div className="card-body">{item.news}</div>
 											</div>
 										</div>
 									</div>

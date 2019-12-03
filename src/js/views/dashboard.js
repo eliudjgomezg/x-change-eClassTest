@@ -9,10 +9,12 @@ export class Dashboard extends React.Component {
 		let flexx = { display: "flex" };
 		return (
 			<Fragment>
-				<div style={flexx}>
-					<Carddashboard />
+				<div className="container">
+					<div className="row">
+						<Carddashboard />
+					</div>
+					<Modaldashboard />
 				</div>
-				<Modaldashboard />
 			</Fragment>
 		);
 	}

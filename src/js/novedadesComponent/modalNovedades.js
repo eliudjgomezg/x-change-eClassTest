@@ -40,7 +40,8 @@ export class ModalNovedades extends React.Component {
 												type="button"
 												className="close"
 												data-dismiss="modal"
-												aria-label="Close">
+												aria-label="Close"
+												onClick={e => actions.deleteNovedad(e)}>
 												<span aria-hidden="true">&times;</span>
 											</button>
 										</div>
@@ -53,8 +54,8 @@ export class ModalNovedades extends React.Component {
 														id="exampleFormControlTextarea1"
 														rows="3"
 														onChange={e => actions.getData(e)}
-														name="addNovedades"
-														value={store.addNovedades}
+														name="news"
+														value={store.news}
 														required
 													/>
 												</div>
@@ -63,7 +64,8 @@ export class ModalNovedades extends React.Component {
 												<button
 													type="button"
 													className="btn btn-secondary"
-													data-dismiss="modal">
+													data-dismiss="modal"
+													onClick={e => actions.deleteNovedad(e)}>
 													Cerrar
 												</button>
 												<button type="submit" className="btn btn-primary">

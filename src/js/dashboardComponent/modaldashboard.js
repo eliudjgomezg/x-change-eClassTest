@@ -46,7 +46,8 @@ export class Modaldashboard extends React.Component {
 														type="button"
 														className="close"
 														data-dismiss="modal"
-														aria-label="Close">
+														aria-label="Close"
+														onClick={e => actions.deleteForm(e)}>
 														<span aria-hidden="true">&times;</span>
 													</button>
 												</div>

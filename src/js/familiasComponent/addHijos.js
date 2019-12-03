@@ -14,24 +14,13 @@ export class AddHijos extends React.Component {
 									<div className="container">
 										<div className="row">
 											<div className="col">
-												<label htmlFor="exampleFormControlInput1">Nombre:</label>
+												<label htmlFor="exampleFormControlInput1">Nombre Completo:</label>
 												<input
 													className="form-control"
 													id="exampleFormControlInput1"
 													onChange={e => actions.handleChangeHijo(e)}
-													value={store.hijo.nombre}
-													name="nombre"
-													required
-												/>
-											</div>
-											<div className="col">
-												<label htmlFor="exampleFormControlInput1">Apellido:</label>
-												<input
-													className="form-control"
-													id="exampleFormControlInput1"
-													onChange={e => actions.handleChangeHijo(e)}
-													value={store.hijo.apellido}
-													name="apellido"
+													value={store.hijo.sonName}
+													name="sonName"
 													required
 												/>
 											</div>
@@ -43,8 +32,8 @@ export class AddHijos extends React.Component {
 													className="form-control"
 													id="exampleFormControlInput1"
 													onChange={e => actions.handleChangeHijo(e)}
-													value={store.hijo.fNacimiento}
-													name="fNacimiento"
+													value={store.hijo.birthDate}
+													name="birthDate"
 													required
 												/>
 											</div>
@@ -57,8 +46,8 @@ export class AddHijos extends React.Component {
 													id="exampleFormControlTextarea1"
 													rows="4"
 													onChange={e => actions.handleChangeHijo(e)}
-													value={store.hijo.observaciones}
-													name="observaciones"
+													value={store.hijo.notes}
+													name="notes"
 													required
 												/>
 											</div>

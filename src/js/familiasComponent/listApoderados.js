@@ -5,20 +5,18 @@ export class ListApoderados extends React.Component {
 	render() {
 		return (
 			<Fragment>
+				<p>Apoderados agregados:</p>
 				<div className="card card-body">
-					<p>Apoderados agregados:</p>
 					<ul className="list-group">
 						<Context.Consumer>
 							{({ store, actions }) => {
-								if (store.familia.apoderados.length > 0) {
-									return store.familia.apoderados.map((item, i) => {
+								if (store.apoderados.length > 0) {
+									return store.apoderados.map((item, i) => {
 										return (
 											<div key={i}>
 												<div className="row">
 													<div className="col-8">
-														<li className="list-group-item">
-															{item.nombre + " " + item.apellido}
-														</li>
+														<li className="list-group-item">{item.parentName}</li>
 													</div>
 													<div className="col-2">
 														<button

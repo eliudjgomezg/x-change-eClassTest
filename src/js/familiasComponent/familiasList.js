@@ -14,14 +14,14 @@ export class FamiliasList extends React.Component {
 								<Fragment key={i}>
 									<div className=" card-body border border-primary container">
 										<div className="row">
-											<div className="col-8">Familia: {item.lastName}</div>
+											<div className="col-8">Familia: {item.familyName}</div>
 											<div className="col-2 ml-0 mr-0">
 												<button
 													type="button"
 													className="btn btn-primary "
 													data-toggle="modal"
 													data-target="#exampleModal"
-													onClick={e => actions.indextodeleteClassroon(i)}>
+													onClick={e => actions.indextodeleteClassroon(item)}>
 													Eliminar
 												</button>
 											</div>
@@ -29,55 +29,9 @@ export class FamiliasList extends React.Component {
 												<button
 													type="button"
 													className="btn btn-primary "
-													data-toggle="modal"
-													data-target="#exampleModalScrollable1"
-													onClick={e => actions.verFamilia(e, item, i)}>
+													onClick={e => actions.verFamilia(item)}>
 													Ver
 												</button>
-											</div>
-										</div>
-									</div>
-
-									<div
-										className="modal fade"
-										id="exampleModalScrollable1"
-										tabIndex="-1"
-										role="dialog"
-										aria-labelledby="exampleModalScrollableTitle"
-										aria-hidden="true">
-										<div className="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-											<div className="modal-content">
-												<div className="modal-header">
-													<h5 className="modal-title" id="exampleModalScrollableTitle">
-														Editar Familia
-													</h5>
-													<button
-														type="button"
-														className="close"
-														data-dismiss="modal"
-														aria-label="Close"
-														onClick={e => actions.deleteAddFamilia(e)}>
-														<span aria-hidden="true">&times;</span>
-													</button>
-												</div>
-												<div className="modal-body">
-													<VerForm />
-												</div>
-												<div className="modal-footer">
-													<button
-														type="button"
-														className="btn btn-secondary"
-														data-dismiss="modal"
-														onClick={e => actions.deleteAddFamilia(e)}>
-														Cancelar
-													</button>
-													<button
-														type="button"
-														className="btn btn-primary"
-														onClick={e => actions.alert(e)}>
-														Guardar
-													</button>
-												</div>
 											</div>
 										</div>
 									</div>
@@ -99,7 +53,8 @@ export class FamiliasList extends React.Component {
 														type="button"
 														className="close"
 														data-dismiss="modal"
-														aria-label="Close">
+														aria-label="Close"
+														onClick={e => actions.deleteAddFamilia(e)}>
 														<span aria-hidden="true">&times;</span>
 													</button>
 												</div>
@@ -110,7 +65,8 @@ export class FamiliasList extends React.Component {
 													<button
 														type="button"
 														className="btn btn-secondary"
-														data-dismiss="modal">
+														data-dismiss="modal"
+														onClick={e => actions.deleteAddFamilia(e)}>
 														Cancelar
 													</button>
 													<button

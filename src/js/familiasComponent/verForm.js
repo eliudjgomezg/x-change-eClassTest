@@ -30,8 +30,8 @@ export class VerForm extends React.Component {
 														id="exampleFormControlInput1"
 														placeholder="Ejemplo: Perez Gonzalez"
 														onChange={e => actions.setFamilialastName(e)}
-														value={store.familia.lastName}
-														name="lastNameFamilia"
+														value={store.familia.familyName}
+														name="familyName"
 														required
 													/>
 												</div>

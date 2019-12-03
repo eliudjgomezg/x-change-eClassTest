@@ -15,99 +15,112 @@ export class FormModalDashboard extends React.Component {
 									<label htmlFor="exampleFormControlInput1">Nombre de la sala:</label>
 									<input
 										className="form-control"
-										id="exampleFormControlInput1"
+										id="classroomName"
 										onChange={e => actions.getData(e)}
-										name="nombreDeSala"
-										value={store.nombreDeSala}
+										name="classroomName"
+										value={store.classroomName}
 										required
 									/>
 								</div>
 								<div className="form-group">
-									<label htmlFor="exampleFormControlInput1">Rango de edades:</label>
+									<label htmlFor="exampleFormControlInput2">Rango de edades:</label>
 
 									<div className="row">
 										<div className="col">
 											<input
 												className="form-control"
-												id="exampleFormControlInput1"
+												id="startAgeRank"
 												placeholder="Desde 3 Años"
-												name="rangoDesde"
+												name="startAgeRank"
 												onChange={e => actions.getData(e)}
-												value={store.rangoDesde}
+												value={store.startAgeRank}
 												required
 											/>
 										</div>
+
 										<div className="col">
 											<input
 												className="form-control"
-												id="exampleFormControlInput1"
+												id="finaltAgeRank"
 												placeholder="Hasta 5 Años"
-												name="rangoHasta"
+												name="finaltAgeRank"
 												onChange={e => actions.getData(e)}
-												value={store.rangoHasta}
+												value={store.finaltAgeRank}
 												required
 											/>
 										</div>
 									</div>
 								</div>
 								<div className="form-group ">
-									<label htmlFor="exampleFormControlSelect1">Seleccionar Profesores</label>
+									<label htmlFor="profesores">Seleccionar Profesores</label>
+
 									<select
-										className="form-control selectpicker"
-										id="exampleFormControlSelect1"
-										required
-										multiple>
-										<Select />
+										className="form-control "
+										id="teachers"
+										multiple
+										name="teachers"
+										onChange={e => actions.getDataSelect(e)}>
+										{store.usuarios.length > 0 &&
+											store.usuarios.map((p, i) => {
+												if (p.rol == "Profesor") {
+													return (
+														<option key={i} value={p.nombre}>
+															{p.nombre + " " + p.apellido}
+														</option>
+													);
+												}
+											})}
 									</select>
 								</div>
 
 								<div className="form-group">
 									<div className="row">
 										<div className="col">
-											<label htmlFor="exampleFormControlInput1">Capacidad:</label>
+											<label htmlFor="capacidad">Capacidad:</label>
 											<input
 												className="form-control"
-												id="exampleFormControlInput1"
-												name="capacidad"
+												id="capacity"
+												name="capacity"
 												onChange={e => actions.getData(e)}
-												value={store.capacidad}
+												value={store.capacity}
 												required
 											/>
 										</div>
 										<div className="col">
-											<label htmlFor="exampleFormControlInput1">Dia de uso:</label>
+											<label htmlFor="diaUso">Dia de uso:</label>
 											<input
 												className="form-control"
-												id="exampleFormControlInput1"
-												name="diaUso"
+												id="dayUse"
+												name="dayUse"
 												onChange={e => actions.getData(e)}
-												value={store.diaUso}
+												value={store.dayUse}
 												required
 											/>
 										</div>
+
 										<div className="col">
-											<label htmlFor="exampleFormControlInput1">Horario:</label>
+											<label htmlFor="horarioDesde">Horario:</label>
 											<input
 												className="form-control"
-												id="exampleFormControlInput1"
+												id="startScheduleRank"
 												placeholder="Desde"
-												name="horarioDesde"
+												name="startScheduleRank"
 												onChange={e => actions.getData(e)}
-												value={store.horarioDesde}
+												value={store.startScheduleRank}
 												required
 											/>
 										</div>
 										<div className="col">
-											<label htmlFor="exampleFormControlInput1" style={textColor}>
+											<label htmlFor="horarioHasta" style={textColor}>
 												.
 											</label>
 											<input
 												className="form-control"
-												id="exampleFormControlInput1"
+												id="finalScheduleRank"
 												placeholder="Hasta"
-												name="horarioHasta"
+												name="finalScheduleRank"
 												onChange={e => actions.getData(e)}
-												value={store.horarioHasta}
+												value={store.finalScheduleRank}
 												required
 											/>
 										</div>

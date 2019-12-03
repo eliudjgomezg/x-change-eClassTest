@@ -115,7 +115,7 @@ export class Admin extends React.Component {
 								<div className="container-fluid">
 									{!!store.dashboard && <Dashboard />}
 									{!!store.novedades && <Novedades />}
-									{!!store.familias && <Familias />}
+									{!!store.familiass && <Familias />}
 									{!!store.roles && <Roles />}
 									{!!store.estadistica && <Estadistica />}
 								</div>
