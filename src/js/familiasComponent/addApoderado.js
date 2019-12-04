@@ -10,7 +10,7 @@ export class AddApoderado extends React.Component {
 						<Fragment>
 							<form onSubmit={e => actions.setApoderado(e)}>
 								<p>Agregar Apoderado</p>
-								<div className="card card-body">
+								<div className="card card-body px-0 py-2">
 									<div className="container">
 										<div className="row">
 											<div className="col">
@@ -24,8 +24,7 @@ export class AddApoderado extends React.Component {
 													required
 												/>
 											</div>
-										</div>
-										<div className="row">
+
 											<div className="col">
 												<label htmlFor="exampleFormControlInput1">Rut:</label>
 												<input
@@ -37,8 +36,7 @@ export class AddApoderado extends React.Component {
 													required
 												/>
 											</div>
-										</div>
-										<div className="row">
+
 											<div className="col">
 												<label htmlFor="exampleFormControlInput1">Telefono:</label>
 												<input
@@ -50,8 +48,7 @@ export class AddApoderado extends React.Component {
 													required
 												/>
 											</div>
-										</div>
-										<div className="row">
+
 											<div className="col">
 												<label htmlFor="exampleFormControlInput1">Email:</label>
 												<input
@@ -64,23 +61,23 @@ export class AddApoderado extends React.Component {
 												/>
 											</div>
 										</div>
-									</div>
-								</div>
 
-								<div className="modal-footer">
-									<button
-										type="button"
-										className="btn btn-secondary"
-										data-toggle="collapse"
-										data-target="#collapseExample"
-										aria-expanded="false"
-										aria-controls="collapseExample"
-										onClick={e => actions.deleteAddApoderado(e)}>
-										Cancelar
-									</button>
-									<button type="submit" className="btn btn-primary">
-										Guardar
-									</button>
+										<div className="row float-right mt-2 ">
+											<button
+												type="button"
+												className="btn btn-secondary "
+												data-toggle="collapse"
+												data-target="#collapseExample"
+												aria-expanded="false"
+												aria-controls="collapseExample"
+												onClick={e => actions.deleteAddApoderado(e)}>
+												Cancelar
+											</button>
+											<button type="submit" className="btn btn-primary ml-1 mr-3">
+												Guardar
+											</button>
+										</div>
+									</div>
 								</div>
 							</form>
 						</Fragment>

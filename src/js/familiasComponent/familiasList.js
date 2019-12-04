@@ -12,7 +12,7 @@ export class FamiliasList extends React.Component {
 						return store.familias.map((item, i) => {
 							return (
 								<Fragment key={i}>
-									<div className=" card-body border border-primary container">
+									<div className=" card card-body container">
 										<div className="row">
 											<div className="col-8">Familia: {item.familyName}</div>
 											<div className="col-2 ml-0 mr-0">

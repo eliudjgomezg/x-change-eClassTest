@@ -18,20 +18,13 @@ export class Familias extends React.Component {
 							{!!store.menu && (
 								<div className="container my-2">
 									<div className="row">
-										<div className="col-3" />
-										<div className="col-3">
-											<button className="btn btn-primary" onClick={e => actions.familias(e)}>
-												Ver Familias
-											</button>
-										</div>
-										<div className="col-3">
+										<div className="col float-right">
 											<button
-												className="btn btn-primary"
+												className="btn btn-primary float-right"
 												onClick={e => actions.familyLastName(e)}>
 												Agregar Familias
 											</button>
 										</div>
-										<div className="col-3" />
 									</div>
 								</div>
 							)}
@@ -62,38 +55,50 @@ export class Familias extends React.Component {
 							)}
 
 							{!!store.familyLastName && (
-								<form onSubmit={e => actions.addFamily(e)}>
-									<div className="row my-5">
+								<div className="container my-2">
+									<div className="row">
 										<div className="col float-right">
-											<label
-												htmlFor="exampleFormControlInput1"
-												className="float-right"
-												onClick={e => actions.addFamily(e)}>
-												Ingrese apellidos de la familia:
-											</label>
-										</div>
-										<div className="col">
-											<input
-												className="form-control"
-												placeholder="Ej: Gomez Gonzalez"
-												value={store.familyName}
-												name="familyName"
-												onChange={e => actions.getData(e)}
-												required
-											/>
-										</div>
-										<div className="col">
-											<button className="btn btn-primary" type="submit">
-												Crear Familia
+											<button
+												className="btn btn-primary float-right"
+												onClick={e => actions.familias(e)}>
+												Volver
 											</button>
 										</div>
 									</div>
-								</form>
+
+									<form onSubmit={e => actions.addFamily(e)}>
+										<div className="row my-5">
+											<div className="col float-right">
+												<label
+													htmlFor="exampleFormControlInput1"
+													className="float-right"
+													onClick={e => actions.addFamily(e)}>
+													Ingrese apellidos de la familia:
+												</label>
+											</div>
+											<div className="col">
+												<input
+													className="form-control"
+													placeholder="Ej: Gomez Gonzalez"
+													value={store.familyName}
+													name="familyName"
+													onChange={e => actions.getData(e)}
+													required
+												/>
+											</div>
+											<div className="col">
+												<button className="btn btn-primary" type="submit">
+													Crear Familia
+												</button>
+											</div>
+										</div>
+									</form>
+								</div>
 							)}
 							{!!store.familiasss && <FamiliasList />}
 							{!!store.editNewFamilia && (
 								<div className="container">
-									<div className="row my-3">
+									<div className="row my-3 ">
 										<div className="col float-right">
 											<label
 												htmlFor="exampleFormControlInput1"
@@ -114,28 +119,26 @@ export class Familias extends React.Component {
 										<div className="col">
 											<button className="btn btn-primary">Editar</button>
 										</div>
-										<div className="col">
-											<button
-												className="btn btn-primary float-right"
-												onClick={e => actions.goBack(e)}>
-												Volver
-											</button>
-										</div>
 									</div>
 
-									<div className="row">
-										<div className="col-3" />
-										<div className="col-3">
-											<button
-												className="btn btn-primary"
-												onClick={e => actions.editNewApoderados(e)}>
-												Editar Apoderados
-											</button>
-										</div>
-										<div className="col-3">
-											<button className="btn btn-primary" onClick={e => actions.editNewHijo(e)}>
-												Editar Hijos
-											</button>
+									<div className="card card-body py-2">
+										<div className="row">
+											<div className="col-3">
+												<button
+													className="btn btn-primary"
+													onClick={e => actions.editNewApoderados(e)}>
+													Editar Apoderados
+												</button>
+											</div>
+											<div className="col-3">
+												<button
+													className="btn btn-primary"
+													onClick={e => actions.editNewHijo(e)}>
+													Editar Hijos
+												</button>
+											</div>
+											<div className="col-3" />
+											<div className="col-3" />
 										</div>
 									</div>
 								</div>
@@ -143,10 +146,12 @@ export class Familias extends React.Component {
 							{!!store.addApoderado && (
 								<Fragment>
 									<div className="container">
-										<div className="row">
+										<div className="row my-0">
 											<div className="col">
 												<AddApoderado />
 											</div>
+										</div>
+										<div className="row my-0">
 											<div className="col">
 												<ListApoderados />
 											</div>
@@ -154,7 +159,7 @@ export class Familias extends React.Component {
 										<div className="row">
 											<div className="col ">
 												<button
-													className="btn btn-primary float-right mr-5"
+													className="btn btn-primary float-right mr-4 mt-2"
 													onClick={e => actions.goBack(e)}>
 													Aceptar
 												</button>

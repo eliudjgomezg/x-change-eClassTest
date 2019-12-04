@@ -359,9 +359,10 @@ const getState = ({ getStore, setStore }) => {
 					id: ""
 				});
 			},
-			indextodeleteClassroon: item => {
+			indextodeleteClassroon: (item, i) => {
 				setStore({
-					id: item._id
+					id: item._id,
+					index: i
 				});
 			},
 			deleteCard: () => {
@@ -561,12 +562,29 @@ const getState = ({ getStore, setStore }) => {
 			},
 			deleteApoderado: index => {
 				const store = getStore();
-				let familia = store.familia;
-				familia.apoderados.splice(index, 1);
-				setStore({
-					familia,
-					index: ""
-				});
+				fetch("http://localhost:3000/api/v1/parent/" + store.id, {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log(resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data); //this will print on the console the exact object received from the server
+						let apoderados = store.apoderados;
+						apoderados.splice(store.index, 1);
+						setStore({ id: "", apoderados });
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			//Funciones para crear, editar y eliminar hijo
 			deleteAddHijo: e => {
@@ -951,7 +969,8 @@ const getState = ({ getStore, setStore }) => {
 					familiasss: false,
 					addApoderado: false,
 					familyOptions: false,
-					addHijo: false
+					addHijo: false,
+					menu: false
 				});
 			},
 			addFamily: e => {
@@ -1032,7 +1051,8 @@ const getState = ({ getStore, setStore }) => {
 					},
 					apoderados: [],
 					hijos: [],
-					id: ""
+					id: "",
+					familyName: ""
 				});
 			},
 			editNewApoderados: e => {
@@ -1042,7 +1062,13 @@ const getState = ({ getStore, setStore }) => {
 					addApoderado: true,
 					addHijo: false,
 					menu: false,
-					editNewFamilia: true
+					editNewFamilia: true,
+					hijo: {
+						id: "",
+						sonName: "",
+						birthDate: "",
+						notes: ""
+					}
 				});
 			},
 			editNewHijo: e => {
@@ -1052,7 +1078,14 @@ const getState = ({ getStore, setStore }) => {
 					addApoderado: false,
 					addHijo: true,
 					menu: false,
-					editNewFamilia: true
+					editNewFamilia: true,
+					apoderado: {
+						id: "",
+						parentName: "",
+						rut: "",
+						email: "",
+						phone: ""
+					}
 				});
 			}
 		}
