@@ -14,29 +14,80 @@ export class ListHijos extends React.Component {
 									return store.hijos.map((item, i) => {
 										return (
 											<Fragment key={i}>
-												<li className="list-group-item">
+												<div>
 													<div className="row">
-														<div className="col-8">{item.sonName}</div>
-														<div className="col-2">
+														<div className="col-8">
+															<li className="list-group-item">{item.sonName}</li>
+														</div>
+														<div className="col-2   ">
 															<button
 																type="button"
-																className="btn btn-primary"
-																onClick={() => actions.editHijo(item, i)}>
+																className="btn btn-primary "
+																onClick={() => actions.editHijo(item, i)}
+																data-toggle="collapse"
+																data-target="#collapseExample"
+																aria-expanded="false"
+																aria-controls="collapseExample">
 																Editar
 															</button>
 														</div>
-														<div className="col-2">
+														<div className="col-2 pl-0">
 															<button
 																type="button"
-																className="btn btn-primarybtn btn-primary"
+																className="btn btn-primary "
 																data-toggle="modal"
-																data-target="#exampleModal1"
-																onClick={() => actions.deleteHijo(i)}>
+																data-target="#exampleModal2"
+																onClick={e => actions.indextodeleteClassroon(item, i)}>
 																Eliminar
 															</button>
 														</div>
 													</div>
-												</li>
+												</div>
+
+												<div
+													className="modal fade"
+													id="exampleModal2"
+													tabIndex="-1"
+													role="dialog"
+													aria-labelledby="exampleModalLabel"
+													aria-hidden="true">
+													<div className="modal-dialog" role="document">
+														<div className="modal-content">
+															<div className="modal-header">
+																<h5 className="modal-title" id="exampleModalLabel">
+																	ALERTA!!!
+																</h5>
+																<button
+																	type="button"
+																	className="close"
+																	data-dismiss="modal"
+																	aria-label="Close"
+																	onClick={e => actions.deleteAddHijo(e)}>
+																	<span aria-hidden="true">&times;</span>
+																</button>
+															</div>
+															<div className="modal-body">
+																¿Estas Segur@ que deseas eliminar este hij@?
+															</div>
+															<div className="modal-footer">
+																<button
+																	type="button"
+																	className="btn btn-secondary"
+																	data-dismiss="modal"
+																	onClick={e => actions.deleteAddHijo(e)}>
+																	Cancelar
+																</button>
+																<button
+																	type="button"
+																	className="btn btn-primary"
+																	onClick={e => actions.deleteHijo(e, item, i)}
+																	data-dismiss="modal">
+																	Eliminar
+																</button>
+															</div>
+														</div>
+													</div>
+												</div>
 											</Fragment>
 										);
 									});

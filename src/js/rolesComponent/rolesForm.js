@@ -12,7 +12,7 @@ export class RolesForm extends React.Component {
 								<div className="row">
 									<div className="col">
 										<div className="form-group">
-											<label htmlFor="exampleFormControlInput1">Nombre</label>
+											<label htmlFor="exampleFormControlInput1">Nombre Completo</label>
 											<input
 												type="text"
 												className="form-control"
@@ -26,7 +26,7 @@ export class RolesForm extends React.Component {
 									</div>
 									<div className="col">
 										<div className="form-group">
-											<label htmlFor="exampleFormControlInput1">Apellido</label>
+											<label htmlFor="exampleFormControlInput1">Rut</label>
 											<input
 												type="text"
 												className="form-control"
@@ -44,7 +44,7 @@ export class RolesForm extends React.Component {
 								<div className="row">
 									<div className="col">
 										<div className="form-group">
-											<label htmlFor="exampleFormControlInput1">Rut</label>
+											<label htmlFor="exampleFormControlInput1">Telefono</label>
 											<input
 												type="text"
 												className="form-control"

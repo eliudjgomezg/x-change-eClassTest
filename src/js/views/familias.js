@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Context } from "../store/appContext";
-import { FormFamilias } from "../familiasComponent/formFamilias";
+
 import { FamiliasList } from "../familiasComponent/familiasList";
 import { AddApoderado } from "../familiasComponent/addApoderado";
 import { ListApoderados } from "../familiasComponent/listApoderados";
@@ -28,32 +28,6 @@ export class Familias extends React.Component {
 									</div>
 								</div>
 							)}
-
-							{!!store.familyOptions && (
-								<div className="container my-2">
-									<div className="row">
-										<div className="col-3" />
-										<div className="col-3">
-											<button className="btn btn-primary" onClick={e => actions.addFamily(e)}>
-												Agregar Apoderados
-											</button>
-										</div>
-										<div className="col-3">
-											<button className="btn btn-primary" onClick={e => actions.addHijo(e)}>
-												Agregar Hijos
-											</button>
-										</div>
-										<div className="col-3">
-											<button
-												className="btn btn-primary float-right"
-												onClick={e => actions.goBack(e)}>
-												Volver
-											</button>
-										</div>
-									</div>
-								</div>
-							)}
-
 							{!!store.familyLastName && (
 								<div className="container my-2">
 									<div className="row">
@@ -95,6 +69,24 @@ export class Familias extends React.Component {
 									</form>
 								</div>
 							)}
+							{!!store.familyOptions && (
+								<div className="card card-body py-2">
+									<div className="row">
+										<div className="col-3">
+											<button className="btn btn-primary" onClick={e => actions.addApoderado(e)}>
+												Agregar Apoderados
+											</button>
+										</div>
+										<div className="col-3">
+											<button className="btn btn-primary" onClick={e => actions.addHijo(e)}>
+												Agregar Hijos
+											</button>
+										</div>
+										<div className="col-3" />
+										<div className="col-3" />
+									</div>
+								</div>
+							)}
 							{!!store.familiasss && <FamiliasList />}
 							{!!store.editNewFamilia && (
 								<div className="container">
@@ -117,7 +109,11 @@ export class Familias extends React.Component {
 											/>
 										</div>
 										<div className="col">
-											<button className="btn btn-primary">Editar</button>
+											<button
+												className="btn btn-primary"
+												onClick={e => actions.editFamilyName(e)}>
+												Editar
+											</button>
 										</div>
 									</div>
 
@@ -150,19 +146,8 @@ export class Familias extends React.Component {
 											<div className="col">
 												<AddApoderado />
 											</div>
-										</div>
-										<div className="row my-0">
 											<div className="col">
 												<ListApoderados />
-											</div>
-										</div>
-										<div className="row">
-											<div className="col ">
-												<button
-													className="btn btn-primary float-right mr-4 mt-2"
-													onClick={e => actions.goBack(e)}>
-													Aceptar
-												</button>
 											</div>
 										</div>
 									</div>
@@ -179,18 +164,48 @@ export class Familias extends React.Component {
 												<ListHijos />
 											</div>
 										</div>
-
-										<div className="row">
-											<div className="col  mr-5">
-												<button
-													className="btn btn-primary float-right "
-													onClick={e => actions.goBack(e)}>
-													Aceptar
-												</button>
-											</div>
-										</div>
 									</div>
 								</Fragment>
+							)}
+							{!!store.goBackNewFamily && (
+								<div className=" float-right mt-2 ">
+									<button
+										type="button"
+										className="btn btn-secondary "
+										data-toggle="collapse"
+										data-target="#collapseExample"
+										aria-expanded="false"
+										aria-controls="collapseExample"
+										onClick={e => actions.deleteNewFamilia(e)}>
+										Cancelar
+									</button>
+									<button
+										type="submit"
+										className="btn btn-primary ml-1 mr-3"
+										onClick={e => actions.goBack(e)}>
+										Aceptar
+									</button>
+								</div>
+							)}
+							{!!store.goBackEditFamily && (
+								<div className=" float-right mt-2 ">
+									<button
+										type="button"
+										className="btn btn-secondary "
+										data-toggle="collapse"
+										data-target="#collapseExample"
+										aria-expanded="false"
+										aria-controls="collapseExample"
+										onClick={e => actions.goBack(e)}>
+										Cancelar
+									</button>
+									<button
+										type="submit"
+										className="btn btn-primary ml-1 mr-3"
+										onClick={e => actions.goBack(e)}>
+										Aceptar
+									</button>
+								</div>
 							)}
 						</Fragment>
 					);

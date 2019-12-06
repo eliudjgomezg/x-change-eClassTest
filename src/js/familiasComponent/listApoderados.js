@@ -19,10 +19,10 @@ export class ListApoderados extends React.Component {
 														<div className="col-8">
 															<li className="list-group-item">{item.parentName}</li>
 														</div>
-														<div className="col-2">
+														<div className="col-2   ">
 															<button
 																type="button"
-																className="btn btn-primary"
+																className="btn btn-primary "
 																onClick={() => actions.editApoderado(item, i)}
 																data-toggle="collapse"
 																data-target="#collapseExample"
@@ -31,7 +31,7 @@ export class ListApoderados extends React.Component {
 																Editar
 															</button>
 														</div>
-														<div className="col-2">
+														<div className="col-2 pl-0">
 															<button
 																type="button"
 																className="btn btn-primary "

@@ -70,7 +70,9 @@ const getState = ({ getStore, setStore }) => {
 			familyOptions: false,
 			addHijo: false,
 			menu: true,
-			editNewFamilia: true
+			editNewFamilia: true,
+			goBackNewFamily: false,
+			goBackEditFamily: false
 		},
 
 		actions: {
@@ -100,7 +102,9 @@ const getState = ({ getStore, setStore }) => {
 							familyOptions: false,
 							addHijo: false,
 							menu: false,
-							editNewFamilia: false
+							editNewFamilia: false,
+							goBackNewFamily: false,
+							goBackEditFamily: false
 						});
 					})
 					.catch(error => {
@@ -133,7 +137,9 @@ const getState = ({ getStore, setStore }) => {
 							familyOptions: false,
 							addHijo: false,
 							menu: false,
-							editNewFamilia: false
+							editNewFamilia: false,
+							goBackNewFamily: false,
+							goBackEditFamily: false
 						});
 					})
 					.catch(error => {
@@ -168,7 +174,9 @@ const getState = ({ getStore, setStore }) => {
 							addHijo: false,
 							menu: true,
 							editNewFamilia: false,
-							familyName: ""
+							familyName: "",
+							goBackNewFamily: false,
+							goBackEditFamily: false
 						});
 					})
 					.catch(error => {
@@ -189,7 +197,9 @@ const getState = ({ getStore, setStore }) => {
 					familyOptions: false,
 					addHijo: false,
 					menu: false,
-					editNewFamilia: false
+					editNewFamilia: false,
+					goBackNewFamily: false,
+					goBackEditFamily: false
 				});
 			},
 			estadistica: e => {
@@ -205,7 +215,9 @@ const getState = ({ getStore, setStore }) => {
 					familyOptions: false,
 					addHijo: false,
 					menu: false,
-					editNewFamilia: false
+					editNewFamilia: false,
+					goBackNewFamily: false,
+					goBackEditFamily: false
 				});
 			},
 			//Funciones para la creacion de aulas
@@ -557,7 +569,9 @@ const getState = ({ getStore, setStore }) => {
 						email: "",
 						phone: ""
 					},
-					cardEdited: true
+					cardEdited: true,
+					id: "",
+					index: ""
 				});
 			},
 			deleteApoderado: index => {
@@ -579,25 +593,14 @@ const getState = ({ getStore, setStore }) => {
 						console.log(data); //this will print on the console the exact object received from the server
 						let apoderados = store.apoderados;
 						apoderados.splice(store.index, 1);
-						setStore({ id: "", apoderados });
+						setStore({ id: "", apoderados, index: "" });
 					})
 					.catch(error => {
 						//error handling
 						console.log(error);
 					});
 			},
-			//Funciones para crear, editar y eliminar hijo
-			deleteAddHijo: e => {
-				setStore({
-					hijo: {
-						sonName: "",
 
-						birthDate: "",
-						notes: ""
-					},
-					cardEdited: true
-				});
-			},
 			setHijo: e => {
 				e.preventDefault();
 				const store = getStore();
@@ -687,15 +690,46 @@ const getState = ({ getStore, setStore }) => {
 					}
 				});
 			},
+			//Funciones para crear, editar y eliminar hijo
+			deleteAddHijo: e => {
+				setStore({
+					hijo: {
+						sonName: "",
+
+						birthDate: "",
+						notes: ""
+					},
+					cardEdited: true,
+					id: "",
+					index: ""
+				});
+			},
 			deleteHijo: index => {
 				//Boton eliminar: Borra el aula seleccionada
 				const store = getStore();
-				let familia = store.familia;
-				familia.hijos.splice(index, 1);
-				setStore({
-					familia,
-					index: ""
-				});
+				fetch("http://localhost:3000/api/v1/son/" + store.id, {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log(resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data); //this will print on the console the exact object received from the server
+						let hijos = store.hijos;
+						hijos.splice(store.index, 1);
+						setStore({ id: "", hijos, index: "" });
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			//Funciones para crear, editar y eliminar Familia
 			deleteAddFamilia: e => {
@@ -788,7 +822,9 @@ const getState = ({ getStore, setStore }) => {
 							menu: false,
 							editNewFamilia: true,
 							familiasss: false,
-							familyName: item.familyName
+							familyName: item.familyName,
+							goBackNewFamily: false,
+							goBackEditFamily: true
 						});
 						fetch("http://localhost:3000/api/v1/sonEdit/" + store.id, {
 							method: "GET",
@@ -837,6 +873,59 @@ const getState = ({ getStore, setStore }) => {
 					});
 				} else setStore({ alert: true });
 			},
+			deleteNewFamilia: (e, item, i) => {
+				const store = getStore();
+				fetch("http://localhost:3000/api/v1/family/" + store.id, {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log(resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data); //this will print on the console the exact object received from the server
+
+						setStore({
+							familyLastName: false,
+							addApoderado: false,
+							familyOptions: false,
+							addHijo: false,
+							menu: true,
+							familiasss: true,
+							editNewFamilia: false,
+							apoderado: {
+								parentName: "",
+								rut: "",
+								email: "",
+								phone: ""
+							},
+							hijo: {
+								sonName: "",
+								birthDate: "",
+								notes: "",
+								families: ""
+							},
+							apoderados: [],
+							hijos: [],
+							id: "",
+							familyName: "",
+							apoderados: [],
+							hijos: [],
+							goBackNewFamily: false,
+							goBackEditFamily: false
+						});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
 			deleteFamilia: (e, item, i) => {
 				const store = getStore();
 				fetch("http://localhost:3000/api/v1/family/" + store.id, {
@@ -854,7 +943,13 @@ const getState = ({ getStore, setStore }) => {
 					.then(data => {
 						//here is were your code should start after the fetch finishes
 						console.log(data); //this will print on the console the exact object received from the server
-						setStore({ id: "" });
+						let familias = store.familias;
+						familias.splice(store.index, 1);
+						setStore({
+							id: "",
+							index: "",
+							familias
+						});
 					})
 					.catch(error => {
 						//error handling
@@ -1001,10 +1096,36 @@ const getState = ({ getStore, setStore }) => {
 							addHijo: false,
 							menu: false,
 							familyName: "",
-							id: data._id
+							id: data._id,
+							goBackNewFamily: true,
+							goBackEditFamily: false
 						});
 
 						//this will print on the console the exact object received from the server
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
+			editFamilyName: e => {
+				const store = getStore();
+				fetch("http://localhost:3000/api/v1/family/" + store.id, {
+					method: "PUT",
+					body: JSON.stringify({
+						familyName: store.familyName
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data); //this will print on the console the exact object received from the server
+						setStore({});
 					})
 					.catch(error => {
 						//error handling
@@ -1022,38 +1143,80 @@ const getState = ({ getStore, setStore }) => {
 						parentName: "",
 						rut: "",
 						email: "",
-						phone: "",
-						id: ""
-					}
+						phone: ""
+					},
+					hijos: [],
+					apoderdos: []
 				});
 			},
-			goBack: e => {
+			addApoderado: e => {
 				setStore({
 					familyLastName: false,
-					addApoderado: false,
-					familyOptions: false,
+
+					familyOptions: true,
 					addHijo: false,
-					menu: true,
-					familiasss: true,
-					editNewFamilia: false,
-					apoderado: {
-						parentName: "",
-						rut: "",
-						email: "",
-						phone: "",
-						id: ""
-					},
+					menu: false,
+					addApoderado: true,
 					hijo: {
 						sonName: "",
 						birthDate: "",
 						notes: "",
 						families: ""
 					},
-					apoderados: [],
 					hijos: [],
-					id: "",
-					familyName: ""
+					apoderdos: []
 				});
+			},
+			goBack: e => {
+				const store = getStore();
+				fetch("http://localhost:3000/api/v1/families", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						setStore({
+							familyLastName: false,
+							addApoderado: false,
+							familyOptions: false,
+							addHijo: false,
+							menu: true,
+							familiasss: true,
+							editNewFamilia: false,
+							apoderado: {
+								parentName: "",
+								rut: "",
+								email: "",
+								phone: "",
+								id: ""
+							},
+							hijo: {
+								sonName: "",
+								birthDate: "",
+								notes: "",
+								families: ""
+							},
+							apoderados: [],
+							hijos: [],
+							id: "",
+							familyName: "",
+							apoderados: [],
+							hijos: [],
+							goBackNewFamily: false,
+							goBackEditFamily: false,
+							familyName: "",
+							familias: data
+						});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			editNewApoderados: e => {
 				setStore({
