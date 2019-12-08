@@ -8,7 +8,7 @@ export class RolesForm extends React.Component {
 				{({ store, actions }) => {
 					return (
 						<Fragment>
-							<div className="container">
+							<div className="container mt-3">
 								<div className="row">
 									<div className="col">
 										<div className="form-group">
@@ -17,8 +17,8 @@ export class RolesForm extends React.Component {
 												type="text"
 												className="form-control"
 												id="exampleFormControlInput1"
-												value={store.usuario.nombre}
-												name="nombre"
+												value={store.usuario.name}
+												name="name"
 												onChange={e => actions.handleChangeUsuario(e)}
 												required
 											/>
@@ -31,16 +31,15 @@ export class RolesForm extends React.Component {
 												type="text"
 												className="form-control"
 												id="exampleFormControlInput1"
-												value={store.usuario.apellido}
-												name="apellido"
+												value={store.usuario.rut}
+												name="rut"
 												onChange={e => actions.handleChangeUsuario(e)}
 												required
 											/>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div className="container">
+
 								<div className="row">
 									<div className="col">
 										<div className="form-group">
@@ -49,8 +48,8 @@ export class RolesForm extends React.Component {
 												type="text"
 												className="form-control"
 												id="exampleFormControlInput1"
-												value={store.usuario.rut}
-												name="rut"
+												value={store.usuario.phone}
+												name="phone"
 												onChange={e => actions.handleChangeUsuario(e)}
 												required
 											/>
@@ -71,46 +70,47 @@ export class RolesForm extends React.Component {
 										</div>
 									</div>
 								</div>
-							</div>
-							<div className="form-group">
-								<label htmlFor="exampleFormControlSelect1">Seleccionar Rol</label>
-								<select
-									className="form-control"
-									id="exampleFormControlSelect1"
-									value={store.usuario.rol}
-									name="rol"
-									onChange={e => actions.handleChangeUsuario(e)}
-									required>
-									<option>Elige una opcion...</option>
-									<option>Administrador</option>
-									<option>Profesor</option>
-									<option>Check In</option>
-								</select>
-							</div>
 
-							<div className="form-group">
-								<label htmlFor="exampleFormControlInput1">Contraseña</label>
-								<input
-									type="password"
-									className="form-control"
-									id="exampleFormControlInput1"
-									value={store.usuario.contraseña}
-									name="contraseña"
-									onChange={e => actions.handleChangeUsuario(e)}
-									required
-								/>
-							</div>
-							<div className="form-group">
-								<label htmlFor="exampleFormControlInput1">Repetir Contraseña</label>
-								<input
-									type="password"
-									className="form-control"
-									id="exampleFormControlInput1"
-									value={store.usuario.rContraseña}
-									name="rContraseña"
-									onChange={e => actions.handleChangeUsuario(e)}
-									required
-								/>
+								<div className="form-group">
+									<label htmlFor="exampleFormControlSelect1">Seleccionar Rol</label>
+									<select
+										className="form-control"
+										id="exampleFormControlSelect1"
+										value={store.usuario.rol}
+										name="rol"
+										onChange={e => actions.handleChangeUsuario(e)}
+										required>
+										<option>Elige una opcion...</option>
+										<option>Administrador</option>
+										<option>Profesor</option>
+										<option>Check In</option>
+									</select>
+								</div>
+
+								<div className="form-group">
+									<label htmlFor="exampleFormControlInput1">Contraseña</label>
+									<input
+										type="password"
+										className="form-control"
+										id="exampleFormControlInput1"
+										value={store.usuario.password}
+										name="password"
+										onChange={e => actions.handleChangeUsuario(e)}
+										required
+									/>
+								</div>
+								<div className="form-group">
+									<label htmlFor="exampleFormControlInput1">Repetir Contraseña</label>
+									<input
+										type="password"
+										className="form-control"
+										id="exampleFormControlInput1"
+										value={store.usuario.rPassword}
+										name="rPassword"
+										onChange={e => actions.handleChangeUsuario(e)}
+										required
+									/>
+								</div>
 							</div>
 							{!!store.rol && (
 								<div className="alert alert-danger" role="alert">

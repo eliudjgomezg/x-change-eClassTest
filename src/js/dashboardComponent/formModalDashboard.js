@@ -64,8 +64,8 @@ export class FormModalDashboard extends React.Component {
 											store.usuarios.map((p, i) => {
 												if (p.rol == "Profesor") {
 													return (
-														<option key={i} value={p.nombre}>
-															{p.nombre + " " + p.apellido}
+														<option key={i} value={p.name}>
+															{p.name}
 														</option>
 													);
 												}

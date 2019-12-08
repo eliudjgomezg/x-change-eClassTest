@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 import { Admin } from "./views/admin";
 import { Login } from "./views/login";
+import { Teacher } from "./views/teacher";
+import { CheckIn } from "./views/checkIn";
 
 import injectContext, { Context } from "./store/appContext";
 
@@ -20,7 +22,9 @@ export class Layout extends React.Component {
 			<BrowserRouter basename={basename}>
 				<Switch>
 					<Route exact path="/" component={Login} />
-					<Route path="/admin" component={Admin} />
+					<Route path="/Administrador" component={Admin} />
+					<Route path="/Profesor" component={Teacher} />
+					<Route path="/Check In" component={CheckIn} />
 
 					<Route render={() => <h1>Not found!</h1>} />
 				</Switch>

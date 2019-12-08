@@ -71,6 +71,7 @@
 	"dependencies": {
 		"bootstrap": "^4.3.1",
 		"bootstrap-select": "^1.13.12",
+		"bootstrap-toggle": "^2.2.2",
 		"jquery": "^3.4.1",
 		"nodemon": "^1.19.4",
 		"poppers": "^0.1.2",

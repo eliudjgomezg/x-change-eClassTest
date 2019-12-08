@@ -42,15 +42,20 @@ const getState = ({ getStore, setStore }) => {
 			familias: [],
 			//Variables para creacion de Roles
 			usuario: {
-				nombre: "",
-				apellido: "",
+				name: "",
 				rut: "",
-				rol: "",
 				email: "",
-				contraseña: "",
-				rContraseña: ""
+				rol: "",
+				phone: "",
+				password: "",
+				rPassword: ""
 			},
 			usuarios: [],
+			//Variables para hacer Loing
+			login: {
+				rut: "",
+				password: ""
+			},
 			//Variables generales
 			alert: false,
 			index: "",
@@ -72,7 +77,15 @@ const getState = ({ getStore, setStore }) => {
 			menu: true,
 			editNewFamilia: true,
 			goBackNewFamily: false,
-			goBackEditFamily: false
+			goBackEditFamily: false,
+			disabled: "",
+			actualRol: "",
+			actualId: "",
+			view: "",
+			rut: "",
+			classroom: "",
+			checkIn: true,
+			configCheckIn: false
 		},
 
 		actions: {
@@ -139,7 +152,9 @@ const getState = ({ getStore, setStore }) => {
 							menu: false,
 							editNewFamilia: false,
 							goBackNewFamily: false,
-							goBackEditFamily: false
+							goBackEditFamily: false,
+							checkIn: false,
+							configCheckIn: false
 						});
 					})
 					.catch(error => {
@@ -186,21 +201,38 @@ const getState = ({ getStore, setStore }) => {
 			},
 			roles: e => {
 				const store = getStore();
-				setStore({
-					dashboard: false,
-					novedades: false,
-					familiass: false,
-					roles: true,
-					estadistica: false,
-					familiasss: false,
-					addApoderado: false,
-					familyOptions: false,
-					addHijo: false,
-					menu: false,
-					editNewFamilia: false,
-					goBackNewFamily: false,
-					goBackEditFamily: false
-				});
+				fetch("http://localhost:3000/api/v1/roles", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						setStore({
+							dashboard: false,
+							novedades: false,
+							familiass: false,
+							roles: true,
+							estadistica: false,
+							familiasss: false,
+							addApoderado: false,
+							familyOptions: false,
+							addHijo: false,
+							menu: false,
+							editNewFamilia: false,
+							goBackNewFamily: false,
+							goBackEditFamily: false,
+							usuarios: data
+						});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			estadistica: e => {
 				const store = getStore();
@@ -220,16 +252,22 @@ const getState = ({ getStore, setStore }) => {
 					goBackEditFamily: false
 				});
 			},
+			checkIn: e => {
+				setStore({ checkIn: true, novedades: false, configCheckIn: false });
+			},
+			configCheckIn: e => {
+				setStore({ configCheckIn: true, novedades: false, checkIn: false });
+			},
 			//Funciones para la creacion de aulas
 			getData: e => {
 				//Toma la data del Input y la coloca en las variables del store
 				const store = getStore();
 				const { name, value } = e.target;
-				setStore({ [name]: value });
+				setStore({ [name]: value, alert: false });
 			},
 			getDataSelect: e => {
 				//Toma la data del Input y la coloca en las variables del store
-				console.log(e.target.selectOption);
+				console.log(e.target.value);
 			},
 			setEditCard: (item, itemPosition) => {
 				// Boton de editar: Toma el valos del Item correspondiente
@@ -426,8 +464,11 @@ const getState = ({ getStore, setStore }) => {
 					.then(data => {
 						//here is were your code should start after the fetch finishes
 						console.log(data);
+						let novedadesArray = store.novedadesArray;
+						novedadesArray.push(data);
 						setStore({
-							news: ""
+							news: "",
+							novedadesArray
 						});
 
 						//this will print on the console the exact object received from the server
@@ -961,22 +1002,52 @@ const getState = ({ getStore, setStore }) => {
 				e.preventDefault();
 				const store = getStore();
 				if (store.cardEdited) {
-					if (store.usuario.contraseña === store.usuario.rContraseña) {
+					if (store.usuario.password === store.usuario.rPassword) {
 						if (store.usuario.rol != "Elige una opcion...") {
-							let usuarios = store.usuarios;
-							usuarios.push(store.usuario);
-							setStore({
-								usuarios,
-								usuario: {
-									nombre: "",
-									apellido: "",
-									rut: "",
-									rol: "",
-									email: "",
-									contraseña: "",
-									rContraseña: ""
+							fetch("http://localhost:3000/api/v1/roles", {
+								method: "POST",
+								body: JSON.stringify({
+									name: store.usuario.name,
+									rut: store.usuario.rut,
+									email: store.usuario.email,
+									phone: store.usuario.phone,
+									rol: store.usuario.rol,
+									password: store.usuario.password
+								}),
+								headers: {
+									"Content-Type": "application/json"
 								}
-							});
+							})
+								.then(resp => {
+									//console.log(resp.ok); // will be true if the response is successfull
+									//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
+									//console.log(resp.text()); // will try return the exact result as string
+									return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+								})
+								.then(data => {
+									//here is were your code should start after the fetch finishes
+									console.log(data);
+									let usuarios = store.usuarios;
+									usuarios.push(data);
+									setStore({
+										usuario: {
+											name: "",
+											rut: "",
+											email: "",
+											rol: "",
+											phone: "",
+											password: "",
+											rPassword: ""
+										},
+										usuarios
+									});
+
+									//this will print on the console the exact object received from the server
+								})
+								.catch(error => {
+									//error handling
+									console.log(error);
+								});
 						} else {
 							setStore({
 								rol: true
@@ -988,23 +1059,46 @@ const getState = ({ getStore, setStore }) => {
 						});
 					}
 				} else {
-					if (store.usuario.contraseña === store.usuario.rContraseña) {
+					if (store.usuario.password === store.usuario.rPassword) {
 						if (store.usuario.rol != "Elige una opcion...") {
-							let usuarios = store.usuarios;
-							usuarios[store.index] = store.usuario;
-							setStore({
-								usuarios,
-								usuario: {
-									nombre: "",
-									apellido: "",
-									rut: "",
-									rol: "",
-									email: "",
-									contraseña: "",
-									rContraseña: ""
-								},
-								cardEdited: true
-							});
+							fetch("http://localhost:3000/api/v1/rol/" + store.id, {
+								method: "PUT",
+								body: JSON.stringify({
+									name: store.usuario.name,
+									rut: store.usuario.rut,
+									email: store.usuario.email,
+									rol: store.usuario.rol,
+									phone: store.usuario.phone,
+									password: store.usuario.password
+								}),
+								headers: {
+									"Content-Type": "application/json"
+								}
+							})
+								.then(resp => {
+									return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+								})
+								.then(data => {
+									//here is were your code should start after the fetch finishes
+									console.log(data); //this will print on the console the exact object received from the server
+									let usuarios = store.usuarios;
+									usuarios[store.index] = data;
+									setStore({
+										usuario: {
+											name: "",
+											rut: "",
+											email: "",
+											rol: "",
+											phone: "",
+											password: "",
+											rPassword: ""
+										},
+										cardEdited: true,
+										id: "",
+										index: "",
+										usuarios
+									});
+								});
 						} else {
 							setStore({
 								rol: true
@@ -1031,31 +1125,62 @@ const getState = ({ getStore, setStore }) => {
 			deleteAddUsuarios: e => {
 				setStore({
 					usuario: {
-						nombre: "",
-						apellido: "",
+						name: "",
 						rut: "",
+						phone: "",
 						rol: "",
 						email: "",
-						contraseña: "",
-						rContraseña: ""
+						password: "",
+						rPassword: ""
 					},
-					cardEdited: true
+					cardEdited: true,
+					id: "",
+					index: ""
 				});
 			},
-			editRoles: (e, item, i) => {
+			deleteUsuarios: (item, i) => {
+				const store = getStore();
+				fetch("http://localhost:3000/api/v1/rol/" + store.id, {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log(resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data); //this will print on the console the exact object received from the server
+						let usuarios = store.usuarios;
+						usuarios.splice(store.index, 1);
+						setStore({
+							id: "",
+							index: "",
+							usuarios
+						});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
+			editRol: (item, i) => {
 				const store = getStore();
 				setStore({
 					usuario: {
-						nombre: item.nombre,
-						apellido: item.apellido,
+						name: item.name,
 						rut: item.rut,
-						rol: item.rol,
 						email: item.email,
-						contraseña: item.contraseña,
-						rContraseña: item.rContraseña
+						phone: item.phone,
+						rol: item.rol
 					},
 					index: i,
-					cardEdited: false
+					cardEdited: false,
+					id: item._id
 				});
 			},
 			familyLastName: e => {
@@ -1250,6 +1375,93 @@ const getState = ({ getStore, setStore }) => {
 						phone: ""
 					}
 				});
+			},
+			//Funciones pra hacer login
+			login: e => {
+				const store = getStore();
+				fetch("http://localhost:3000/api/v1/rolesLogin", {
+					method: "POST",
+					body: JSON.stringify({
+						rut: store.login.rut,
+						password: store.login.password
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data);
+						if (data != false) {
+							setStore({
+								usuario: {
+									name: data.name,
+									rut: data.rut,
+									email: data.email,
+									rol: data.rol,
+									phone: data.phone,
+									password: data.password,
+									rPassword: data.password
+								},
+								view: "/" + data.rol
+							});
+						} else setStore({ alert: true });
+
+						//this will print on the console the exact object received from the server
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
+			handleLoging: e => {
+				const store = getStore();
+				const { name, value } = e.target;
+				let login = store.login;
+				login[name] = value;
+				setStore({
+					login,
+					alert: false
+				});
+			},
+			//Funciones pra modulo CheckIn
+			serchRut: e => {
+				const store = getStore();
+				if (store.rut != "") {
+					fetch("http://localhost:3000/api/v1/serchRut/" + store.rut, {
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json"
+						}
+					})
+						.then(resp => {
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							console.log(data);
+							if (data) {
+								setStore({
+									rut: "",
+									hijos: data
+								});
+							} else setStore({ alert: true });
+						})
+						.catch(error => {
+							//error handling
+							console.log(error);
+						});
+				} else setStore({ alert: true });
+			},
+			pickSon: (e, item) => {
+				if (e.target.value === true) {
+					console.log("activado");
+				} else console.log("activado");
 			}
 		}
 	};
