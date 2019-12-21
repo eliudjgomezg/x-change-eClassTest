@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
+import PropTypes from "prop-types";
 
 export class Login extends React.Component {
 	render() {
@@ -37,12 +38,12 @@ export class Login extends React.Component {
 										required
 									/>
 
-									<Link
-										to={store.view}
+									<button
+										type="button"
 										className="btn btn-lg btn-primary btn-block"
-										onClick={e => actions.login(e)}>
+										onClick={e => actions.login(e, this.props.history)}>
 										Sign in
-									</Link>
+									</button>
 									{!!store.alert && (
 										<div className="alert alert-danger" role="alert">
 											Usuario o Contraseña Incorrecto
@@ -57,3 +58,6 @@ export class Login extends React.Component {
 		);
 	}
 }
+Login.propTypes = {
+	history: PropTypes.object
+};

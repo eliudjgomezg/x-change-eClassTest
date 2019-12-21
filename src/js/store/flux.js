@@ -1,6 +1,6 @@
 import { ENGINE_METHOD_STORE } from "constants";
 
-const getState = ({ getStore, setStore }) => {
+const getState = ({ getStore, setStore, getActions }) => {
 	return {
 		store: {
 			//Variables para creacion de aula
@@ -48,8 +48,10 @@ const getState = ({ getStore, setStore }) => {
 				rol: "",
 				phone: "",
 				password: "",
-				rPassword: ""
+				rPassword: "",
+				logedIn: false
 			},
+
 			usuarios: [],
 			//Variables para hacer Loing
 			login: {
@@ -78,7 +80,8 @@ const getState = ({ getStore, setStore }) => {
 			editNewFamilia: true,
 			goBackNewFamily: false,
 			goBackEditFamily: false,
-			disabled: "",
+			disabledOut: true,
+			disabledin: false,
 			actualRol: "",
 			actualId: "",
 			view: "",
@@ -154,7 +157,9 @@ const getState = ({ getStore, setStore }) => {
 							goBackNewFamily: false,
 							goBackEditFamily: false,
 							checkIn: false,
-							configCheckIn: false
+							configCheckIn: false,
+							hijos: [],
+							rut: ""
 						});
 					})
 					.catch(error => {
@@ -253,10 +258,40 @@ const getState = ({ getStore, setStore }) => {
 				});
 			},
 			checkIn: e => {
+				const store = getStore();
+				fetch("http://localhost:3000/api/v1/classrooms", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						setStore({
+							cardArray: data,
+							checkIn: true,
+							novedades: false,
+							configCheckIn: false
+						});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+
 				setStore({ checkIn: true, novedades: false, configCheckIn: false });
 			},
 			configCheckIn: e => {
-				setStore({ configCheckIn: true, novedades: false, checkIn: false });
+				setStore({
+					configCheckIn: true,
+					novedades: false,
+					checkIn: false,
+					hijos: [],
+					rut: ""
+				});
 			},
 			//Funciones para la creacion de aulas
 			getData: e => {
@@ -1377,8 +1412,9 @@ const getState = ({ getStore, setStore }) => {
 				});
 			},
 			//Funciones pra hacer login
-			login: e => {
+			login: (e, history) => {
 				const store = getStore();
+				const actions = getActions();
 				fetch("http://localhost:3000/api/v1/rolesLogin", {
 					method: "POST",
 					body: JSON.stringify({
@@ -1407,10 +1443,12 @@ const getState = ({ getStore, setStore }) => {
 									rol: data.rol,
 									phone: data.phone,
 									password: data.password,
-									rPassword: data.password
-								},
-								view: "/" + data.rol
+									rPassword: data.password,
+									logedIn: true
+								}
 							});
+							actions.dashboard();
+							history.push("/" + data.rol);
 						} else setStore({ alert: true });
 
 						//this will print on the console the exact object received from the server
@@ -1458,10 +1496,78 @@ const getState = ({ getStore, setStore }) => {
 						});
 				} else setStore({ alert: true });
 			},
-			pickSon: (e, item) => {
-				if (e.target.value === true) {
-					console.log("activado");
-				} else console.log("activado");
+			checkInSon: (e, item) => {
+				const store = getStore();
+				if (e.target.checked) {
+					fetch("http://localhost:3000/api/v1/currentClassroom", {
+						method: "POST",
+						body: JSON.stringify({
+							sonName: item.sonName,
+							birthDate: item.birthDate,
+							notes: item.notes,
+							families: item.families,
+							age: item.age,
+							classroomName: item.classroomName
+						}),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					})
+						.then(resp => {
+							//console.log(resp.ok); // will be true if the response is successfull
+							//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
+							//console.log(resp.text()); // will try return the exact result as string
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							//here is were your code should start after the fetch finishes
+							console.log(data);
+
+							//this will print on the console the exact object received from the server
+						})
+						.catch(error => {
+							//error handling
+							console.log(error);
+						});
+				} else {
+					fetch("http://localhost:3000/api/v1/currentClassroom/" + item.sonName, {
+						method: "DELETE",
+						headers: {
+							"Content-Type": "application/json"
+						}
+					})
+						.then(resp => {
+							//console.log(resp.ok); // will be true if the response is successfull
+							//console.log(resp.status); // the status code = 200 or code = 400 etc.
+							//console.log(resp.text()); // will try return the exact result as string
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							//here is were your code should start after the fetch finishes
+							console.log(data); //this will print on the console the exact object received from the server
+						})
+						.catch(error => {
+							//error handling
+							console.log(error);
+						});
+				}
+			},
+			checkOutSon: (e, item) => {
+				let day = Math.floor(Math.random() * (32 - 1) + 1);
+				let month = Math.floor(Math.random() * (13 - 1) + 1);
+
+				if (1 <= month <= 9) {
+					month = "0" + month;
+				}
+				let year = Math.floor(Math.random() * (2019 - 1990) + 1990);
+				let moment = require("moment");
+				let date = moment(20130307, "YYYYMMDD").fromNow(true);
+				let age = date.replace(/\D/g, "");
+
+				console.log(day + "/" + month + "/" + year + "    edad:" + age);
+			},
+			selectClassroom: e => {
+				console.log("asdf");
 			}
 		}
 	};

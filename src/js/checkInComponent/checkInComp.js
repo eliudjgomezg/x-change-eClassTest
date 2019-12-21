@@ -38,6 +38,16 @@ export class CheckInComp extends React.Component {
 								)}
 							</div>
 							<ListHijos />
+							<div>
+								<button
+									type="button"
+									className="btn btn-primary float-right mt-2 mr-5 "
+									data-toggle="modal"
+									data-target="#exampleModal2"
+									onClick={e => actions.indextodeleteClassroon(item, i)}>
+									Aceptar
+								</button>
+							</div>
 						</Fragment>
 					);
 				}}

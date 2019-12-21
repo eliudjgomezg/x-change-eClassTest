@@ -27,6 +27,7 @@ export class AddHijos extends React.Component {
 											<label htmlFor="exampleFormControlInput1">F. Nacimiento:</label>
 											<input
 												className="form-control"
+												type="date"
 												id="exampleFormControlInput1"
 												onChange={e => actions.handleChangeHijo(e)}
 												value={store.hijo.birthDate}
