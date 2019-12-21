@@ -1,12 +1,40 @@
 import React, { Fragment } from "react";
 import { Context } from "../store/appContext";
-import { SelectClassroom } from "../checkInComponent/selectClassroom";
 
-export class ListHijos extends React.Component {
+export class Classroom extends React.Component {
 	render() {
 		return (
 			<Fragment>
-				<h1 className="text-center">Seleccionar Niñ@:</h1>
+				<Context.Consumer>
+					{({ store, actions }) => {
+						return (
+							<div className="card card-body">
+								<div className="container">
+									<div className="row">
+										<div className="col text-center">
+											<h1>Bienvenid@ a la Sala de 1 a 3 años</h1>
+										</div>
+									</div>
+									<div className="row">
+										<div className="col">
+											<p className="float-left">
+												<strong>Lista de asistencia</strong>
+											</p>
+										</div>
+										<div className="col">
+											<button
+												className="btn btn-primary float-right"
+												onClick={e => actions.classroomList(e)}>
+												ACTUALIZAR LISTA
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						);
+					}}
+				</Context.Consumer>
+
 				<div className="card card-body pr-0 pl-5">
 					<ul className="list-group">
 						<Context.Consumer>

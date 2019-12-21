@@ -86,9 +86,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 			actualId: "",
 			view: "",
 			rut: "",
-			classroom: "",
+			classroom: true,
 			checkIn: true,
-			configCheckIn: false
+			configCheckIn: false,
+			selectRol: true
 		},
 
 		actions: {
@@ -231,7 +232,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							editNewFamilia: false,
 							goBackNewFamily: false,
 							goBackEditFamily: false,
-							usuarios: data
+							usuarios: data,
+							selectRol: true
 						});
 					})
 					.catch(error => {
@@ -290,7 +292,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					novedades: false,
 					checkIn: false,
 					hijos: [],
-					rut: ""
+					rut: "",
+					selectRol: false
 				});
 			},
 			//Funciones para la creacion de aulas
@@ -298,7 +301,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 				//Toma la data del Input y la coloca en las variables del store
 				const store = getStore();
 				const { name, value } = e.target;
-				setStore({ [name]: value, alert: false });
+				setStore({ [name]: value, alert: false, hijos: [] });
 			},
 			getDataSelect: e => {
 				//Toma la data del Input y la coloca en las variables del store
@@ -1445,9 +1448,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 									password: data.password,
 									rPassword: data.password,
 									logedIn: true
-								}
+								},
+								id: data._id
 							});
-							actions.dashboard();
 							history.push("/" + data.rol);
 						} else setStore({ alert: true });
 
@@ -1485,7 +1488,6 @@ const getState = ({ getStore, setStore, getActions }) => {
 							console.log(data);
 							if (data) {
 								setStore({
-									rut: "",
 									hijos: data
 								});
 							} else setStore({ alert: true });
@@ -1502,6 +1504,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 					fetch("http://localhost:3000/api/v1/currentClassroom", {
 						method: "POST",
 						body: JSON.stringify({
+							id: item.id,
 							sonName: item.sonName,
 							birthDate: item.birthDate,
 							notes: item.notes,
@@ -1530,7 +1533,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							console.log(error);
 						});
 				} else {
-					fetch("http://localhost:3000/api/v1/currentClassroom/" + item.sonName, {
+					fetch("http://localhost:3000/api/v1/currentClassroom/" + item.id, {
 						method: "DELETE",
 						headers: {
 							"Content-Type": "application/json"
@@ -1552,22 +1555,69 @@ const getState = ({ getStore, setStore, getActions }) => {
 						});
 				}
 			},
-			checkOutSon: (e, item) => {
-				let day = Math.floor(Math.random() * (32 - 1) + 1);
-				let month = Math.floor(Math.random() * (13 - 1) + 1);
-
-				if (1 <= month <= 9) {
-					month = "0" + month;
-				}
-				let year = Math.floor(Math.random() * (2019 - 1990) + 1990);
-				let moment = require("moment");
-				let date = moment(20130307, "YYYYMMDD").fromNow(true);
-				let age = date.replace(/\D/g, "");
-
-				console.log(day + "/" + month + "/" + year + "    edad:" + age);
+			outCheckin: (e, item) => {
+				const store = getStore();
+				setStore({ hijos: [], rut: "" });
 			},
-			selectClassroom: e => {
-				console.log("asdf");
+			logedEditRol: e => {
+				const store = getStore();
+				fetch("http://localhost:3000/api/v1/rol/" + store.id, {
+					method: "PUT",
+					body: JSON.stringify({
+						name: store.usuario.name,
+						rut: store.usuario.rut,
+						email: store.usuario.email,
+						rol: store.usuario.rol,
+						phone: store.usuario.phone,
+						password: store.usuario.password
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data); //this will print on the console the exact object received from the server
+						setStore({
+							usuario: {
+								name: data.name,
+								rut: data.rut,
+								email: data.email,
+								rol: data.rol,
+								phone: data.phone,
+								password: data.password,
+								rPassword: data.password
+							}
+						});
+					});
+			},
+			classroom: e => {
+				const store = getStore();
+				setStore({ classroom: true });
+			},
+			classroomList: e => {
+				fetch("http://localhost:3000/api/v1/currentClassroom/", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						setStore({
+							hijos: data
+						});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			}
 		}
 	};

@@ -2,9 +2,10 @@ import React, { Fragment } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Context } from "../store/appContext";
 
-import { Classroom } from "../classroomComponet/classroom";
-import { Config } from "../configComponent/config";
+import { Classroom } from "../teachersComponet/classroom";
+import { EditRol } from "../teachersComponet/editRole";
 import { Novedades } from "../views/novedades";
+import { RolesForm } from "../rolesComponent/rolesForm";
 
 import "jquery";
 
@@ -20,8 +21,8 @@ export class Teacher extends React.Component {
 								<div className="sidebar-heading">iKids </div>
 								<div className="list-group list-group-flush">
 									<button
-										onClick={e => actions.classroom(e)}
-										className="list-group-item list-group-item-action bg-light">
+										className="list-group-item list-group-item-action bg-light"
+										onClick={e => actions.classroom(e)}>
 										Aula
 									</button>
 									<button
@@ -30,9 +31,9 @@ export class Teacher extends React.Component {
 										Novedades
 									</button>
 									<button
-										onClick={e => actions.config(e)}
+										onClick={e => actions.configCheckIn(e)}
 										className="list-group-item list-group-item-action bg-light">
-										Configuracion
+										Editar Usuari@
 									</button>
 								</div>
 							</div>
@@ -103,7 +104,24 @@ export class Teacher extends React.Component {
 								<div className="container-fluid">
 									{!!store.classroom && <Classroom />}
 									{!!store.novedades && <Novedades />}
-									{!!store.config && <Config />}
+									{!!store.configCheckIn && (
+										<Fragment>
+											<div className="card card-body mt-2">
+												<p className="">Editar Usuari@:</p>
+												<RolesForm />
+											</div>
+											<div>
+												<button
+													type="button"
+													className="btn btn-primary float-right mt-2 mr-5 "
+													data-toggle="modal"
+													data-target="#exampleModal2"
+													onClick={e => actions.logedEditRol(e)}>
+													Aceptar
+												</button>
+											</div>
+										</Fragment>
+									)}
 								</div>
 							</div>
 						</Fragment>

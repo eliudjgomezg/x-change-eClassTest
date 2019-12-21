@@ -44,7 +44,7 @@ export class CheckInComp extends React.Component {
 									className="btn btn-primary float-right mt-2 mr-5 "
 									data-toggle="modal"
 									data-target="#exampleModal2"
-									onClick={e => actions.indextodeleteClassroon(item, i)}>
+									onClick={e => actions.outCheckin(e)}>
 									Aceptar
 								</button>
 							</div>

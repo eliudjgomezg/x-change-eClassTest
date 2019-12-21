@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 import { CheckInComp } from "../checkInComponent/checkInComp";
-import { Config } from "../checkinConfigComponet/config";
+
 import { Novedades } from "../views/novedades";
 import { RolesForm } from "../rolesComponent/rolesForm";
 
@@ -104,7 +104,24 @@ export class CheckIn extends React.Component {
 								<div className="container-fluid">
 									{!!store.checkIn && <CheckInComp />}
 									{!!store.novedades && <Novedades />}
-									{!!store.configCheckIn && <RolesForm />}
+									{!!store.configCheckIn && (
+										<Fragment>
+											<div className="card card-body mt-2">
+												<p className="">Editar Perfil:</p>
+												<RolesForm />
+											</div>
+											<div>
+												<button
+													type="button"
+													className="btn btn-primary float-right mt-2 mr-5 "
+													data-toggle="modal"
+													data-target="#exampleModal2"
+													onClick={e => actions.logedEditRol(e)}>
+													Aceptar
+												</button>
+											</div>
+										</Fragment>
+									)}
 								</div>
 							</div>
 						</Fragment>

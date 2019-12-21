@@ -71,21 +71,23 @@ export class RolesForm extends React.Component {
 									</div>
 								</div>
 
-								<div className="form-group">
-									<label htmlFor="exampleFormControlSelect1">Seleccionar Rol</label>
-									<select
-										className="form-control"
-										id="exampleFormControlSelect1"
-										value={store.usuario.rol}
-										name="rol"
-										onChange={e => actions.handleChangeUsuario(e)}
-										required>
-										<option>Elige una opcion...</option>
-										<option>Administrador</option>
-										<option>Profesor</option>
-										<option>Check In</option>
-									</select>
-								</div>
+								{!!store.selectRol && (
+									<div className="form-group">
+										<label htmlFor="exampleFormControlSelect1">Seleccionar Rol</label>
+										<select
+											className="form-control"
+											id="exampleFormControlSelect1"
+											value={store.usuario.rol}
+											name="rol"
+											onChange={e => actions.handleChangeUsuario(e)}
+											required>
+											<option>Elige una opcion...</option>
+											<option>Administrador</option>
+											<option>Profesor</option>
+											<option>Check In</option>
+										</select>
+									</div>
+								)}
 
 								<div className="form-group">
 									<label htmlFor="exampleFormControlInput1">Contraseña</label>
