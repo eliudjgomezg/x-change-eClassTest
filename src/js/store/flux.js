@@ -13,6 +13,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			dayUse: "",
 			startScheduleRank: "",
 			finalScheduleRank: "",
+			filterByWord: "",
 			cardArray: [],
 
 			//Variables para creacion de novedades
@@ -53,6 +54,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 
 			usuarios: [],
+			selectUSuarios: [],
 			//Variables para hacer Loing
 			login: {
 				rut: "",
@@ -89,7 +91,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 			classroom: true,
 			checkIn: true,
 			configCheckIn: false,
-			selectRol: true
+			selectRol: true,
+			carddashboard: true,
+			formModalDashboard: false
 		},
 
 		actions: {
@@ -121,13 +125,20 @@ const getState = ({ getStore, setStore, getActions }) => {
 							menu: false,
 							editNewFamilia: false,
 							goBackNewFamily: false,
-							goBackEditFamily: false
+							goBackEditFamily: false,
+							formModalDashboard: false,
+							carddashboard: true,
+							alert: false
 						});
 					})
 					.catch(error => {
 						//error handling
 						console.log(error);
 					});
+			},
+			formModalDashboard: e => {
+				const store = getStore();
+				setStore({ formModalDashboard: true, carddashboard: false });
 			},
 			novedades: e => {
 				const store = getStore();
@@ -160,7 +171,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 							checkIn: false,
 							configCheckIn: false,
 							hijos: [],
-							rut: ""
+							rut: "",
+							formModalDashboard: false,
+							carddashboard: false
 						});
 					})
 					.catch(error => {
@@ -197,7 +210,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 							editNewFamilia: false,
 							familyName: "",
 							goBackNewFamily: false,
-							goBackEditFamily: false
+							goBackEditFamily: false,
+							carddashboard: false,
+							formModalDashboard: false
 						});
 					})
 					.catch(error => {
@@ -218,6 +233,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					})
 					.then(data => {
 						console.log(data);
+						let roles = data;
+						let selectUSuarios = roles.filter(r => r.rol === "Profesor");
 						setStore({
 							dashboard: false,
 							novedades: false,
@@ -233,7 +250,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 							goBackNewFamily: false,
 							goBackEditFamily: false,
 							usuarios: data,
-							selectRol: true
+							selectUSuarios,
+							selectRol: true,
+							carddashboard: false,
+							formModalDashboard: false
 						});
 					})
 					.catch(error => {
@@ -256,7 +276,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 					menu: false,
 					editNewFamilia: false,
 					goBackNewFamily: false,
-					goBackEditFamily: false
+					goBackEditFamily: false,
+					carddashboard: false,
+					formModalDashboard: false
 				});
 			},
 			checkIn: e => {
@@ -320,12 +342,15 @@ const getState = ({ getStore, setStore, getActions }) => {
 					capacity: item.capacity,
 					dayUse: item.dayUse,
 					startScheduleRank: item.startScheduleRank,
-					finalScheduleRank: item.finalScheduleRank
+					finalScheduleRank: item.finalScheduleRank,
+					carddashboard: false,
+					formModalDashboard: true
 				});
 			},
 			setCard: e => {
 				e.preventDefault();
 				const store = getStore();
+				const actions = getActions();
 
 				//Boton de guardar: Guarda una nueva aula en un card. Puede diferenciar entre editar
 				// un aula y guardar una nueva. Tamnien, verifica que los campos estes escritos
@@ -407,6 +432,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 								id: "",
 								cardEdited: true
 							});
+							actions.dashboard();
 						})
 						.catch(error => {
 							//error handling
@@ -444,7 +470,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 					dayUse: "",
 					startScheduleRank: "",
 					finalScheduleRank: "",
-					id: ""
+					id: "",
+					carddashboard: true,
+					formModalDashboard: false
 				});
 			},
 			indextodeleteClassroon: (item, i) => {
@@ -453,9 +481,39 @@ const getState = ({ getStore, setStore, getActions }) => {
 					index: i
 				});
 			},
+			filterByDay: e => {
+				const store = getStore();
+				let moment = require("moment");
+				let day = moment().format("dddd");
+				let sDay = "";
+				if (day === "Monday") {
+					sDay = "Lunes";
+				} else if (day === "Tuesday") {
+					sDay = "martes";
+				} else if (day === "Wednesday") {
+					sDay = "miercoles";
+				} else if (day === "Thursday") {
+					sDay = "jueves";
+				} else if (day === "Friday") {
+					sDay = "viernes";
+				} else if (day === "Saturday") {
+					sDay = "sabado";
+				} else if (day === "Sunday") {
+					sDay = "sunday";
+				}
+
+				console.log(sDay);
+				let cardArray = store.cardArray.filter(d => d.dayUse == sDay);
+				if (cardArray.length > 0) {
+					setStore({ cardArray });
+				} else setStore({ cardArray, alert: true });
+			},
+
 			deleteCard: () => {
 				//Boton eliminar: Borra el aula seleccionada
 				const store = getStore();
+				const actions = getActions();
+
 				fetch("http://localhost:3000/api/v1/classroom/" + store.id, {
 					method: "DELETE",
 					headers: {
@@ -472,6 +530,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 						//here is were your code should start after the fetch finishes
 						console.log(data); //this will print on the console the exact object received from the server
 						setStore({ id: "" });
+						actions.dashboard();
 					})
 					.catch(error => {
 						//error handling
@@ -1618,6 +1677,12 @@ const getState = ({ getStore, setStore, getActions }) => {
 						//error handling
 						console.log(error);
 					});
+			},
+			addTeacher: (optionsList, selectedItem) => {
+				console.log(optionsList);
+			},
+			removeTeacher: (optionsList, removedItem) => {
+				console.log(optionsList);
 			}
 		}
 	};

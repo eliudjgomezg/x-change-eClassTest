@@ -6,13 +6,6 @@ import { FormModalDashboard } from "../dashboardComponent/formModalDashboard";
 
 export class Modaldashboard extends React.Component {
 	render() {
-		let verticalPosition = {
-			margin: "0",
-			position: "absolute",
-			top: "87%",
-			left: "90%"
-		};
-
 		return (
 			<Fragment>
 				<Context.Consumer>
@@ -21,10 +14,9 @@ export class Modaldashboard extends React.Component {
 							<Fragment>
 								<button
 									type="button"
-									className="btn btn-primary"
+									className="btn btn-primary float-right"
 									data-toggle="modal"
-									data-target="#exampleModalScrollable"
-									style={verticalPosition}>
+									data-target="#exampleModalScrollable">
 									Agregar Sala
 								</button>
 

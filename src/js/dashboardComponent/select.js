@@ -1,21 +1,22 @@
 import React, { Fragment } from "react";
 import { Context } from "../store/appContext";
+import { Multiselect } from "multiselect-react-dropdown";
 
 export class Select extends React.Component {
 	render() {
 		return (
 			<Context.Consumer>
 				{({ store, actions }) => {
-					if (store.usuarios.length > 0) {
-						return store.usuarios.map((item, i) => {
-							return (
-								<option key={i} value={i}>
-									{" "}
-									{item.nombre}{" "}
-								</option>
-							);
-						});
-					}
+					return (
+						<Multiselect
+							options={store.selectUSuarios}
+							displayValue="name"
+							selectedValues={store.selectUSuarios}
+							placeholder="Elejir con DOBLE CLICK"
+							onSelect={(optionsList, selectedItem) => actions.addTeacher(optionsList, selectedItem)}
+							onRemove={(optionsList, removedItem) => actions.removeTeacher(optionsList, removedItem)}
+						/>
+					);
 				}}
 			</Context.Consumer>
 		);
