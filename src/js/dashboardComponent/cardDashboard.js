@@ -9,11 +9,14 @@ export class Carddashboard extends React.Component {
 					{({ store, actions }) => {
 						return (
 							<Fragment>
-								<div className="row">
+								<div className="row mt-2">
+									<div className="col">
+										<h1 className="m-0 p-0">Aulas</h1>
+									</div>
 									<div className="col">
 										<button
-											className="btn btn-primary float-right mr-5 "
-											onClick={e => actions.formModalDashboard(e)}>
+											className="btn btn-primary float-right mr-1 mt-2 "
+											onClick={e => actions.formModal(e)}>
 											Agregar Sala
 										</button>
 									</div>
@@ -27,6 +30,7 @@ export class Carddashboard extends React.Component {
 										placeholder="Filtrar por palabra clave"
 										name="filterByWord"
 										value={store.filterByWord}
+										onChange={e => actions.filterByWord(e)}
 									/>
 									<div className="input-group-append">
 										<button
@@ -47,6 +51,7 @@ export class Carddashboard extends React.Component {
 										</div>
 									</div>
 								</div>
+
 								{!!store.alert && (
 									<div className="alert alert-danger" role="alert">
 										<p className="text-center">¡¡¡No hay Aulas asignadas para el dia de hoy!!!</p>
@@ -58,96 +63,88 @@ export class Carddashboard extends React.Component {
 				</Context.Consumer>
 
 				<div className="row">
-					<div className="card card-body py-2 mt-2">
-						<ul className="list-group">
-							<Context.Consumer>
-								{({ store, actions }) => {
-									if (store.cardArray.length > 0) {
-										return store.cardArray.map((item, i) => {
-											return (
-												<Fragment key={i}>
-													<div className="container">
-														<div className="row">
-															<div className="col pl-1 d-inline">
-																<li className="list-group-item">
-																	<div className="btn btn-primary">
-																		{item.classroomName}
-																	</div>{" "}
-																	/ CAPACIDAD: {item.sonsInClassroom} DE{" "}
-																	{item.capacity} / DIA DE USO: {item.dayUse}
-																	<button
-																		type="button"
-																		className="btn btn-primary float-right"
-																		data-toggle="modal"
-																		data-target="#exampleModal"
-																		onClick={e =>
-																			actions.indextodeleteClassroon(item)
-																		}>
-																		Eliminar
-																	</button>
-																	<a
-																		href="#"
-																		className="btn btn-primary float-right mr-2"
-																		data-toggle="modal"
-																		data-target="#exampleModalScrollable"
-																		onClick={() => actions.setEditCard(item, i)}>
-																		Editar
-																	</a>
-																</li>
-															</div>
+					<Context.Consumer>
+						{({ store, actions }) => {
+							if (store.cardArray.length > 0) {
+								return store.cardArray.map((item, i) => {
+									return (
+										<Fragment key={i}>
+											<div className="container">
+												<div className="row">
+													<div className="col pl-3  d-inline">
+														<div className="list-group-item py-1 mb-1">
+															<div className="btn btn-primary">{item.classroomName}</div>{" "}
+															/ CAPACIDAD: {item.sonsInClassroom} DE {item.capacity} / DIA
+															DE USO: {item.dayUse}
+															<button
+																type="button"
+																className="btn btn-primary float-right"
+																data-toggle="modal"
+																data-target="#exampleModal"
+																onClick={e => actions.indextodeleteClassroon(item)}>
+																Eliminar
+															</button>
+															<a
+																href="#"
+																className="btn btn-primary float-right mr-2"
+																data-toggle="modal"
+																data-target="#exampleModalScrollable"
+																onClick={() => actions.setEditCard(item, i)}>
+																Editar
+															</a>
 														</div>
 													</div>
+												</div>
+											</div>
 
-													<div
-														className="modal fade"
-														id="exampleModal"
-														tabIndex="-1"
-														role="dialog"
-														aria-labelledby="exampleModalLabel"
-														aria-hidden="true">
-														<div className="modal-dialog" role="document">
-															<div className="modal-content">
-																<div className="modal-header">
-																	<h5 className="modal-title" id="exampleModalLabel">
-																		ALERTA!!!
-																	</h5>
-																	<button
-																		type="button"
-																		className="close"
-																		data-dismiss="modal"
-																		aria-label="Close">
-																		<span aria-hidden="true">&times;</span>
-																	</button>
-																</div>
-																<div className="modal-body">
-																	¿Estas Segur@ que deseas eliminar el aula?
-																</div>
-																<div className="modal-footer">
-																	<button
-																		type="button"
-																		className="btn btn-secondary"
-																		data-dismiss="modal">
-																		Cancelar
-																	</button>
-																	<button
-																		type="button"
-																		className="btn btn-primary"
-																		onClick={e => actions.deleteCard()}
-																		data-dismiss="modal">
-																		Eliminar
-																	</button>
-																</div>
-															</div>
+											<div
+												className="modal fade"
+												id="exampleModal"
+												tabIndex="-1"
+												role="dialog"
+												aria-labelledby="exampleModalLabel"
+												aria-hidden="true">
+												<div className="modal-dialog" role="document">
+													<div className="modal-content">
+														<div className="modal-header">
+															<h5 className="modal-title" id="exampleModalLabel">
+																ALERTA!!!
+															</h5>
+															<button
+																type="button"
+																className="close"
+																data-dismiss="modal"
+																aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<div className="modal-body">
+															¿Estas Segur@ que deseas eliminar el aula?
+														</div>
+														<div className="modal-footer">
+															<button
+																type="button"
+																className="btn btn-secondary"
+																data-dismiss="modal">
+																Cancelar
+															</button>
+															<button
+																type="button"
+																className="btn btn-primary"
+																onClick={e => actions.deleteCard()}
+																data-dismiss="modal">
+																Eliminar
+															</button>
 														</div>
 													</div>
-												</Fragment>
-											);
-										});
-									}
-								}}
-							</Context.Consumer>
-						</ul>
-					</div>
+												</div>
+											</div>
+										</Fragment>
+									);
+								});
+							}
+						}}
+					</Context.Consumer>
 				</div>
 			</Fragment>
 		);

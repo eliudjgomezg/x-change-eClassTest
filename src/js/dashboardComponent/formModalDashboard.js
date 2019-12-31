@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useState } from "react";
 import { Context } from "../store/appContext";
-import { Multiselect } from "multiselect-react-dropdown";
+import { Select } from "../dashboardComponent/Select";
 
 export class FormModalDashboard extends React.Component {
 	render() {
@@ -12,6 +12,13 @@ export class FormModalDashboard extends React.Component {
 						return (
 							<Fragment>
 								<form onSubmit={e => actions.setCard(e)}>
+									{!!store.alert && (
+										<div className="alert alert-danger" role="alert">
+											<h1 className="text-center m-0 p-0">
+												¡¡¡Upsss. Es necesario crear roles de profesor antes de crear aulas!!!
+											</h1>
+										</div>
+									)}
 									<div>
 										<h1 className="text-center">Crear Nueva Aula</h1>
 									</div>
@@ -56,21 +63,13 @@ export class FormModalDashboard extends React.Component {
 												</div>
 											</div>
 										</div>
-										<div className="form-group ">
-											<label htmlFor="profesores">Seleccionar Profesores</label>
-
-											<Multiselect
-												options={store.selectUSuarios}
-												displayValue="name"
-												selectedValues={store.selectUSuarios}
-												placeholder="Elejir con DOBLE CLICK"
-												onSelect={(optionsList, selectedItem) =>
-													actions.addTeacher(optionsList, selectedItem)
-												}
-												onRemove={(optionsList, removedItem) =>
-													actions.removeTeacher(optionsList, removedItem)
-												}
-											/>
+										<div
+											className="form-group btn btn-primary float-right"
+											type="button"
+											data-toggle="modal"
+											data-target="#exampleModalScrollable"
+											onClick={e => actions.formModalDashboard(e)}>
+											SELECCIONAR PROFESORES
 										</div>
 
 										<div className="form-group">
@@ -135,11 +134,51 @@ export class FormModalDashboard extends React.Component {
 											onClick={e => actions.deleteForm(e)}>
 											Cerrar
 										</button>
-										<button type="submit" className="btn btn-primary">
+										<button type="submit" disabled={store.alert} className="btn btn-primary">
 											Guardar
 										</button>
 									</div>
 								</form>
+
+								<div
+									className="modal fade"
+									id="exampleModalScrollable"
+									tabIndex="-1"
+									role="dialog"
+									aria-labelledby="exampleModalScrollableTitle"
+									aria-hidden="true">
+									<div className="modal-dialog modal-dialog-scrollable" role="document">
+										<div className="modal-content">
+											<form onSubmit={e => actions.setCard(e)}>
+												<div className="modal-header">
+													<h5 className="modal-title" id="exampleModalScrollableTitle">
+														Agregar Profesores
+													</h5>
+													<button
+														type="button"
+														className="close"
+														data-dismiss="modal"
+														aria-label="Close"
+														onClick={e => actions.selectedTeachersOut(e)}>
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div className="modal-body">
+													<Select />
+												</div>
+												<div className="modal-footer">
+													<button
+														type="button"
+														className="btn btn-secondary"
+														data-dismiss="modal"
+														onClick={e => actions.selectedTeachersOut(e)}>
+														Aceptar
+													</button>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
 							</Fragment>
 						);
 					}}

@@ -18,14 +18,24 @@ export class Familias extends React.Component {
 							{!!store.menu && (
 								<div className="container my-2">
 									<div className="row">
-										<div className="col float-right">
+										<div className="col">
+											<h1 className="m-0 p-0">Familias</h1>
+										</div>
+										<div className="col">
 											<button
-												className="btn btn-primary float-right"
+												className="btn btn-primary mt-2  float-right"
 												onClick={e => actions.familyLastName(e)}>
 												Agregar Familias
 											</button>
 										</div>
 									</div>
+								</div>
+							)}
+							{!!store.alert && (
+								<div className="alert alert-danger" role="alert">
+									<h1 className="text-center m-0 p-0">
+										¡¡¡Upsss. Es necesario crear Aulas antes de crear familias!!!
+									</h1>
 								</div>
 							)}
 							{!!store.familyLastName && (
@@ -61,7 +71,10 @@ export class Familias extends React.Component {
 												/>
 											</div>
 											<div className="col">
-												<button className="btn btn-primary" type="submit">
+												<button
+													className="btn btn-primary"
+													disabled={store.alert}
+													type="submit">
 													Crear Familia
 												</button>
 											</div>

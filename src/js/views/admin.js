@@ -24,7 +24,7 @@ export class Admin extends React.Component {
 									<button
 										onClick={e => actions.dashboard(e)}
 										className="list-group-item list-group-item-action bg-light">
-										Dashboard
+										Aulas
 									</button>
 									<button
 										onClick={e => actions.novedades(e)}

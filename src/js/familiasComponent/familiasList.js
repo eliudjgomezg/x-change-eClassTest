@@ -11,30 +11,32 @@ export class FamiliasList extends React.Component {
 						return store.familias.map((item, i) => {
 							return (
 								<Fragment key={i}>
-									<div className=" card card-body container py-1 px-2">
-										<div className="row">
-											<div className="col-8">Familia: {item.familyName}</div>
-											<div className="col-3   ">
-												<button
-													type="button"
-													className="btn btn-primary float-right"
-													onClick={() => actions.indextodeleteClassroon(item, i)}
-													data-toggle="collapse"
-													data-target="#collapseExample"
-													aria-expanded="false"
-													aria-controls="collapseExample">
-													Eliminar
-												</button>
-											</div>
-											<div className="col-1 pl-0">
-												<button
-													type="button"
-													className="btn btn-primary float-right"
-													data-toggle="modal"
-													data-target="#exampleModal2"
-													onClick={e => actions.verFamilia(item, i)}>
-													Ver
-												</button>
+									<div className="container">
+										<div className=" card card-body py-1 px-2">
+											<div className="row">
+												<div className="col-8">Familia: {item.familyName}</div>
+												<div className="col-3 ">
+													<button
+														type="button"
+														className="btn btn-primary float-right"
+														onClick={() => actions.indextodeleteClassroon(item, i)}
+														data-toggle="collapse"
+														data-target="#collapseExample"
+														aria-expanded="false"
+														aria-controls="collapseExample">
+														Eliminar
+													</button>
+												</div>
+												<div className="col-1 pl-0">
+													<button
+														type="button"
+														className="btn btn-primary float-right"
+														data-toggle="modal"
+														data-target="#exampleModal2"
+														onClick={e => actions.verFamilia(item, i)}>
+														Ver
+													</button>
+												</div>
 											</div>
 										</div>
 									</div>

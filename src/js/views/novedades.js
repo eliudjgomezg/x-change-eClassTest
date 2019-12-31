@@ -9,8 +9,14 @@ export class Novedades extends React.Component {
 	render() {
 		return (
 			<Fragment>
-				<ModalNovedades />
-				<NovedadesList />
+				<div className="container">
+					<div className="row">
+						<ModalNovedades />
+					</div>
+					<div className="row">
+						<NovedadesList />
+					</div>
+				</div>
 			</Fragment>
 		);
 	}

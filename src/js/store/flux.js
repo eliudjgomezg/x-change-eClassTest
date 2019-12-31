@@ -8,7 +8,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			classroomName: "",
 			startAgeRank: "",
 			finaltAgeRank: "",
-			teachers: "",
+			teachers: [],
 			capacity: "",
 			dayUse: "",
 			startScheduleRank: "",
@@ -18,6 +18,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 
 			//Variables para creacion de novedades
 			news: "",
+			date: "",
+			timeStamp: "",
 			novedadesArray: [],
 			//Variables para creacion de familias
 			familyName: "",
@@ -55,6 +57,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 
 			usuarios: [],
 			selectUSuarios: [],
+			selectedUsuarios: [],
 			//Variables para hacer Loing
 			login: {
 				rut: "",
@@ -93,7 +96,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 			configCheckIn: false,
 			selectRol: true,
 			carddashboard: true,
-			formModalDashboard: false
+			formModalDashboard: false,
+			noClassroom: false
 		},
 
 		actions: {
@@ -128,7 +132,17 @@ const getState = ({ getStore, setStore, getActions }) => {
 							goBackEditFamily: false,
 							formModalDashboard: false,
 							carddashboard: true,
-							alert: false
+							alert: false,
+							classroomName: "",
+							startAgeRank: "",
+							finaltAgeRank: "",
+							selectedUsuarios: [],
+							capacity: "",
+							dayUse: "",
+							startScheduleRank: "",
+							finalScheduleRank: "",
+							id: "",
+							cardEdited: true
 						});
 					})
 					.catch(error => {
@@ -136,9 +150,30 @@ const getState = ({ getStore, setStore, getActions }) => {
 						console.log(error);
 					});
 			},
+			formModal: e => {
+				setStore({ formModalDashboard: true, carddashboard: false });
+			},
 			formModalDashboard: e => {
 				const store = getStore();
-				setStore({ formModalDashboard: true, carddashboard: false });
+				fetch("http://localhost:3000/api/v1/roles", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						let selectUSuarios = data.filter(s => s.rol === "Profesor");
+						let selectedUsuarios = data.filter(s => s.selected === true && s.notSelected === false);
+						setStore({ selectUSuarios, selectedUsuarios });
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			novedades: e => {
 				const store = getStore();
@@ -212,7 +247,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							goBackNewFamily: false,
 							goBackEditFamily: false,
 							carddashboard: false,
-							formModalDashboard: false
+							formModalDashboard: false,
+							alert: false
 						});
 					})
 					.catch(error => {
@@ -233,8 +269,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 					})
 					.then(data => {
 						console.log(data);
-						let roles = data;
-						let selectUSuarios = roles.filter(r => r.rol === "Profesor");
+
 						setStore({
 							dashboard: false,
 							novedades: false,
@@ -250,7 +285,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							goBackNewFamily: false,
 							goBackEditFamily: false,
 							usuarios: data,
-							selectUSuarios,
+
 							selectRol: true,
 							carddashboard: false,
 							formModalDashboard: false
@@ -293,20 +328,29 @@ const getState = ({ getStore, setStore, getActions }) => {
 						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
 					})
 					.then(data => {
-						console.log(data);
-						setStore({
-							cardArray: data,
-							checkIn: true,
-							novedades: false,
-							configCheckIn: false
-						});
+						if (data.length <= 0) {
+							setStore({
+								noClassroom: true,
+								cardArray: data,
+								checkIn: true,
+								novedades: false,
+								configCheckIn: false
+							});
+						} else {
+							console.log(data);
+							setStore({
+								cardArray: data,
+								checkIn: true,
+								novedades: false,
+								configCheckIn: false,
+								noClassroom: false
+							});
+						}
 					})
 					.catch(error => {
 						//error handling
 						console.log(error);
 					});
-
-				setStore({ checkIn: true, novedades: false, configCheckIn: false });
 			},
 			configCheckIn: e => {
 				setStore({
@@ -332,13 +376,13 @@ const getState = ({ getStore, setStore, getActions }) => {
 			setEditCard: (item, itemPosition) => {
 				// Boton de editar: Toma el valos del Item correspondiente
 				// del map en el form para ser editado.
+				const store = getStore();
 				setStore({
 					id: item._id,
 					cardEdited: false,
 					classroomName: item.classroomName,
 					startAgeRank: item.startAgeRank,
 					finaltAgeRank: item.finaltAgeRank,
-					teachers: "",
 					capacity: item.capacity,
 					dayUse: item.dayUse,
 					startScheduleRank: item.startScheduleRank,
@@ -361,7 +405,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							classroomName: store.classroomName,
 							startAgeRank: store.startAgeRank,
 							finaltAgeRank: store.finaltAgeRank,
-							teachers: store.teachers,
+							teachers: store.selectedUsuarios,
 							capacity: store.capacity,
 							dayUse: store.dayUse,
 							startScheduleRank: store.startScheduleRank,
@@ -379,19 +423,27 @@ const getState = ({ getStore, setStore, getActions }) => {
 						})
 						.then(data => {
 							//here is were your code should start after the fetch finishes
-							console.log(data);
-							setStore({
-								classroomName: "",
-								startAgeRank: "",
-								finaltAgeRank: "",
-								teachers: "",
-								capacity: "",
-								dayUse: "",
-								startScheduleRank: "",
-								finalScheduleRank: ""
-							});
-							actions.dashboard();
-							//this will print on the console the exact object received from the server
+
+							if (data === false) {
+								setStore({ alert: true });
+							} else {
+								console.log(data);
+
+								setStore({
+									classroomName: "",
+									startAgeRank: "",
+									finaltAgeRank: "",
+									selectedUsuarios: [],
+									capacity: "",
+									dayUse: "",
+									startScheduleRank: "",
+									finalScheduleRank: "",
+									alert: false,
+									selectedUsuarios: []
+								});
+								actions.dashboard();
+								//this will print on the console the exact object received from the server
+							}
 						})
 						.catch(error => {
 							//error handling
@@ -404,7 +456,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							classroomName: store.classroomName,
 							startAgeRank: store.startAgeRank,
 							finaltAgeRank: store.finaltAgeRank,
-							teachers: store.teachers,
+							teachers: store.selectedUsuarios,
 							capacity: store.capacity,
 							dayUse: store.dayUse,
 							startScheduleRank: store.startScheduleRank,
@@ -424,7 +476,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 								classroomName: "",
 								startAgeRank: "",
 								finaltAgeRank: "",
-								teachers: "",
+								selectedUsuarios: [],
 								capacity: "",
 								dayUse: "",
 								startScheduleRank: "",
@@ -460,19 +512,28 @@ const getState = ({ getStore, setStore, getActions }) => {
 					});
 			},
 			deleteForm: e => {
+				const store = getStore();
 				setStore({
 					//Boton cerrar: Limpia los input del form
 					classroomName: "",
 					startAgeRank: "",
 					finaltAgeRank: "",
-					teachers: "",
+					selectedUsuarios: [],
 					capacity: "",
 					dayUse: "",
 					startScheduleRank: "",
 					finalScheduleRank: "",
 					id: "",
+					cardEdited: true,
+
 					carddashboard: true,
 					formModalDashboard: false
+				});
+			},
+			selectedTeachersOut: e => {
+				setStore({
+					carddashboard: false,
+					formModalDashboard: true
 				});
 			},
 			indextodeleteClassroon: (item, i) => {
@@ -541,12 +602,31 @@ const getState = ({ getStore, setStore, getActions }) => {
 			setNovedad: e => {
 				e.preventDefault();
 				const store = getStore();
+				const actions = getActions();
+				let date = new Date();
+				let timeStamp = new Date().getTime();
+
+				let day = date.getDate();
+				let month = date.getMonth() + 1;
+				let year = date.getFullYear();
+
+				if (month < 10) {
+					let date = `${day}-0${month}-${year}`;
+					setStore({ date });
+				} else {
+					let date = `${day}-${month}-${year}`;
+					setStore({ date, timeStamp });
+				}
 
 				//Agrega la novedad al arreglo addNovedades
 				fetch("http://localhost:3000/api/v1/news", {
 					method: "POST",
 					body: JSON.stringify({
-						news: store.news
+						name: store.usuario.name,
+						news: store.news,
+						date: store.date,
+						rol: store.usuario.rol,
+						timeStamp: store.timeStamp
 					}),
 					headers: {
 						"Content-Type": "application/json"
@@ -561,12 +641,11 @@ const getState = ({ getStore, setStore, getActions }) => {
 					.then(data => {
 						//here is were your code should start after the fetch finishes
 						console.log(data);
-						let novedadesArray = store.novedadesArray;
-						novedadesArray.push(data);
+
 						setStore({
-							news: "",
-							novedadesArray
+							news: ""
 						});
+						actions.novedades();
 
 						//this will print on the console the exact object received from the server
 					})
@@ -574,6 +653,12 @@ const getState = ({ getStore, setStore, getActions }) => {
 						//error handling
 						console.log(error);
 					});
+			},
+			news: (e, item) => {
+				const store = getStore();
+				setStore({
+					news: item.news
+				});
 			},
 			deleteNovedad: e => {
 				const store = getStore();
@@ -1281,14 +1366,53 @@ const getState = ({ getStore, setStore, getActions }) => {
 				});
 			},
 			familyLastName: e => {
-				setStore({
-					familyLastName: true,
-					familiasss: false,
-					addApoderado: false,
-					familyOptions: false,
-					addHijo: false,
-					menu: false
-				});
+				fetch("http://localhost:3000/api/v1/classrooms", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						if (data.length <= 0) {
+							setStore({
+								alert: true,
+								familyLastName: true,
+								familiasss: false,
+								addApoderado: false,
+								familyOptions: false,
+								addHijo: false,
+								menu: false
+							});
+						} else {
+							console.log(data);
+							setStore({
+								familyLastName: true,
+								familiasss: false,
+								addApoderado: false,
+								familyOptions: false,
+								addHijo: false,
+								menu: false,
+								alert: false
+							});
+						}
+
+						console.log(data);
+						setStore({
+							familyLastName: true,
+							familiasss: false,
+							addApoderado: false,
+							familyOptions: false,
+							addHijo: false,
+							menu: false
+						});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			addFamily: e => {
 				const store = getStore();
@@ -1511,6 +1635,14 @@ const getState = ({ getStore, setStore, getActions }) => {
 								id: data._id
 							});
 							history.push("/" + data.rol);
+							if (data.rol === "Administrador") {
+								actions.dashboard();
+							} else if (data.rol === "Profesor") {
+								actions.classroom();
+							} else if (data.rol === "Check In") {
+								actions.checkIn();
+								actions.checkIn(e);
+							}
 						} else setStore({ alert: true });
 
 						//this will print on the console the exact object received from the server
@@ -1678,11 +1810,21 @@ const getState = ({ getStore, setStore, getActions }) => {
 						console.log(error);
 					});
 			},
-			addTeacher: (optionsList, selectedItem) => {
-				console.log(optionsList);
+			addTeacher: (e, item) => {
+				const store = getStore();
+				let selectedUsuarios = store.selectedUsuarios;
+				item["selected"] = true;
+				item["notSelected"] = false;
+				selectedUsuarios.push(item);
+				setStore({ selectedUsuarios });
 			},
-			removeTeacher: (optionsList, removedItem) => {
-				console.log(optionsList);
+			removeTeacher: (e, item) => {
+				const store = getStore();
+				let newselectedUsuarios = store.selectedUsuarios;
+				item["selected"] = false;
+				item["notSelected"] = true;
+				let selectedUsuarios = newselectedUsuarios.filter(s => s._id != item._id);
+				setStore({ selectedUsuarios });
 			}
 		}
 	};

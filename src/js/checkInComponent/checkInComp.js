@@ -9,6 +9,14 @@ export class CheckInComp extends React.Component {
 				{({ store, actions }) => {
 					return (
 						<Fragment>
+							{!!store.noClassroom && (
+								<div className="alert alert-danger" role="alert">
+									<h1 className="text-center m-0 p-0">
+										No es posible hacer CheckIn, ya que no hay aulas creadas. Notificar a un
+										Administrador{" "}
+									</h1>
+								</div>
+							)}
 							<div className="container">
 								<div className="row my-3 ">
 									<div className="col float-right">
@@ -26,7 +34,10 @@ export class CheckInComp extends React.Component {
 										/>
 									</div>
 									<div className="col">
-										<button className="btn btn-primary" onClick={e => actions.serchRut(e)}>
+										<button
+											className="btn btn-primary"
+											disabled={store.noClassroom}
+											onClick={e => actions.serchRut(e)}>
 											Aceptar
 										</button>
 									</div>

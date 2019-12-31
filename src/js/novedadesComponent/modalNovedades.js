@@ -3,26 +3,38 @@ import { Context } from "../store/appContext";
 
 export class ModalNovedades extends React.Component {
 	render() {
-		let verticalPosition = {
-			margin: "0",
-			position: "absolute",
-			top: "87%",
-			left: "90%"
-		};
 		return (
 			<Context.Consumer>
 				{({ store, actions }) => {
 					return (
 						<Fragment>
-							<button
-								type="button"
-								className="btn btn-primary"
-								data-toggle="modal"
-								data-target="#exampleModalScrollable"
-								style={verticalPosition}>
-								Agregar Novedad
-							</button>
-
+							<div className="col mt-2">
+								<h1 className="m-0 p-0">Novedades</h1>
+							</div>
+							<div className="col">
+								<button
+									type="button"
+									className="btn btn-primary float-right mr-1 mt-2"
+									data-toggle="modal"
+									data-target="#exampleModalScrollable">
+									Agregar Novedad
+								</button>
+							</div>
+							<div className="container">
+								<div className="input-group mb-1 mt-2">
+									<input
+										type="text"
+										className="form-control"
+										aria-label="Text input with dropdown button"
+										placeholder="Filtrar por palabra clave"
+									/>
+									<div className="input-group-append">
+										<button className="btn btn-outline-secondary dropdown-toggle" type="button">
+											Filtrar
+										</button>
+									</div>
+								</div>
+							</div>
 							<div
 								className="modal fade"
 								id="exampleModalScrollable"
@@ -66,7 +78,7 @@ export class ModalNovedades extends React.Component {
 													className="btn btn-secondary"
 													data-dismiss="modal"
 													onClick={e => actions.deleteNovedad(e)}>
-													Cerrar
+													Cancelar
 												</button>
 												<button type="submit" className="btn btn-primary">
 													Guardar
