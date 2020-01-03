@@ -76,22 +76,22 @@ export class Carddashboard extends React.Component {
 															<div className="btn btn-primary">{item.classroomName}</div>{" "}
 															/ CAPACIDAD: {item.sonsInClassroom} DE {item.capacity} / DIA
 															DE USO: {item.dayUse}
-															<button
-																type="button"
-																className="btn btn-primary float-right"
-																data-toggle="modal"
-																data-target="#exampleModal"
-																onClick={e => actions.indextodeleteClassroon(item)}>
-																Eliminar
-															</button>
 															<a
 																href="#"
-																className="btn btn-primary float-right mr-2"
+																className="btn btn-primary float-right "
 																data-toggle="modal"
 																data-target="#exampleModalScrollable"
 																onClick={() => actions.setEditCard(item, i)}>
 																Editar
 															</a>
+															<button
+																type="button"
+																className="btn btn-primary float-right mr-2"
+																data-toggle="modal"
+																data-target="#exampleModal"
+																onClick={e => actions.indextodeleteClassroon(item)}>
+																Eliminar
+															</button>
 														</div>
 													</div>
 												</div>

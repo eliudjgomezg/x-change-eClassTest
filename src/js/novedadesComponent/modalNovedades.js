@@ -29,9 +29,19 @@ export class ModalNovedades extends React.Component {
 										placeholder="Filtrar por palabra clave"
 									/>
 									<div className="input-group-append">
-										<button className="btn btn-outline-secondary dropdown-toggle" type="button">
+										<button
+											className="btn btn-outline-secondary dropdown-toggle"
+											type="button"
+											data-toggle="dropdown"
+											aria-haspopup="true"
+											aria-expanded="false">
 											Filtrar
 										</button>
+										<div className="dropdown-menu">
+											<a className="dropdown-item" href="#" onClick={e => actions.novedades(e)}>
+												Todas las Novedades
+											</a>
+										</div>
 									</div>
 								</div>
 							</div>

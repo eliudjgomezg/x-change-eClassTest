@@ -43,6 +43,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 				hijos: []
 			},
 			familias: [],
+			familyId: "",
 			//Variables para creacion de Roles
 			usuario: {
 				name: "",
@@ -65,6 +66,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 			//Variables generales
 			alert: false,
+			alertt: false,
 			index: "",
 			cardEdited: true,
 			contraseña: false,
@@ -367,12 +369,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 				//Toma la data del Input y la coloca en las variables del store
 				const store = getStore();
 				const { name, value } = e.target;
-				setStore({ [name]: value, alert: false, hijos: [] });
+				setStore({ [name]: value, alertt: false, alert: false, hijos: [] });
 			},
-			getDataSelect: e => {
-				//Toma la data del Input y la coloca en las variables del store
-				console.log(e.target.value);
-			},
+
 			setEditCard: (item, itemPosition) => {
 				// Boton de editar: Toma el valos del Item correspondiente
 				// del map en el form para ser editado.
@@ -610,9 +609,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 				let month = date.getMonth() + 1;
 				let year = date.getFullYear();
 
-				if (month < 10) {
-					let date = `${day}-0${month}-${year}`;
-					setStore({ date });
+				if (month < 10 || day < 10) {
+					let date = `0${day}-0${month}-${year}`;
+					setStore({ date, timeStamp });
 				} else {
 					let date = `${day}-${month}-${year}`;
 					setStore({ date, timeStamp });
@@ -666,6 +665,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 					news: ""
 				});
 			},
+
 			//Funciones para llenar formulario de familia......................................................
 			handleChangeApoderado: e => {
 				const store = getStore();
@@ -682,7 +682,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				let hijo = store.hijo;
 				hijo[name] = value;
 				setStore({
-					hijo
+					hijo,
+					alertt: false
 				});
 			},
 			//Funciones para crear, editar y eliminar apoderado
@@ -698,7 +699,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							rut: store.apoderado.rut,
 							email: store.apoderado.email,
 							phone: store.apoderado.phone,
-							families: store.id
+							families: store.familyId
 						}),
 						headers: {
 							"Content-Type": "application/json"
@@ -834,7 +835,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							sonName: store.hijo.sonName,
 							birthDate: store.hijo.birthDate,
 							notes: store.hijo.notes,
-							families: store.id
+							families: store.familyId
 						}),
 						headers: {
 							"Content-Type": "application/json"
@@ -849,17 +850,25 @@ const getState = ({ getStore, setStore, getActions }) => {
 						.then(data => {
 							//here is were your code should start after the fetch finishes
 							console.log(data);
-							let hijos = store.hijos;
-							hijos.push(data);
-							setStore({
-								hijo: {
-									sonName: "",
-									birthDate: "",
-									notes: "",
-									families: ""
-								},
-								hijos
-							});
+							if (data.status) {
+								setStore({
+									alertt: true,
+									startAgeRank: data.startAgeRank,
+									finaltAgeRank: data.finaltAgeRank
+								});
+							} else {
+								let hijos = store.hijos;
+								hijos.push(data);
+								setStore({
+									hijo: {
+										sonName: "",
+										birthDate: "",
+										notes: "",
+										families: ""
+									},
+									hijos
+								});
+							}
 
 							//this will print on the console the exact object received from the server
 						})
@@ -1024,8 +1033,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 
 			verFamilia: item => {
 				const store = getStore();
-				setStore({ id: item._id });
-				fetch("http://localhost:3000/api/v1/parentEdit/" + store.id, {
+				setStore({ familyId: item._id });
+				fetch("http://localhost:3000/api/v1/parentEdit/" + store.familyId, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json"
@@ -1049,7 +1058,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							goBackNewFamily: false,
 							goBackEditFamily: true
 						});
-						fetch("http://localhost:3000/api/v1/sonEdit/" + store.id, {
+						fetch("http://localhost:3000/api/v1/sonEdit/" + store.familyId, {
 							method: "GET",
 							headers: {
 								"Content-Type": "application/json"
@@ -1442,7 +1451,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							addHijo: false,
 							menu: false,
 							familyName: "",
-							id: data._id,
+							familyId: data._id,
 							goBackNewFamily: true,
 							goBackEditFamily: false
 						});
@@ -1456,7 +1465,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 			editFamilyName: e => {
 				const store = getStore();
-				fetch("http://localhost:3000/api/v1/family/" + store.id, {
+				fetch("http://localhost:3000/api/v1/family/" + store.familyId, {
 					method: "PUT",
 					body: JSON.stringify({
 						familyName: store.familyName
@@ -1550,6 +1559,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							apoderados: [],
 							hijos: [],
 							id: "",
+							familyId: "",
 							familyName: "",
 							apoderados: [],
 							hijos: [],

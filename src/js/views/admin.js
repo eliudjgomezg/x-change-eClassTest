@@ -56,7 +56,7 @@ export class Admin extends React.Component {
 										id="menu-toggle"
 										data-toggle="toggled"
 										data-target="#sidebar-wrapper">
-										Toggle Menu
+										Menu
 									</button>
 
 									<button

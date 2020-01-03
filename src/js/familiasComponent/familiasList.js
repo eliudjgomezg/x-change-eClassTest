@@ -20,10 +20,8 @@ export class FamiliasList extends React.Component {
 														type="button"
 														className="btn btn-primary float-right"
 														onClick={() => actions.indextodeleteClassroon(item, i)}
-														data-toggle="collapse"
-														data-target="#collapseExample"
-														aria-expanded="false"
-														aria-controls="collapseExample">
+														data-toggle="modal"
+														data-target="#exampleModal">
 														Eliminar
 													</button>
 												</div>

@@ -45,7 +45,7 @@ export class AddHijos extends React.Component {
 												onChange={e => actions.handleChangeHijo(e)}
 												value={store.hijo.notes}
 												name="notes"
-												required
+												placeholder="Describa alguna condicion especial, enfermedad o lesion a considerar"
 											/>
 										</div>
 										<div className="row float-right mt-2 ">

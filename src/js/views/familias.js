@@ -16,21 +16,55 @@ export class Familias extends React.Component {
 					return (
 						<Fragment>
 							{!!store.menu && (
-								<div className="container my-2">
-									<div className="row">
-										<div className="col">
-											<h1 className="m-0 p-0">Familias</h1>
-										</div>
-										<div className="col">
-											<button
-												className="btn btn-primary mt-2  float-right"
-												onClick={e => actions.familyLastName(e)}>
-												Agregar Familias
-											</button>
+								<Fragment>
+									<div className="container my-2">
+										<div className="row">
+											<div className="col">
+												<h1 className="m-0 p-0">Familias</h1>
+											</div>
+											<div className="col">
+												<button
+													className="btn btn-primary mt-2  float-right"
+													onClick={e => actions.familyLastName(e)}>
+													Agregar Familias
+												</button>
+											</div>
 										</div>
 									</div>
-								</div>
+									<div className="container">
+										<div className="input-group mb-1 mt-2">
+											<input
+												type="text"
+												className="form-control"
+												aria-label="Text input with dropdown button"
+												placeholder="Filtrar por palabra clave"
+												name="filterByWord"
+												value={store.filterByWord}
+												onChange={e => actions.filterByWord(e)}
+											/>
+											<div className="input-group-append">
+												<button
+													className="btn btn-outline-secondary dropdown-toggle"
+													type="button"
+													data-toggle="dropdown"
+													aria-haspopup="true"
+													aria-expanded="false">
+													Filtrar
+												</button>
+												<div className="dropdown-menu">
+													<a
+														className="dropdown-item"
+														href="#"
+														onClick={e => actions.familias(e)}>
+														Todas las Aulas
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</Fragment>
 							)}
+
 							{!!store.alert && (
 								<div className="alert alert-danger" role="alert">
 									<h1 className="text-center m-0 p-0">
@@ -150,6 +184,14 @@ export class Familias extends React.Component {
 											<div className="col-3" />
 										</div>
 									</div>
+									{!!store.alertt && (
+										<div className="alert alert-danger" role="alert">
+											<p className="text-center m-0 p-0">
+												¡¡¡Upsss. Solo puedes agregar Hij@s con edades comprendidas entre{" "}
+												{store.startAgeRank} y {store.finaltAgeRank} años!!!
+											</p>
+										</div>
+									)}
 								</div>
 							)}
 							{!!store.addApoderado && (
