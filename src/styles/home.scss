@@ -102,6 +102,23 @@ body {
   .toggle:checked:before {
     left: 32px;
   }
-
+  @media (min-width: 992px) {
+    .modal-lg {
+      width: 900px;
+    }
+  }
+  #global {
+    height: 300px;
+    width: 300px;
+    background: #f1f1f1;
+    overflow-y: scroll;
+  }
+  #mensajes {
+    height: auto;
+  }
+  .texto {
+    padding:4px;
+    background:#fff;
+  }
 
   

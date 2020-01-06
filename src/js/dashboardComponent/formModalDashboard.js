@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useState } from "react";
 import { Context } from "../store/appContext";
-import { Select } from "../dashboardComponent/Select";
+import { Select } from "../dashboardComponent/select";
 
 export class FormModalDashboard extends React.Component {
 	render() {
@@ -64,10 +64,10 @@ export class FormModalDashboard extends React.Component {
 											</div>
 										</div>
 										<div
-											className="form-group btn btn-primary float-right"
 											type="button"
+											className="btn btn-primary"
 											data-toggle="modal"
-											data-target="#exampleModalScrollable"
+											data-target="#exampleModalLong"
 											onClick={e => actions.formModalDashboard(e)}>
 											SELECCIONAR PROFESORES
 										</div>
@@ -141,41 +141,39 @@ export class FormModalDashboard extends React.Component {
 								</form>
 
 								<div
-									className="modal fade"
-									id="exampleModalScrollable"
+									className="modal fade "
+									id="exampleModalLong"
 									tabIndex="-1"
 									role="dialog"
-									aria-labelledby="exampleModalScrollableTitle"
+									aria-labelledby="exampleModalLongTitle"
 									aria-hidden="true">
-									<div className="modal-dialog modal-dialog-scrollable" role="document">
+									<div className="modal-dialog modal-lg" role="document">
 										<div className="modal-content">
-											<form onSubmit={e => actions.setCard(e)}>
-												<div className="modal-header">
-													<h5 className="modal-title" id="exampleModalScrollableTitle">
-														Agregar Profesores
-													</h5>
-													<button
-														type="button"
-														className="close"
-														data-dismiss="modal"
-														aria-label="Close"
-														onClick={e => actions.selectedTeachersOut(e)}>
-														<span aria-hidden="true">&times;</span>
-													</button>
-												</div>
-												<div className="modal-body">
-													<Select />
-												</div>
-												<div className="modal-footer">
-													<button
-														type="button"
-														className="btn btn-secondary"
-														data-dismiss="modal"
-														onClick={e => actions.selectedTeachersOut(e)}>
-														Aceptar
-													</button>
-												</div>
-											</form>
+											<div className="modal-header">
+												<h5 className="modal-title" id="exampleModalLongTitle">
+													Seleccionar Profesor
+												</h5>
+												<button
+													type="button"
+													className="close"
+													data-dismiss="modal"
+													aria-label="Close"
+													onClick={e => actions.selectedTeachersOut(e)}>
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div className="modal-body">
+												<Select />
+											</div>
+											<div className="modal-footer">
+												<button
+													type="button"
+													className="btn btn-primary"
+													data-dismiss="modal"
+													onClick={e => actions.selectedTeachersOut(e)}>
+													Aceptar
+												</button>
+											</div>
 										</div>
 									</div>
 								</div>

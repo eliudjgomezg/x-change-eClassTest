@@ -72,13 +72,13 @@ export class Carddashboard extends React.Component {
 											<div className="container">
 												<div className="row">
 													<div className="col pl-3  d-inline">
-														<div className="list-group-item py-1 mb-1">
+														<div className="list-group-item py-1 mb-1 px-2">
 															<div className="btn btn-primary">{item.classroomName}</div>{" "}
 															/ CAPACIDAD: {item.sonsInClassroom} DE {item.capacity} / DIA
 															DE USO: {item.dayUse}
 															<a
 																href="#"
-																className="btn btn-primary float-right "
+																className="btn btn-primary float-right mr-2"
 																data-toggle="modal"
 																data-target="#exampleModalScrollable"
 																onClick={() => actions.setEditCard(item, i)}>

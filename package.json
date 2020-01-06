@@ -69,6 +69,7 @@
 		]
 	},
 	"dependencies": {
+		"@material-ui/core": "^4.8.2",
 		"bootstrap": "^4.3.1",
 		"bootstrap-select": "^1.13.12",
 		"bootstrap-toggle": "^2.2.2",

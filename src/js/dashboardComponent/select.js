@@ -1,93 +1,63 @@
 import React, { Fragment } from "react";
+import "../../styles/home.scss";
 import { Context } from "../store/appContext";
 
 export class Select extends React.Component {
 	render() {
 		return (
-			<div className="row">
-				<div className="card card-body py-2 mt-2">
-					<ul className="list-group">
-						<Context.Consumer>
-							{({ store, actions }) => {
-								if (store.selectUSuarios.length > 0) {
-									return store.selectUSuarios.map((item, i) => {
-										return (
-											<Fragment key={i}>
-												<div className="container">
-													<div className="row">
-														<div className="col pl-1 d-inline">
-															<li className="list-group-item">
-																{item.name}
-																<button
-																	type="button"
-																	className="btn btn-primary float-right"
-																	onClick={e => actions.addTeacher(e, item)}
-																	disabled={item.selected}>
-																	Agregar
-																</button>
-																<button
-																	type="button"
-																	className="btn btn-primary float-right mr-2"
-																	onClick={e => actions.removeTeacher(e, item)}
-																	disabled={item.notSelected}>
-																	Quitar
-																</button>
-															</li>
-														</div>
-													</div>
-												</div>
-
-												<div
-													className="modal fade"
-													id="exampleModal"
-													tabIndex="-1"
-													role="dialog"
-													aria-labelledby="exampleModalLabel"
-													aria-hidden="true">
-													<div className="modal-dialog" role="document">
-														<div className="modal-content">
-															<div className="modal-header">
-																<h5 className="modal-title" id="exampleModalLabel">
-																	ALERTA!!!
-																</h5>
-																<button
-																	type="button"
-																	className="close"
-																	data-dismiss="modal"
-																	aria-label="Close">
-																	<span aria-hidden="true">&times;</span>
-																</button>
+			<Context.Consumer>
+				{({ store, actions }) => {
+					return (
+						<div className="container">
+							<div className="row">
+								<div className="col-6">
+									<div className=" float-right card card-body ">
+										<p className="card card-body p-1">
+											<strong>Profesores Disponibles:</strong>
+										</p>
+										<div id="global">
+											<div id="mensajes">
+												{if ( store.usuarios.length > 0){
+													store.usuarios.map((item, i) => {
+														return (
+															<div className="container" key= {i}>
+																<div className=" card card-body py-1 px-2 mb-1">
+																	<div className="row">
+																		<div className="col-9">Familia: {item.name}</div>
+																		<div className="col-3 ">
+																			<button
+																				type="button"
+																				className="btn btn-primary float-right"
+																				data-toggle="modal"
+																				data-target="#exampleModal2">
+																				Agregar
+																			</button>
+																		</div>
+																	</div>
+																</div>
 															</div>
-															<div className="modal-body">
-																¿Estas Segur@ que deseas eliminar el aula?
-															</div>
-															<div className="modal-footer">
-																<button
-																	type="button"
-																	className="btn btn-secondary"
-																	data-dismiss="modal">
-																	Cancelar
-																</button>
-																<button
-																	type="button"
-																	className="btn btn-primary"
-																	onClick={e => actions.deleteCard()}
-																	data-dismiss="modal">
-																	Eliminar
-																</button>
-															</div>
-														</div>
-													</div>
-												</div>
-											</Fragment>
-										);
-									});
-								}
-							}}
-						</Context.Consumer>
-					</ul>
-				</div>
-			</div>
+														);
+													})
+												}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div className="col-6">
+									<div className=" card card-body ">
+										<p className="card card-body p-1">
+											<strong>Profesores Seleccionados:</strong>
+										</p>
+										<div id="global">
+											<div id="mensajes" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					);
+				}}
+			</Context.Consumer>
 		);
 	}
 }

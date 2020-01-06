@@ -56,7 +56,7 @@ export class Familias extends React.Component {
 														className="dropdown-item"
 														href="#"
 														onClick={e => actions.familias(e)}>
-														Todas las Aulas
+														Todas las Familias
 													</a>
 												</div>
 											</div>

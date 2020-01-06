@@ -99,7 +99,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 			selectRol: true,
 			carddashboard: true,
 			formModalDashboard: false,
-			noClassroom: false
+			noClassroom: false,
+			showPasswoord: false,
+			test: ""
 		},
 
 		actions: {
@@ -539,6 +541,13 @@ const getState = ({ getStore, setStore, getActions }) => {
 				setStore({
 					id: item._id,
 					index: i
+				});
+			},
+			indextodeleteClassroon2: (item, i) => {
+				setStore({
+					id: item._id,
+					index: i,
+					test: item.classrooms
 				});
 			},
 			filterByDay: e => {
@@ -1192,8 +1201,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 			setUsuarios: e => {
 				e.preventDefault();
 				const store = getStore();
+				const actions = getActions();
 				if (store.cardEdited) {
-					if (store.usuario.password === store.usuario.rPassword) {
+					if (store.usuario.password === store.usuario.rPassword && store.usuario.password.length >= 4) {
 						if (store.usuario.rol != "Elige una opcion...") {
 							fetch("http://localhost:3000/api/v1/roles", {
 								method: "POST",
@@ -1232,7 +1242,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 										},
 										usuarios
 									});
-
+									actions.roles();
 									//this will print on the console the exact object received from the server
 								})
 								.catch(error => {
@@ -1287,8 +1297,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 										cardEdited: true,
 										id: "",
 										index: "",
-										usuarios
+										usuarios,
+										showPasswoord: false
 									});
+									actions.roles();
 								});
 						} else {
 							setStore({
@@ -1326,13 +1338,17 @@ const getState = ({ getStore, setStore, getActions }) => {
 					},
 					cardEdited: true,
 					id: "",
-					index: ""
+					index: "",
+					showPasswoord: false
 				});
 			},
-			deleteUsuarios: (item, i) => {
+			deleteUsuarios: item => {
 				const store = getStore();
-				fetch("http://localhost:3000/api/v1/rol/" + store.id, {
+				const actions = getActions();
+
+				fetch("http://localhost:3000/api/v1/rol/" + store.id + "/" + store.test, {
 					method: "DELETE",
+
 					headers: {
 						"Content-Type": "application/json"
 					}
@@ -1353,6 +1369,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							index: "",
 							usuarios
 						});
+						actions.roles();
 					})
 					.catch(error => {
 						//error handling
@@ -1367,12 +1384,37 @@ const getState = ({ getStore, setStore, getActions }) => {
 						rut: item.rut,
 						email: item.email,
 						phone: item.phone,
-						rol: item.rol
+						rol: item.rol,
+						password: item.password,
+						rPassword: item.password
 					},
 					index: i,
 					cardEdited: false,
-					id: item._id
+					id: item._id,
+					showPasswoord: true
 				});
+			},
+			filterByRole: e => {
+				const store = getStore();
+				let foo = e.target.name;
+				fetch("http://localhost:3000/api/v1/roles", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						const usuarios = data.filter(u => u.rol === foo);
+						setStore({ usuarios });
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			familyLastName: e => {
 				fetch("http://localhost:3000/api/v1/classrooms", {

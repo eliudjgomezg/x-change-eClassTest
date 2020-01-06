@@ -98,6 +98,7 @@ export class RolesForm extends React.Component {
 										value={store.usuario.password}
 										name="password"
 										onChange={e => actions.handleChangeUsuario(e)}
+										disabled={store.showPasswoord}
 										required
 									/>
 								</div>
@@ -110,6 +111,7 @@ export class RolesForm extends React.Component {
 										value={store.usuario.rPassword}
 										name="rPassword"
 										onChange={e => actions.handleChangeUsuario(e)}
+										disabled={store.showPasswoord}
 										required
 									/>
 								</div>
@@ -121,7 +123,7 @@ export class RolesForm extends React.Component {
 							)}
 							{!!store.contraseña && (
 								<div className="alert alert-danger" role="alert">
-									Contraseñas no coinciden.
+									Contraseña incorrecta o no coinciden.
 								</div>
 							)}
 						</Fragment>

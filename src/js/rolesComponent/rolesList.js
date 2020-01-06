@@ -17,22 +17,21 @@ export class RolesList extends React.Component {
 						return store.usuarios.map((item, i) => {
 							return (
 								<Fragment key={i}>
-									<div className=" card card-body container py-1 px-2">
+									<div className=" card card-body container py-1 px-2 mb-1">
 										<div className="row">
-											<div className="col-8">
+											<div className="col-9">
 												{item.rol}: {item.name}
 											</div>
 											<div className="col-3   ">
 												<button
 													type="button"
-													className="btn btn-primary float-right"
-													onClick={() => actions.indextodeleteClassroon(item, i)}
+													className="btn btn-primary float-right mr-2 ml-2"
+													onClick={() => actions.indextodeleteClassroon2(item, i)}
 													data-toggle="modal"
 													data-target="#exampleModal">
 													Eliminar
 												</button>
-											</div>
-											<div className="col-1 pl-0">
+
 												<button
 													type="button"
 													className="btn btn-primary float-right"
@@ -81,7 +80,7 @@ export class RolesList extends React.Component {
 													<button
 														type="button"
 														className="btn btn-primary"
-														onClick={e => actions.deleteUsuarios(e, item, i)}
+														onClick={e => actions.deleteUsuarios(item)}
 														data-dismiss="modal">
 														Eliminar
 													</button>

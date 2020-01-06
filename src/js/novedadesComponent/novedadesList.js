@@ -3,12 +3,6 @@ import { Context } from "../store/appContext";
 
 export class NovedadesList extends React.Component {
 	render() {
-		let align = {
-			paddingBottom: "10px"
-		};
-		let inline = {
-			display: "inline"
-		};
 		return (
 			<Fragment>
 				<Context.Consumer>
@@ -18,12 +12,12 @@ export class NovedadesList extends React.Component {
 								return (
 									<Fragment key={i}>
 										<div className="container">
-											<div className="row ">
-												<div className="col pl-3  d-inline">
-													<div className="list-group-item py-1 mb-1">
-														<div className="btn btn-primary">Nombre: {item.name} </div> Rol:{" "}
-														{item.rol} /Fecha:
-														{item.date}
+											<div className=" card card-body py-1 px-2 mb-1">
+												<div className="row">
+													<div className="col-9">
+														Nombre: {item.name} /Rol: {item.rol} /Fecha: {item.date}
+													</div>
+													<div className="col-3">
 														<button
 															className="btn btn-primary float-right mr-2"
 															data-toggle="modal"
