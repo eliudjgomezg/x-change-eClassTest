@@ -6,42 +6,49 @@ export class ListHijos extends React.Component {
 	render() {
 		return (
 			<Fragment>
-				<h1 className="text-center">Seleccionar Niñ@:</h1>
-				<div className="card card-body pr-0 pl-5">
-					<ul className="list-group">
-						<Context.Consumer>
-							{({ store, actions }) => {
-								if (store.hijos.length > 0) {
-									return store.hijos.map((item, i) => {
-										return (
-											<Fragment key={i}>
+				<h5 className="text-center">Seleccionar Niñ@:</h5>
+				<Context.Consumer>
+					{({ store, actions }) => {
+						if (store.hijos.length > 0) {
+							return store.hijos.map((item, i) => {
+								return (
+									<Fragment key={i}>
+										<div className="container">
+											<div className=" card card-body py-1 px-2 mb-2">
 												<div className="row">
-													<div className="col-10 mx-0">
-														<li className="list-group-item ">
-															<div className="row">
-																<div className="col">{item.sonName}</div>
-																<div className="col">
-																	{item.age} Años, {item.classroomName}
-																</div>
+													<div className="col-9">
+														<div className="row">
+															<div className="col-lg-3 align-items-endcol-sm-12">
+																{item.sonName}
 															</div>
-														</li>
+															<div className="col-lg-9 col-sm-12">
+																{item.age} Años, {item.classroomName}
+															</div>
+														</div>
 													</div>
-													<div className="col-2 mx-0 px-0">
+													<div className="col-3 mx-0 px-0">
 														<input
-															className="toggle"
+															className="toggle float-right mr-3"
 															type="checkbox"
 															onChange={e => actions.checkInSon(e, item)}
 														/>
 													</div>
 												</div>
-											</Fragment>
-										);
-									});
-								}
-							}}
-						</Context.Consumer>
-					</ul>
-				</div>
+												{!!item.hBirthDate && (
+													<div className="alert alert-success" role="alert">
+														<p className="text-center my-auto">
+															<strong>¡¡¡ESTOY DE CUMPLEAÑOSSSSSSS!!!</strong>
+														</p>
+													</div>
+												)}
+											</div>
+										</div>
+									</Fragment>
+								);
+							});
+						}
+					}}
+				</Context.Consumer>
 			</Fragment>
 		);
 	}

@@ -46,6 +46,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			familyId: "",
 			//Variables para creacion de Roles
 			usuario: {
+				id: "",
 				name: "",
 				rut: "",
 				email: "",
@@ -54,6 +55,18 @@ const getState = ({ getStore, setStore, getActions }) => {
 				password: "",
 				rPassword: "",
 				logedIn: false
+			},
+			usuarioLoged: {
+				id: "",
+				name: "",
+				rut: "",
+				email: "",
+				rol: "",
+				phone: "",
+				password: "",
+				rPassword: "",
+				logedIn: false,
+				classrooms: ""
 			},
 
 			usuarios: [],
@@ -101,13 +114,16 @@ const getState = ({ getStore, setStore, getActions }) => {
 			formModalDashboard: false,
 			noClassroom: false,
 			showPasswoord: false,
-			test: ""
+			test: "",
+			sonToClassroom: [],
+			attendance: 0
 		},
 
 		actions: {
 			//Funciones para renderizado condicional
 			dashboard: e => {
 				const store = getStore();
+				const actions = getActions();
 				fetch("http://localhost:3000/api/v1/classrooms", {
 					method: "GET",
 					headers: {
@@ -148,6 +164,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							id: "",
 							cardEdited: true
 						});
+						actions.deleteAddHijo();
+						actions.deleteAddApoderado();
 					})
 					.catch(error => {
 						//error handling
@@ -170,9 +188,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					})
 					.then(data => {
 						console.log(data);
-						let selectUSuarios = data.filter(s => s.rol === "Profesor");
-						let selectedUsuarios = data.filter(s => s.selected === true && s.notSelected === false);
-						setStore({ selectUSuarios, selectedUsuarios });
+						let selectUSuarios = data.filter(s => s.rol === "Profesor" && s.selected === false);
+						setStore({ selectUSuarios });
 					})
 					.catch(error => {
 						//error handling
@@ -181,6 +198,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 			novedades: e => {
 				const store = getStore();
+				const actions = getActions();
 				fetch("http://localhost:3000/api/v1/news", {
 					method: "GET",
 					headers: {
@@ -212,8 +230,12 @@ const getState = ({ getStore, setStore, getActions }) => {
 							hijos: [],
 							rut: "",
 							formModalDashboard: false,
-							carddashboard: false
+							carddashboard: false,
+							classroom: false
 						});
+						actions.deleteAddHijo();
+						actions.deleteAddApoderado();
+						actions.deleteConfigCheckin();
 					})
 					.catch(error => {
 						//error handling
@@ -222,6 +244,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 			familias: e => {
 				const store = getStore();
+				const actions = getActions();
 				fetch("http://localhost:3000/api/v1/families", {
 					method: "GET",
 					headers: {
@@ -254,6 +277,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							formModalDashboard: false,
 							alert: false
 						});
+						actions.deleteAddHijo();
+						actions.deleteAddApoderado();
 					})
 					.catch(error => {
 						//error handling
@@ -262,6 +287,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 			roles: e => {
 				const store = getStore();
+				const actions = getActions();
 				fetch("http://localhost:3000/api/v1/roles", {
 					method: "GET",
 					headers: {
@@ -294,6 +320,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							carddashboard: false,
 							formModalDashboard: false
 						});
+						actions.deleteAddHijo();
+						actions.deleteAddApoderado();
 					})
 					.catch(error => {
 						//error handling
@@ -322,6 +350,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 			checkIn: e => {
 				const store = getStore();
+				const actions = getActions();
 				fetch("http://localhost:3000/api/v1/classrooms", {
 					method: "GET",
 					headers: {
@@ -332,24 +361,24 @@ const getState = ({ getStore, setStore, getActions }) => {
 						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
 					})
 					.then(data => {
-						if (data.length <= 0) {
+						console.log(data);
+						if (data.length > 0) {
 							setStore({
-								noClassroom: true,
+								noClassroom: false,
 								cardArray: data,
 								checkIn: true,
 								novedades: false,
 								configCheckIn: false
 							});
 						} else {
-							console.log(data);
 							setStore({
-								cardArray: data,
 								checkIn: true,
 								novedades: false,
 								configCheckIn: false,
-								noClassroom: false
+								noClassroom: true
 							});
 						}
+						actions.deleteConfigCheckin();
 					})
 					.catch(error => {
 						//error handling
@@ -357,13 +386,24 @@ const getState = ({ getStore, setStore, getActions }) => {
 					});
 			},
 			configCheckIn: e => {
+				const store = getStore();
 				setStore({
 					configCheckIn: true,
 					novedades: false,
 					checkIn: false,
 					hijos: [],
 					rut: "",
-					selectRol: false
+					selectRol: false,
+					classroom: false,
+					usuario: {
+						name: store.usuarioLoged.name,
+						rut: store.usuarioLoged.rut,
+						email: store.usuarioLoged.email,
+						rol: store.usuarioLoged.rol,
+						phone: store.usuarioLoged.phone,
+						password: store.usuarioLoged.password,
+						rPassword: store.usuarioLoged.password
+					}
 				});
 			},
 			//Funciones para la creacion de aulas
@@ -371,7 +411,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 				//Toma la data del Input y la coloca en las variables del store
 				const store = getStore();
 				const { name, value } = e.target;
-				setStore({ [name]: value, alertt: false, alert: false, hijos: [] });
+				setStore({ [name]: value, alertt: false, alert: false, hijos: [], sonToClassroom: [] });
 			},
 
 			setEditCard: (item, itemPosition) => {
@@ -388,6 +428,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 					dayUse: item.dayUse,
 					startScheduleRank: item.startScheduleRank,
 					finalScheduleRank: item.finalScheduleRank,
+					selectedUsuarios: item.teachers,
 					carddashboard: false,
 					formModalDashboard: true
 				});
@@ -440,7 +481,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 									startScheduleRank: "",
 									finalScheduleRank: "",
 									alert: false,
-									selectedUsuarios: []
+									selectedUsuarios: [],
+									selectUSuarios: []
 								});
 								actions.dashboard();
 								//this will print on the console the exact object received from the server
@@ -483,7 +525,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 								startScheduleRank: "",
 								finalScheduleRank: "",
 								id: "",
-								cardEdited: true
+								cardEdited: true,
+								selectUSuarios: []
 							});
 							actions.dashboard();
 						})
@@ -526,7 +569,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 					finalScheduleRank: "",
 					id: "",
 					cardEdited: true,
-
+					selectUSuarios: [],
 					carddashboard: true,
 					formModalDashboard: false
 				});
@@ -572,11 +615,12 @@ const getState = ({ getStore, setStore, getActions }) => {
 				}
 
 				console.log(sDay);
-				let cardArray = store.cardArray.filter(d => d.dayUse == sDay);
+				let cardArray = store.cardArray.filter(d => d.dayUse.toLowerCase() == sDay);
 				if (cardArray.length > 0) {
 					setStore({ cardArray });
 				} else setStore({ cardArray, alert: true });
 			},
+			filterByDay2: e => {},
 
 			deleteCard: () => {
 				//Boton eliminar: Borra el aula seleccionada
@@ -630,10 +674,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/news", {
 					method: "POST",
 					body: JSON.stringify({
-						name: store.usuario.name,
+						name: store.usuarioLoged.name,
 						news: store.news,
 						date: store.date,
-						rol: store.usuario.rol,
+						rol: store.usuarioLoged.rol,
 						timeStamp: store.timeStamp
 					}),
 					headers: {
@@ -1674,7 +1718,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						console.log(data);
 						if (data != false) {
 							setStore({
-								usuario: {
+								usuarioLoged: {
+									id: data._id,
 									name: data.name,
 									rut: data.rut,
 									email: data.email,
@@ -1682,6 +1727,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 									phone: data.phone,
 									password: data.password,
 									rPassword: data.password,
+									classrooms: data.classrooms,
 									logedIn: true
 								},
 								id: data._id
@@ -1693,7 +1739,6 @@ const getState = ({ getStore, setStore, getActions }) => {
 								actions.classroom();
 							} else if (data.rol === "Check In") {
 								actions.checkIn();
-								actions.checkIn(e);
 							}
 						} else setStore({ alert: true });
 
@@ -1703,6 +1748,19 @@ const getState = ({ getStore, setStore, getActions }) => {
 						//error handling
 						console.log(error);
 					});
+			},
+			deleteConfigCheckin: () => {
+				setStore({
+					usuario: {
+						name: "",
+						rut: "",
+						email: "",
+						rol: "",
+						phone: "",
+						password: "",
+						rPassword: ""
+					}
+				});
 			},
 			handleLoging: e => {
 				const store = getStore();
@@ -1744,67 +1802,60 @@ const getState = ({ getStore, setStore, getActions }) => {
 			checkInSon: (e, item) => {
 				const store = getStore();
 				if (e.target.checked) {
-					fetch("http://localhost:3000/api/v1/currentClassroom", {
-						method: "POST",
-						body: JSON.stringify({
-							id: item.id,
-							sonName: item.sonName,
-							birthDate: item.birthDate,
-							notes: item.notes,
-							families: item.families,
-							age: item.age,
-							classroomName: item.classroomName
-						}),
-						headers: {
-							"Content-Type": "application/json"
-						}
-					})
-						.then(resp => {
-							//console.log(resp.ok); // will be true if the response is successfull
-							//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
-							//console.log(resp.text()); // will try return the exact result as string
-							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
-						})
-						.then(data => {
-							//here is were your code should start after the fetch finishes
-							console.log(data);
-
-							//this will print on the console the exact object received from the server
-						})
-						.catch(error => {
-							//error handling
-							console.log(error);
-						});
+					let sonToClassroom = store.sonToClassroom;
+					let son = {
+						id: item.id,
+						sonName: item.sonName,
+						birthDate: item.birthDate,
+						notes: item.notes,
+						families: item.families,
+						age: item.age,
+						classroomName: item.classroomName,
+						hBirthDate: item.hBirthDate,
+						parentPhone: item.parentPhone,
+						classroomId: item.classroomId,
+						parentName: item.parentName
+					};
+					sonToClassroom.push(son);
+					setStore({ sonToClassroom });
 				} else {
-					fetch("http://localhost:3000/api/v1/currentClassroom/" + item.id, {
-						method: "DELETE",
-						headers: {
-							"Content-Type": "application/json"
-						}
-					})
-						.then(resp => {
-							//console.log(resp.ok); // will be true if the response is successfull
-							//console.log(resp.status); // the status code = 200 or code = 400 etc.
-							//console.log(resp.text()); // will try return the exact result as string
-							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
-						})
-						.then(data => {
-							//here is were your code should start after the fetch finishes
-							console.log(data); //this will print on the console the exact object received from the server
-						})
-						.catch(error => {
-							//error handling
-							console.log(error);
-						});
+					let sonToClassroom = store.sonToClassroom;
+					let foo = sonToClassroom.filter(f => f.id != item.id);
+					setStore({ sonToClassroom: foo });
 				}
 			},
 			outCheckin: (e, item) => {
 				const store = getStore();
-				setStore({ hijos: [], rut: "" });
+				const actions = getActions();
+				fetch("http://localhost:3000/api/v1/currentClassroom", {
+					method: "POST",
+					body: JSON.stringify({
+						newClass: store.sonToClassroom
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data);
+						setStore({ hijos: [], rut: "", sonToClassroom: [] });
+						actions.checkIn();
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			},
 			logedEditRol: e => {
 				const store = getStore();
-				fetch("http://localhost:3000/api/v1/rol/" + store.id, {
+				fetch("http://localhost:3000/api/v1/rol/" + store.usuarioLoged.id, {
 					method: "PUT",
 					body: JSON.stringify({
 						name: store.usuario.name,
@@ -1833,15 +1884,21 @@ const getState = ({ getStore, setStore, getActions }) => {
 								phone: data.phone,
 								password: data.password,
 								rPassword: data.password
+							},
+							usuarioLoged: {
+								name: data.name,
+								rut: data.rut,
+								email: data.email,
+								rol: data.rol,
+								phone: data.phone,
+								password: data.password,
+								rPassword: data.password
 							}
 						});
 					});
 			},
+
 			classroom: e => {
-				const store = getStore();
-				setStore({ classroom: true });
-			},
-			classroomList: e => {
 				fetch("http://localhost:3000/api/v1/currentClassroom/", {
 					method: "GET",
 					headers: {
@@ -1854,7 +1911,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 					.then(data => {
 						console.log(data);
 						setStore({
-							hijos: data
+							hijos: data,
+							classroom: true,
+							novedades: false,
+							configCheckIn: false
 						});
 					})
 					.catch(error => {
@@ -1862,21 +1922,127 @@ const getState = ({ getStore, setStore, getActions }) => {
 						console.log(error);
 					});
 			},
-			addTeacher: (e, item) => {
+			addTeacher: (item, i) => {
 				const store = getStore();
 				let selectedUsuarios = store.selectedUsuarios;
+				let selectUSuarios = store.selectUSuarios;
 				item["selected"] = true;
-				item["notSelected"] = false;
 				selectedUsuarios.push(item);
-				setStore({ selectedUsuarios });
+				selectUSuarios.splice(i, 1);
+				setStore({ selectedUsuarios, selectUSuarios });
 			},
-			removeTeacher: (e, item) => {
+			removeTeacher: (item, i) => {
 				const store = getStore();
-				let newselectedUsuarios = store.selectedUsuarios;
+				let selectedUsuarios = store.selectedUsuarios;
+				let selectUSuarios = store.selectUSuarios;
 				item["selected"] = false;
-				item["notSelected"] = true;
-				let selectedUsuarios = newselectedUsuarios.filter(s => s._id != item._id);
-				setStore({ selectedUsuarios });
+				selectUSuarios.push(item);
+				selectedUsuarios.splice(i, 1);
+				setStore({ selectedUsuarios, selectUSuarios });
+			},
+			button: (item, i) => {
+				const actions = getActions();
+				fetch("http://localhost:3000/api/v1/currentClassroom/" + item._id, {
+					method: "PUT",
+					body: JSON.stringify({
+						button: true
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data); //this will print on the console the exact object received from the server
+						actions.classroom();
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
+			showBorder: (item, i) => {
+				const store = getStore();
+				const actions = getActions();
+				fetch("http://localhost:3000/api/v1/currentClassroom/" + item._id, {
+					method: "PUT",
+					body: JSON.stringify({
+						borderColor: "border-success",
+						status: false
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data); //this will print on the console the exact object received from the server
+						let attendance = store.attendance;
+						attendance = attendance + 1;
+						setStore({
+							attendance
+						});
+						actions.classroom();
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
+			deleteCurrentClassroom: item => {
+				const store = getStore();
+				const actions = getActions();
+				console.log(item.sonName);
+
+				fetch("http://localhost:3000/api/v1/currentClassroom/" + item._id, {
+					method: "DELETE",
+
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log(resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data); //this will print on the console the exact object received from the server
+						actions.classroom();
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
+			myData: item => {
+				fetch("http://localhost:3000/api/v1/parentEdit/" + item.families, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						setStore({
+							apoderados: data
+						});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			}
 		}
 	};

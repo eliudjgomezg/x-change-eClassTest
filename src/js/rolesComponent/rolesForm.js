@@ -9,10 +9,10 @@ export class RolesForm extends React.Component {
 					return (
 						<Fragment>
 							<div className="container mt-3">
-								<div className="row">
-									<div className="col">
-										<div className="form-group">
-											<label htmlFor="exampleFormControlInput1">Nombre Completo</label>
+								<div className="row ">
+									<div className="col pr-1">
+										<div className="form-group ">
+											<label htmlFor="exampleFormControlInput1">Nombre</label>
 											<input
 												type="text"
 												className="form-control"
@@ -24,8 +24,8 @@ export class RolesForm extends React.Component {
 											/>
 										</div>
 									</div>
-									<div className="col">
-										<div className="form-group">
+									<div className="col pl-1">
+										<div className="form-group pl-1">
 											<label htmlFor="exampleFormControlInput1">Rut</label>
 											<input
 												type="text"
@@ -40,8 +40,8 @@ export class RolesForm extends React.Component {
 									</div>
 								</div>
 
-								<div className="row">
-									<div className="col">
+								<div className="row ">
+									<div className="col pr-1">
 										<div className="form-group">
 											<label htmlFor="exampleFormControlInput1">Telefono</label>
 											<input
@@ -55,7 +55,7 @@ export class RolesForm extends React.Component {
 											/>
 										</div>
 									</div>
-									<div className="col">
+									<div className="col pl-1">
 										<div className="form-group">
 											<label htmlFor="exampleFormControlInput1">Email</label>
 											<input
@@ -72,7 +72,7 @@ export class RolesForm extends React.Component {
 								</div>
 
 								{!!store.selectRol && (
-									<div className="form-group">
+									<div className="form-group ">
 										<label htmlFor="exampleFormControlSelect1">Seleccionar Rol</label>
 										<select
 											className="form-control"
@@ -89,7 +89,7 @@ export class RolesForm extends React.Component {
 									</div>
 								)}
 
-								<div className="form-group">
+								<div className="form-group ">
 									<label htmlFor="exampleFormControlInput1">Contraseña</label>
 									<input
 										type="password"
@@ -102,6 +102,7 @@ export class RolesForm extends React.Component {
 										required
 									/>
 								</div>
+
 								<div className="form-group">
 									<label htmlFor="exampleFormControlInput1">Repetir Contraseña</label>
 									<input
@@ -116,6 +117,7 @@ export class RolesForm extends React.Component {
 									/>
 								</div>
 							</div>
+
 							{!!store.rol && (
 								<div className="alert alert-danger" role="alert">
 									Elige un Rol correcto

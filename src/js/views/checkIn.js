@@ -101,13 +101,15 @@ export class CheckIn extends React.Component {
 									</div>
 								</nav>
 
-								<div className="container-fluid">
+								<div className="container">
 									{!!store.checkIn && <CheckInComp />}
 									{!!store.novedades && <Novedades />}
 									{!!store.configCheckIn && (
 										<Fragment>
-											<div className="card card-body mt-2">
-												<p className="">Editar Perfil:</p>
+											<div className="card card-body mt-2 px-1">
+												<p className="ml-3 mb-0">
+													<strong>Editar Perfil</strong>
+												</p>
 												<RolesForm />
 											</div>
 											<div>

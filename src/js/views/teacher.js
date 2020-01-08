@@ -106,8 +106,10 @@ export class Teacher extends React.Component {
 									{!!store.novedades && <Novedades />}
 									{!!store.configCheckIn && (
 										<Fragment>
-											<div className="card card-body mt-2">
-												<p className="">Editar Usuari@:</p>
+											<div className="card card-body mt-2 px-2">
+												<p className="mb-0">
+													<strong>Editar Usuari@</strong>
+												</p>
 												<RolesForm />
 											</div>
 											<div>
