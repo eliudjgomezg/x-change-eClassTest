@@ -35,8 +35,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 				id: "",
 				sonName: "",
 				birthDate: "",
-				notes: ""
+				notes: "",
+				age: ""
 			},
+			sonName: "",
 			hijos: [],
 			familia: {
 				apoderados: [],
@@ -116,7 +118,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 			showPasswoord: false,
 			test: "",
 			sonToClassroom: [],
-			attendance: 0
+			attendance: 0,
+			checkOutHijos: [],
+			status: false
 		},
 
 		actions: {
@@ -413,6 +417,12 @@ const getState = ({ getStore, setStore, getActions }) => {
 				const { name, value } = e.target;
 				setStore({ [name]: value, alertt: false, alert: false, hijos: [], sonToClassroom: [] });
 			},
+			getData2: e => {
+				//Toma la data del Input y la coloca en las variables del store
+				const store = getStore();
+				const { name, value } = e.target;
+				setStore({ [name]: value });
+			},
 
 			setEditCard: (item, itemPosition) => {
 				// Boton de editar: Toma el valos del Item correspondiente
@@ -536,25 +546,6 @@ const getState = ({ getStore, setStore, getActions }) => {
 						});
 				}
 			},
-			showClassrooms: e => {
-				fetch("https://assets.breatheco.de/apis/fake/todos/user/" + user, {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json"
-					}
-				})
-					.then(resp => {
-						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
-					})
-					.then(data => {
-						console.log(data);
-						setStore({ cardArray: data });
-					})
-					.catch(error => {
-						//error handling
-						console.log(error);
-					});
-			},
 			deleteForm: e => {
 				const store = getStore();
 				setStore({
@@ -599,7 +590,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 				let day = moment().format("dddd");
 				let sDay = "";
 				if (day === "Monday") {
-					sDay = "Lunes";
+					sDay = "lunes";
 				} else if (day === "Tuesday") {
 					sDay = "martes";
 				} else if (day === "Wednesday") {
@@ -663,7 +654,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 				let year = date.getFullYear();
 
 				if (month < 10 || day < 10) {
-					let date = `0${day}-0${month}-${year}`;
+					let date = `${day}-0${month}-${year}`;
 					setStore({ date, timeStamp });
 				} else {
 					let date = `${day}-${month}-${year}`;
@@ -1730,7 +1721,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 									classrooms: data.classrooms,
 									logedIn: true
 								},
-								id: data._id
+								login: {
+									rut: "",
+									password: ""
+								}
 							});
 							history.push("/" + data.rol);
 							if (data.rol === "Administrador") {
@@ -1775,6 +1769,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			//Funciones pra modulo CheckIn
 			serchRut: e => {
 				const store = getStore();
+				const actions = getActions();
 				if (store.rut != "") {
 					fetch("http://localhost:3000/api/v1/serchRut/" + store.rut, {
 						method: "GET",
@@ -1791,6 +1786,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 								setStore({
 									hijos: data
 								});
+								actions.checkIn();
 							} else setStore({ alert: true });
 						})
 						.catch(error => {
@@ -1799,29 +1795,87 @@ const getState = ({ getStore, setStore, getActions }) => {
 						});
 				} else setStore({ alert: true });
 			},
-			checkInSon: (e, item) => {
+			checkInSon: (e, item, i) => {
+				setStore({ status: true });
+				const actions = getActions();
 				const store = getStore();
+				let newClassroom = store.cardArray.find(c => c.startAgeRank <= item.age && c.finaltAgeRank >= item.age);
+				console.log(newClassroom);
 				if (e.target.checked) {
-					let sonToClassroom = store.sonToClassroom;
-					let son = {
-						id: item.id,
-						sonName: item.sonName,
-						birthDate: item.birthDate,
-						notes: item.notes,
-						families: item.families,
-						age: item.age,
-						classroomName: item.classroomName,
-						hBirthDate: item.hBirthDate,
-						parentPhone: item.parentPhone,
-						classroomId: item.classroomId,
-						parentName: item.parentName
-					};
-					sonToClassroom.push(son);
-					setStore({ sonToClassroom });
+					if (newClassroom.capacity != newClassroom.sonsInClassroom) {
+						let sonToClassroom = store.sonToClassroom;
+						let son = {
+							id: item.id,
+							sonName: item.sonName,
+							birthDate: item.birthDate,
+							notes: item.notes,
+							families: item.families,
+							age: item.age,
+							classroomName: item.classroomName,
+							hBirthDate: item.hBirthDate,
+							parentPhone: item.parentPhone,
+							classroomId: item.classroomId,
+							parentName: item.parentName,
+							parentsList: item.parentsList,
+							parentRut: item.parentRut,
+							fullClassroom: item.fullClassroom
+						};
+						sonToClassroom.push(son);
+						setStore({ sonToClassroom });
+						fetch("http://localhost:3000/api/v1/classroomPutAssintance/" + item.classroomId, {
+							method: "PUT",
+							body: JSON.stringify({
+								sonsInClassroom: newClassroom.sonsInClassroom + 1
+							}),
+							headers: {
+								"Content-Type": "application/json"
+							}
+						})
+							.then(resp => {
+								return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+							})
+							.then(data => {
+								//here is were your code should start after the fetch finishes
+								console.log(data);
+								actions.checkIn();
+								setStore({ status: false });
+							})
+							.catch(error => {
+								//error handling
+								console.log(error);
+							});
+					} else {
+						console.log(" aula ful");
+						let hijos = store.hijos;
+						hijos[i].fullClassroom = true;
+						setStore({ hijos, status: false });
+					}
 				} else {
 					let sonToClassroom = store.sonToClassroom;
 					let foo = sonToClassroom.filter(f => f.id != item.id);
-					setStore({ sonToClassroom: foo });
+
+					fetch("http://localhost:3000/api/v1/classroomPutAssintance/" + item.classroomId, {
+						method: "PUT",
+						body: JSON.stringify({
+							sonsInClassroom: newClassroom.sonsInClassroom - 1
+						}),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					})
+						.then(resp => {
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							//here is were your code should start after the fetch finishes
+							console.log(data);
+							actions.checkIn();
+							setStore({ status: false, sonToClassroom: foo, hijos });
+						})
+						.catch(error => {
+							//error handling
+							console.log(error);
+						});
 				}
 			},
 			outCheckin: (e, item) => {
@@ -1897,8 +1951,35 @@ const getState = ({ getStore, setStore, getActions }) => {
 						});
 					});
 			},
+			capacityClassroon: () => {
+				const store = getStore();
+				let foo = store.hijos.length;
+				console.log(foo);
+				fetch("http://localhost:3000/api/v1/classroomPutAssintance/" + store.usuarioLoged.classrooms._id, {
+					method: "PUT",
+					body: JSON.stringify({
+						sonsInClassroom: foo
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data); //this will print on the console the exact object received from the server
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
 
 			classroom: e => {
+				const store = getStore();
+				const actions = getActions();
 				fetch("http://localhost:3000/api/v1/currentClassroom/", {
 					method: "GET",
 					headers: {
@@ -1910,12 +1991,20 @@ const getState = ({ getStore, setStore, getActions }) => {
 					})
 					.then(data => {
 						console.log(data);
+
+						let hijos = data.filter(
+							c =>
+								store.usuarioLoged.classrooms.startAgeRank <= c.age &&
+								store.usuarioLoged.classrooms.finaltAgeRank >= c.age
+						);
+						console.log(hijos);
 						setStore({
-							hijos: data,
+							hijos,
 							classroom: true,
 							novedades: false,
 							configCheckIn: false
 						});
+						actions.capacityClassroon();
 					})
 					.catch(error => {
 						//error handling
@@ -1958,6 +2047,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 						//here is were your code should start after the fetch finishes
 						console.log(data); //this will print on the console the exact object received from the server
 						actions.classroom();
+						console.log(item.parentsList);
 					})
 					.catch(error => {
 						//error handling
@@ -1996,11 +2086,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 					});
 			},
 			deleteCurrentClassroom: item => {
-				const store = getStore();
 				const actions = getActions();
-				console.log(item.sonName);
-
-				fetch("http://localhost:3000/api/v1/currentClassroom/" + item._id, {
+				const store = getStore();
+				fetch("http://localhost:3000/api/v1/currentClassroom/" + store.id, {
 					method: "DELETE",
 
 					headers: {
@@ -2016,6 +2104,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 					.then(data => {
 						//here is were your code should start after the fetch finishes
 						console.log(data); //this will print on the console the exact object received from the server
+						setStore({ sonName: "", id: "" });
 						actions.classroom();
 					})
 					.catch(error => {
@@ -2024,25 +2113,57 @@ const getState = ({ getStore, setStore, getActions }) => {
 					});
 			},
 			myData: item => {
-				fetch("http://localhost:3000/api/v1/parentEdit/" + item.families, {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json"
-					}
-				})
-					.then(resp => {
-						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+				const store = getStore();
+				setStore({
+					apoderados: item.parentsList,
+					hijo: { sonName: item.sonName, notes: item.notes, age: item.age }
+				});
+			},
+			byeSon: item => {
+				setStore({ sonName: item.sonName, id: item._id });
+			},
+			checkOutHijos: e => {
+				const store = getStore();
+				let checkOutHijos = store.hijos.filter(c => c.parentRut === store.rut);
+				setStore({ checkOutHijos, rut: "" });
+			},
+			exitCheckOut: () => {
+				setStore({ checkOutHijos: [] });
+			},
+			checkOut: () => {
+				const store = getStore();
+				const actions = getActions();
+				store.checkOutHijos.map(c => {
+					fetch("http://localhost:3000/api/v1/currentClassroom/" + c._id, {
+						method: "DELETE",
+
+						headers: {
+							"Content-Type": "application/json"
+						}
 					})
-					.then(data => {
-						console.log(data);
-						setStore({
-							apoderados: data
+						.then(resp => {
+							//console.log(resp.ok); // will be true if the response is successfull
+							//console.log(resp.status); // the status code = 200 or code = 400 etc.
+							//console.log(resp.text()); // will try return the exact result as string
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							//here is were your code should start after the fetch finishes
+							console.log(data); //this will print on the console the exact object received from the server
+						})
+						.catch(error => {
+							//error handling
+							console.log(error);
 						});
-					})
-					.catch(error => {
-						//error handling
-						console.log(error);
-					});
+				});
+				setStore({ checkOutHijos: [] });
+				actions.classroom();
+			},
+			wrapper: () => {
+				const classes = document.querySelector("#wrapper");
+				classes.className.indexOf("hola") > -1
+					? (classes.className = classes.className.replace("hola", ""))
+					: (classes.className += " hola");
 			}
 		}
 	};

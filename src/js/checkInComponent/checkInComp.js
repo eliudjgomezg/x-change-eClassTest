@@ -96,17 +96,6 @@ export class CheckInComp extends React.Component {
 										}}
 									</Context.Consumer>
 								</Fragment>
-
-								{!!(store.cardArray.length > 0) && (
-									<button
-										type="button"
-										className=" container btn btn-primary float-right"
-										data-toggle="modal"
-										data-target="#exampleModal2"
-										onClick={e => actions.checkIn(e)}>
-										ACTUALIZAR ESTATUS
-									</button>
-								)}
 							</div>
 						</Fragment>
 					);

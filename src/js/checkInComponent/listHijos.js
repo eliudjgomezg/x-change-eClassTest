@@ -30,7 +30,8 @@ export class ListHijos extends React.Component {
 														<input
 															className="toggle float-right mr-3"
 															type="checkbox"
-															onChange={e => actions.checkInSon(e, item)}
+															onChange={e => actions.checkInSon(e, item, i)}
+															disabled={store.status}
 														/>
 													</div>
 												</div>
@@ -38,6 +39,17 @@ export class ListHijos extends React.Component {
 													<div className="alert alert-success" role="alert">
 														<p className="text-center my-auto">
 															<strong>¡¡¡ESTOY DE CUMPLEAÑOSSSSSSS!!!</strong>
+														</p>
+													</div>
+												)}
+
+												{!!item.fullClassroom && (
+													<div className="alert alert-danger" role="alert">
+														<p className="text-center my-auto">
+															<strong>
+																¡¡¡
+																{item.classroomName} esta llena !!!
+															</strong>
 														</p>
 													</div>
 												)}

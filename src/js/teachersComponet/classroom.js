@@ -25,9 +25,9 @@ export class Classroom extends React.Component {
 											</p>
 										</div>
 									</div>
-									<div className="col">
+									<div className="col align-items-center ">
 										<button
-											className="btn btn-primary float-right d-flex align-self-center"
+											className="btn btn-primary  float-right"
 											onClick={e => actions.classroom(e)}>
 											ACTUALIZAR
 										</button>
@@ -141,7 +141,8 @@ export class Classroom extends React.Component {
 																	className="btn btn-danger container"
 																	type="button"
 																	data-toggle="modal"
-																	data-target="#exampleModal">
+																	data-target="#exampleModal"
+																	onClick={e => actions.byeSon(item)}>
 																	RETIRAR
 																</button>
 															</div>
@@ -180,14 +181,22 @@ export class Classroom extends React.Component {
 														</button>
 													</div>
 													<div className="modal-body">
-														Si retiras a {item.sonName}, se eliminara de la lista y
+														Si retiras a {store.sonName}, se eliminara de la lista y
 														permitira la entrada a otro niñ@. ¿Segur@ deseas continuar?
 													</div>
+
 													<div className="modal-footer">
 														<button
 															type="button"
+															className="btn btn-secondary"
+															data-dismiss="modal">
+															Cancelar
+														</button>
+														<button
+															type="button"
 															className="btn btn-primary"
-															onClick={e => actions.deleteCurrentClassroom(item)}>
+															data-dismiss="modal"
+															onClick={e => actions.deleteCurrentClassroom()}>
 															Aceptar
 														</button>
 													</div>
@@ -216,11 +225,37 @@ export class Classroom extends React.Component {
 															<span aria-hidden="true">&times;</span>
 														</button>
 													</div>
-													<div className="modal-body">
+													<div className="modal-body ">
+														<div className="container ">
+															<div className="card card-body pt-1 mb-2">
+																<div className="row">
+																	Hola soy {store.hijo.sonName} y tengo{" "}
+																	{store.hijo.age} años.
+																</div>
+																{!!store.hijo.notes.length > 0 && (
+																	<Fragment>
+																		<div className="row">
+																			Por favor ten en cuenta estas
+																			consideraciones sobre mi:
+																		</div>
+																		<div className="row">
+																			<textarea
+																				className="form-control"
+																				id="exampleFormControlTextarea1"
+																				rows="4"
+																				disabled
+																				value={store.hijo.notes}
+																				name="notes"
+																			/>
+																		</div>
+																	</Fragment>
+																)}
+															</div>
+														</div>
 														<Context.Consumer>
 															{({ store, actions }) => {
 																if (store.apoderados.length > 0) {
-																	return store.apoderados.map((item, i) => {
+																	return store.apoderados.map((a, i) => {
 																		return (
 																			<Fragment key={i}>
 																				<div className="container">
@@ -229,7 +264,7 @@ export class Classroom extends React.Component {
 																							<div className="col-12">
 																								<div className="col justify-content-center">
 																									Apoderad@:{" "}
-																									{item.parentName}
+																									{a.parentName}
 																								</div>
 																							</div>
 																						</div>
@@ -242,7 +277,7 @@ export class Classroom extends React.Component {
 																										type="button"
 																										href={
 																											"tel:" +
-																											item.phone
+																											a.phone
 																										}>
 																										LLAMAR
 																									</button>
@@ -253,10 +288,10 @@ export class Classroom extends React.Component {
 																										type="button"
 																										href={
 																											"https://api.whatsapp.com/send?phone=" +
-																											item.phone +
+																											a.phone +
 																											"&text=hola,%20¿qué%20tal%20estás? "
 																										}>
-																										WHATAPP
+																										WHATAPP{" "}
 																									</button>
 																								</div>
 																							</div>
@@ -287,6 +322,123 @@ export class Classroom extends React.Component {
 						}
 					}}
 				</Context.Consumer>
+				<div className="container">
+					<button
+						type="button"
+						className=" container btn btn-primary float-right"
+						data-toggle="modal"
+						data-target="#exampleModalScrollable2">
+						CHECK OUT
+					</button>
+
+					<div
+						className="modal fade"
+						id="exampleModalScrollable2"
+						tabIndex="-1"
+						role="dialog"
+						aria-labelledby="exampleModalScrollableTitle"
+						aria-hidden="true">
+						<div className="modal-dialog modal-dialog-scrollable" role="document">
+							<div className="modal-content">
+								<Context.Consumer>
+									{({ store, actions }) => {
+										return (
+											<div className="modal-header">
+												<h5 className="modal-title" id="exampleModalScrollableTitle">
+													Check Out
+												</h5>
+
+												<button
+													type="button"
+													className="close"
+													data-dismiss="modal"
+													aria-label="Close"
+													onClick={() => actions.exitCheckOut()}>
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+										);
+									}}
+								</Context.Consumer>
+
+								<div className="modal-body">
+									<div className=" container input-group mb-3 mt-2">
+										<Context.Consumer>
+											{({ store, actions }) => {
+												return (
+													<Fragment>
+														<input
+															type="text"
+															className="form-control"
+															aria-label="Recipient's username"
+															aria-describedby="button-addon2"
+															value={store.rut}
+															name="rut"
+															onChange={e => actions.getData2(e)}
+															placeholder="Ingresar Rut de Apoderado"
+														/>
+														<div className="input-group-append">
+															<button
+																className="btn btn-primary"
+																type="button"
+																id="button-addon2"
+																onClick={e => actions.checkOutHijos(e)}>
+																Buscar
+															</button>
+														</div>
+													</Fragment>
+												);
+											}}
+										</Context.Consumer>
+									</div>
+									<Context.Consumer>
+										{({ store, actions }) => {
+											if (store.checkOutHijos.length > 0) {
+												return store.checkOutHijos.map((item, i) => {
+													return (
+														<div className="container" key={i}>
+															<div className="card card-body">
+																<div className="row">
+																	<div className="col-12">
+																		<div className="col justify-content-center">
+																			{i + 1} {item.sonName}
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													);
+												});
+											}
+										}}
+									</Context.Consumer>
+								</div>
+								<Context.Consumer>
+									{({ store, actions }) => {
+										return (
+											<div className="modal-footer">
+												<button
+													type="button"
+													className="btn btn-secondary"
+													data-dismiss="modal"
+													onClick={() => actions.exitCheckOut()}>
+													Cancelar
+												</button>
+												<button
+													type="button"
+													className="btn btn-primary"
+													data-dismiss="modal"
+													onClick={() => actions.checkOut()}>
+													Check Out
+												</button>
+											</div>
+										);
+									}}
+								</Context.Consumer>
+							</div>
+						</div>
+					</div>
+				</div>
 			</Fragment>
 		);
 	}
