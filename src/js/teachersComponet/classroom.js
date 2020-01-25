@@ -19,7 +19,7 @@ export class Classroom extends React.Component {
 										</div>
 										<div className="row">
 											<p className="my-0 ml-3">
-												CAPACIDAD: {store.usuarioLoged.classrooms.sonsInClassroom}
+												CAPACIDAD: {store.hijos.length}
 												{" / "}
 												{store.usuarioLoged.classrooms.capacity}
 											</p>
@@ -386,6 +386,13 @@ export class Classroom extends React.Component {
 																Buscar
 															</button>
 														</div>
+														{!!store.status && (
+															<div className="alert alert-danger" role="alert">
+																<p className="text-center m-0 p-0">
+																	Apoderado no tiene Hij@s asignados a esta aula.
+																</p>
+															</div>
+														)}
 													</Fragment>
 												);
 											}}
@@ -428,7 +435,8 @@ export class Classroom extends React.Component {
 													type="button"
 													className="btn btn-primary"
 													data-dismiss="modal"
-													onClick={() => actions.checkOut()}>
+													onClick={() => actions.checkOut()}
+													disabled={store.status}>
 													Check Out
 												</button>
 											</div>

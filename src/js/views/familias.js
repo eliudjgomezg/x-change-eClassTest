@@ -132,6 +132,14 @@ export class Familias extends React.Component {
 										<div className="col-3" />
 										<div className="col-3" />
 									</div>
+									{!!store.alertt && (
+										<div className="alert alert-danger" role="alert">
+											<p className="text-center m-0 p-0">
+												¡¡¡Upsss. Solo puedes agregar Hij@s con edades comprendidas entre{" "}
+												{store.startAgeRank} y {store.finaltAgeRank} años!!!
+											</p>
+										</div>
+									)}
 								</div>
 							)}
 							{!!store.familiasss && <FamiliasList />}

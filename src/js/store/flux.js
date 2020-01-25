@@ -166,7 +166,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 							startScheduleRank: "",
 							finalScheduleRank: "",
 							id: "",
-							cardEdited: true
+							cardEdited: true,
+							hijos: [],
+							apoderados: []
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -235,7 +237,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 							rut: "",
 							formModalDashboard: false,
 							carddashboard: false,
-							classroom: false
+							classroom: false,
+							hijos: [],
+							apoderados: []
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -279,7 +283,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 							goBackEditFamily: false,
 							carddashboard: false,
 							formModalDashboard: false,
-							alert: false
+							alert: false,
+							hijos: [],
+							apoderados: []
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -319,7 +325,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							goBackNewFamily: false,
 							goBackEditFamily: false,
 							usuarios: data,
-
+							hijos: [],
+							apoderados: [],
 							selectRol: true,
 							carddashboard: false,
 							formModalDashboard: false
@@ -421,7 +428,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 				//Toma la data del Input y la coloca en las variables del store
 				const store = getStore();
 				const { name, value } = e.target;
-				setStore({ [name]: value });
+				setStore({ [name]: value, status: false });
 			},
 
 			setEditCard: (item, itemPosition) => {
@@ -937,20 +944,28 @@ const getState = ({ getStore, setStore, getActions }) => {
 						})
 						.then(data => {
 							//here is were your code should start after the fetch finishes
-							console.log(data); //this will print on the console the exact object received from the server
-							let hijos = store.hijos;
-							hijos[store.index] = data;
-							setStore({
-								hijo: {
-									sonName: "",
-									birthDate: "",
-									notes: ""
-								},
-								cardEdited: true,
-								id: "",
-								index: "",
-								hijos
-							});
+							console.log(data);
+							if (data.status) {
+								setStore({
+									alertt: true,
+									startAgeRank: data.startAgeRank,
+									finaltAgeRank: data.finaltAgeRank
+								});
+							} else {
+								let hijos = store.hijos;
+								hijos[store.index] = data;
+								setStore({
+									hijo: {
+										sonName: "",
+										birthDate: "",
+										notes: ""
+									},
+									cardEdited: true,
+									id: "",
+									index: "",
+									hijos
+								});
+							}
 						});
 				}
 			},
@@ -1151,7 +1166,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 			deleteNewFamilia: (e, item, i) => {
 				const store = getStore();
-				fetch("http://localhost:3000/api/v1/family/" + store.id, {
+				fetch("http://localhost:3000/api/v1/family/" + store.familyId, {
 					method: "DELETE",
 					headers: {
 						"Content-Type": "application/json"
@@ -1189,7 +1204,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							},
 							apoderados: [],
 							hijos: [],
-							id: "",
+							familyId: "",
 							familyName: "",
 							apoderados: [],
 							hijos: [],
@@ -1853,6 +1868,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 				} else {
 					let sonToClassroom = store.sonToClassroom;
 					let foo = sonToClassroom.filter(f => f.id != item.id);
+					let hijos = store.hijos;
+					hijos.map(h => ((h.fullClassroom = false), (h.status = false)));
+					console.log(hijos);
 
 					fetch("http://localhost:3000/api/v1/classroomPutAssintance/" + item.classroomId, {
 						method: "PUT",
@@ -2125,39 +2143,43 @@ const getState = ({ getStore, setStore, getActions }) => {
 			checkOutHijos: e => {
 				const store = getStore();
 				let checkOutHijos = store.hijos.filter(c => c.parentRut === store.rut);
-				setStore({ checkOutHijos, rut: "" });
+				if (checkOutHijos.length > 0) {
+					setStore({ checkOutHijos, rut: "" });
+				} else setStore({ status: true });
 			},
 			exitCheckOut: () => {
-				setStore({ checkOutHijos: [] });
+				setStore({ checkOutHijos: [], rut: "", status: false });
 			},
 			checkOut: () => {
 				const store = getStore();
 				const actions = getActions();
-				store.checkOutHijos.map(c => {
-					fetch("http://localhost:3000/api/v1/currentClassroom/" + c._id, {
-						method: "DELETE",
+				if (store.checkOutHijos.length > 0) {
+					store.checkOutHijos.map(c => {
+						fetch("http://localhost:3000/api/v1/currentClassroom/" + c._id, {
+							method: "DELETE",
 
-						headers: {
-							"Content-Type": "application/json"
-						}
-					})
-						.then(resp => {
-							//console.log(resp.ok); // will be true if the response is successfull
-							//console.log(resp.status); // the status code = 200 or code = 400 etc.
-							//console.log(resp.text()); // will try return the exact result as string
-							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+							headers: {
+								"Content-Type": "application/json"
+							}
 						})
-						.then(data => {
-							//here is were your code should start after the fetch finishes
-							console.log(data); //this will print on the console the exact object received from the server
-						})
-						.catch(error => {
-							//error handling
-							console.log(error);
-						});
-				});
-				setStore({ checkOutHijos: [] });
-				actions.classroom();
+							.then(resp => {
+								//console.log(resp.ok); // will be true if the response is successfull
+								//console.log(resp.status); // the status code = 200 or code = 400 etc.
+								//console.log(resp.text()); // will try return the exact result as string
+								return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+							})
+							.then(data => {
+								//here is were your code should start after the fetch finishes
+								console.log(data); //this will print on the console the exact object received from the server
+							})
+							.catch(error => {
+								//error handling
+								console.log(error);
+							});
+					});
+					setStore({ checkOutHijos: [] });
+					actions.classroom();
+				} else actions.exitCheckOut();
 			},
 			wrapper: () => {
 				const classes = document.querySelector("#wrapper");

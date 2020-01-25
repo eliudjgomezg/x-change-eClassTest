@@ -27,12 +27,16 @@ export class ListHijos extends React.Component {
 														</div>
 													</div>
 													<div className="col-3 mx-0 px-0">
-														<input
-															className="toggle float-right mr-3"
-															type="checkbox"
-															onChange={e => actions.checkInSon(e, item, i)}
-															disabled={store.status}
-														/>
+														{item.fullClassroom ? (
+															<div />
+														) : (
+															<input
+																className="toggle float-right mr-3"
+																type="checkbox"
+																onChange={e => actions.checkInSon(e, item, i)}
+																disabled={store.status}
+															/>
+														)}
 													</div>
 												</div>
 												{!!item.hBirthDate && (
