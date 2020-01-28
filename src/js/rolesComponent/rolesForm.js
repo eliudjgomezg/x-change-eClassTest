@@ -41,21 +41,33 @@ export class RolesForm extends React.Component {
 								</div>
 
 								<div className="row ">
-									<div className="col pr-1">
-										<div className="form-group">
-											<label htmlFor="exampleFormControlInput1">Telefono</label>
+									<label className="ml-3" htmlFor="exampleFormControlInput1">
+										Telefono:
+									</label>
+
+									<div className="row">
+										<div className="col-3 ml-3 pr-0">
 											<input
-												type="text"
+												className="form-control "
+												id="exampleFormControlInput1"
+												value={store.area}
+												readOnly
+												required
+											/>
+										</div>
+										<div className="col pl-1 pr-0">
+											<input
 												className="form-control"
 												id="exampleFormControlInput1"
+												onChange={e => actions.handleChangeUsuario(e)}
 												value={store.usuario.phone}
 												name="phone"
-												onChange={e => actions.handleChangeUsuario(e)}
 												required
 											/>
 										</div>
 									</div>
-									<div className="col pl-1">
+
+									<div className="col ml-2 pl-1">
 										<div className="form-group">
 											<label htmlFor="exampleFormControlInput1">Email</label>
 											<input

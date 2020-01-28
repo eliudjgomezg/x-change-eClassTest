@@ -30,6 +30,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 				email: "",
 				phone: ""
 			},
+			area: "+56",
 			apoderados: [],
 			hijo: {
 				id: "",
@@ -120,7 +121,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 			sonToClassroom: [],
 			attendance: 0,
 			checkOutHijos: [],
-			status: false
+			status: false,
+			noSon: false
 		},
 
 		actions: {
@@ -422,7 +424,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 				//Toma la data del Input y la coloca en las variables del store
 				const store = getStore();
 				const { name, value } = e.target;
-				setStore({ [name]: value, alertt: false, alert: false, hijos: [], sonToClassroom: [] });
+				setStore({ [name]: value, alertt: false, alert: false, hijos: [], sonToClassroom: [], noSon: false });
 			},
 			getData2: e => {
 				//Toma la data del Input y la coloca en las variables del store
@@ -750,7 +752,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							rut: store.apoderado.rut,
 							email: store.apoderado.email,
 							phone: store.apoderado.phone,
-							families: store.familyId
+							families: store.familyId,
+							area: store.area
 						}),
 						headers: {
 							"Content-Type": "application/json"
@@ -832,7 +835,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						rut: item.rut,
 						email: item.email,
 						phone: item.phone
-					}
+					},
+					area: item.area
 				});
 			},
 			deleteAddApoderado: e => {
@@ -846,7 +850,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					},
 					cardEdited: true,
 					id: "",
-					index: ""
+					index: "",
+					area: "+56"
 				});
 			},
 			deleteApoderado: index => {
@@ -1106,6 +1111,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 						console.log(data);
 						setStore({
 							apoderados: data,
+
 							familyOptions: false,
 							familyLastName: false,
 							addApoderado: true,
@@ -1263,7 +1269,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 									email: store.usuario.email,
 									phone: store.usuario.phone,
 									rol: store.usuario.rol,
-									password: store.usuario.password
+									password: store.usuario.password,
+									area: store.area
 								}),
 								headers: {
 									"Content-Type": "application/json"
@@ -1438,6 +1445,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 						password: item.password,
 						rPassword: item.password
 					},
+					area: item.area,
 					index: i,
 					cardEdited: false,
 					id: item._id,
@@ -1798,10 +1806,14 @@ const getState = ({ getStore, setStore, getActions }) => {
 						.then(data => {
 							console.log(data);
 							if (data) {
-								setStore({
-									hijos: data
-								});
-								actions.checkIn();
+								if (data.length === 0) {
+									setStore({ noSon: true });
+								} else {
+									setStore({
+										hijos: data
+									});
+									actions.checkIn();
+								}
 							} else setStore({ alert: true });
 						})
 						.catch(error => {

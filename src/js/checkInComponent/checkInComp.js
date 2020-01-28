@@ -47,6 +47,13 @@ export class CheckInComp extends React.Component {
 										<p className="text-center m-0 p-0">Ingrese un Rut valido</p>
 									</div>
 								)}
+								{!!store.noSon && (
+									<div className="alert alert-danger" role="alert">
+										<p className="text-center m-0 p-0">
+											Este apoderad@ no tienes Hij@s registrados con su rut
+										</p>
+									</div>
+								)}
 							</div>
 							<ListHijos />
 

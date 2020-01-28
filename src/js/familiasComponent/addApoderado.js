@@ -37,14 +37,28 @@ export class AddApoderado extends React.Component {
 
 										<div className="row">
 											<label htmlFor="exampleFormControlInput1">Telefono:</label>
-											<input
-												className="form-control"
-												id="exampleFormControlInput1"
-												onChange={e => actions.handleChangeApoderado(e)}
-												value={store.apoderado.phone}
-												name="phone"
-												required
-											/>
+
+											<div className="row">
+												<div className="col-3 pr-0">
+													<input
+														className="form-control "
+														id="exampleFormControlInput1"
+														value={store.area}
+														readOnly
+														required
+													/>
+												</div>
+												<div className="col pl-1 ">
+													<input
+														className="form-control"
+														id="exampleFormControlInput1"
+														onChange={e => actions.handleChangeApoderado(e)}
+														value={store.apoderado.phone}
+														name="phone"
+														required
+													/>
+												</div>
+											</div>
 										</div>
 
 										<div className="row">
