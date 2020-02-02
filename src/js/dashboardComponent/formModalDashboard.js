@@ -14,9 +14,10 @@ export class FormModalDashboard extends React.Component {
 								<form onSubmit={e => actions.setCard(e)}>
 									{!!store.alert && (
 										<div className="alert alert-danger" role="alert">
-											<h1 className="text-center m-0 p-0">
-												¡¡¡Upsss. Es necesario crear roles de profesor antes de crear aulas!!!
-											</h1>
+											<p className="text-center m-0 p-0">
+												¡¡¡Verifica que el rango de edad que estas creando no se encuentre entre{" "}
+												{store.editstartAgeRank} y {store.editfinaltAgeRank} !!!
+											</p>
 										</div>
 									)}
 									<div>
@@ -35,46 +36,36 @@ export class FormModalDashboard extends React.Component {
 											/>
 										</div>
 										<div className="form-group">
-											<label htmlFor="exampleFormControlInput2">Rango de edades:</label>
-
 											<div className="row">
-												<div className="col">
-													<input
-														className="form-control"
-														id="startAgeRank"
-														placeholder="Desde 3 Años"
-														name="startAgeRank"
-														onChange={e => actions.getData(e)}
-														value={store.startAgeRank}
-														required
-													/>
-												</div>
+												<div className="col mr-1 pr-0">
+													<label htmlFor="exampleFormControlInput2">Rango de edades:</label>
+													<div className="row">
+														<div className="col mr-1 pr-0">
+															<input
+																className="form-control"
+																id="startAgeRank"
+																placeholder="Desde 3 Años"
+																name="startAgeRank"
+																onChange={e => actions.getData(e)}
+																value={store.startAgeRank}
+																required
+															/>
+														</div>
 
-												<div className="col">
-													<input
-														className="form-control"
-														id="finaltAgeRank"
-														placeholder="Hasta 5 Años"
-														name="finaltAgeRank"
-														onChange={e => actions.getData(e)}
-														value={store.finaltAgeRank}
-														required
-													/>
+														<div className="col ml-1 pl-0">
+															<input
+																className="form-control"
+																id="finaltAgeRank"
+																placeholder="Hasta 5 Años"
+																name="finaltAgeRank"
+																onChange={e => actions.getData(e)}
+																value={store.finaltAgeRank}
+																required
+															/>
+														</div>
+													</div>
 												</div>
-											</div>
-										</div>
-										<div
-											type="button"
-											className="btn btn-primary"
-											data-toggle="modal"
-											data-target="#exampleModalLong"
-											onClick={e => actions.formModalDashboard(e)}>
-											SELECCIONAR PROFESORES
-										</div>
-
-										<div className="form-group">
-											<div className="row">
-												<div className="col">
+												<div className="col ml-1 pl-0">
 													<label htmlFor="capacidad">Capacidad:</label>
 													<input
 														className="form-control"
@@ -85,47 +76,10 @@ export class FormModalDashboard extends React.Component {
 														required
 													/>
 												</div>
-												<div className="col">
-													<label htmlFor="diaUso">Dia de uso:</label>
-													<input
-														className="form-control"
-														id="dayUse"
-														name="dayUse"
-														onChange={e => actions.getData(e)}
-														value={store.dayUse}
-														required
-													/>
-												</div>
-
-												<div className="col">
-													<label htmlFor="horarioDesde">Horario:</label>
-													<input
-														className="form-control"
-														id="startScheduleRank"
-														placeholder="Desde"
-														name="startScheduleRank"
-														onChange={e => actions.getData(e)}
-														value={store.startScheduleRank}
-														required
-													/>
-												</div>
-												<div className="col">
-													<label htmlFor="horarioHasta" style={textColor}>
-														.
-													</label>
-													<input
-														className="form-control"
-														id="finalScheduleRank"
-														placeholder="Hasta"
-														name="finalScheduleRank"
-														onChange={e => actions.getData(e)}
-														value={store.finalScheduleRank}
-														required
-													/>
-												</div>
 											</div>
 										</div>
 									</div>
+
 									<div className="modal-footer">
 										<button
 											type="button"
@@ -139,44 +93,6 @@ export class FormModalDashboard extends React.Component {
 										</button>
 									</div>
 								</form>
-
-								<div
-									className="modal fade "
-									id="exampleModalLong"
-									tabIndex="-1"
-									role="dialog"
-									aria-labelledby="exampleModalLongTitle"
-									aria-hidden="true">
-									<div className="modal-dialog modal-lg" role="document">
-										<div className="modal-content">
-											<div className="modal-header">
-												<h5 className="modal-title" id="exampleModalLongTitle">
-													Seleccionar Profesor
-												</h5>
-												<button
-													type="button"
-													className="close"
-													data-dismiss="modal"
-													aria-label="Close"
-													onClick={e => actions.selectedTeachersOut(e)}>
-													<span aria-hidden="true">&times;</span>
-												</button>
-											</div>
-											<div className="modal-body">
-												<Select />
-											</div>
-											<div className="modal-footer">
-												<button
-													type="button"
-													className="btn btn-primary"
-													data-dismiss="modal"
-													onClick={e => actions.selectedTeachersOut(e)}>
-													Aceptar
-												</button>
-											</div>
-										</div>
-									</div>
-								</div>
 							</Fragment>
 						);
 					}}

@@ -74,8 +74,7 @@ export class Carddashboard extends React.Component {
 													<div className="col pl-3  d-inline">
 														<div className="list-group-item py-1 mb-1 px-2">
 															<div className="btn btn-primary">{item.classroomName}</div>{" "}
-															/ CAPACIDAD: {item.sonsInClassroom} DE {item.capacity} / DIA
-															DE USO: {item.dayUse}
+															/ CAPACIDAD: {item.sonsInClassroom} DE {item.capacity}
 															<a
 																href="#"
 																className="btn btn-primary float-right mr-2"

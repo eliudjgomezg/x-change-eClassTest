@@ -15,6 +15,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 			finalScheduleRank: "",
 			filterByWord: "",
 			cardArray: [],
+			editstartAgeRank: "",
+			editfinaltAgeRank: "",
 
 			//Variables para creacion de novedades
 			news: "",
@@ -61,8 +63,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				classrooms: "",
 				startScheduleRank: "",
 				finalScheduleRank: "",
-				dayUse: "",
-				classroomName: ""
+				editstartAgeRank: "",
+				editfinaltAgeRank: ""
 			},
 			usuarioLoged: {
 				id: "",
@@ -178,7 +180,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 							cardEdited: true,
 							hijos: [],
 							apoderados: [],
-							alertt: false
+							alertt: false,
+							sDayUse: false,
+							editstartAgeRank: "",
+							editfinaltAgeRank: ""
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -250,7 +255,11 @@ const getState = ({ getStore, setStore, getActions }) => {
 							classroom: false,
 							hijos: [],
 							apoderados: [],
-							alertt: false
+							alertt: false,
+							sDayUse: false,
+							alert: false,
+							editstartAgeRank: "",
+							editfinaltAgeRank: ""
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -297,7 +306,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 							alert: false,
 							hijos: [],
 							apoderados: [],
-							alertt: false
+							alertt: false,
+							sDayUse: false,
+							editstartAgeRank: "",
+							editfinaltAgeRank: ""
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -342,7 +354,11 @@ const getState = ({ getStore, setStore, getActions }) => {
 							selectRol: false,
 							carddashboard: false,
 							formModalDashboard: false,
-							alertt: false
+							alertt: false,
+							sDayUse: false,
+							alert: false,
+							editstartAgeRank: "",
+							editfinaltAgeRank: ""
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -442,7 +458,16 @@ const getState = ({ getStore, setStore, getActions }) => {
 				//Toma la data del Input y la coloca en las variables del store
 				const store = getStore();
 				const { name, value } = e.target;
-				setStore({ [name]: value, alertt: false, alert: false, hijos: [], sonToClassroom: [], noSon: false });
+				setStore({
+					[name]: value,
+					alertt: false,
+					alert: false,
+					hijos: [],
+					sonToClassroom: [],
+					noSon: false,
+					editstartAgeRank: "",
+					editfinaltAgeRank: ""
+				});
 			},
 			getData2: e => {
 				//Toma la data del Input y la coloca en las variables del store
@@ -484,11 +509,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							classroomName: store.classroomName,
 							startAgeRank: store.startAgeRank,
 							finaltAgeRank: store.finaltAgeRank,
-							teachers: store.selectedUsuarios,
-							capacity: store.capacity,
-							dayUse: store.dayUse,
-							startScheduleRank: store.startScheduleRank,
-							finalScheduleRank: store.finalScheduleRank
+							capacity: store.capacity
 						}),
 						headers: {
 							"Content-Type": "application/json"
@@ -502,12 +523,14 @@ const getState = ({ getStore, setStore, getActions }) => {
 						})
 						.then(data => {
 							//here is were your code should start after the fetch finishes
-
-							if (data === false) {
-								setStore({ alert: true });
+							console.log(data);
+							if (data.status === false) {
+								setStore({
+									alert: true,
+									editstartAgeRank: data.startAgeRank,
+									editfinaltAgeRank: data.finaltAgeRank
+								});
 							} else {
-								console.log(data);
-
 								setStore({
 									classroomName: "",
 									startAgeRank: "",
@@ -519,11 +542,15 @@ const getState = ({ getStore, setStore, getActions }) => {
 									finalScheduleRank: "",
 									alert: false,
 									selectedUsuarios: [],
-									selectUSuarios: []
+									selectUSuarios: [],
+									startAgeRank: "",
+									finaltAgeRank: "",
+									editstartAgeRank: "",
+									editfinaltAgeRank: ""
 								});
 								actions.dashboard();
-								//this will print on the console the exact object received from the server
 							}
+							//this will print on the console the exact object received from the server
 						})
 						.catch(error => {
 							//error handling
@@ -536,11 +563,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							classroomName: store.classroomName,
 							startAgeRank: store.startAgeRank,
 							finaltAgeRank: store.finaltAgeRank,
-							teachers: store.selectedUsuarios,
-							capacity: store.capacity,
-							dayUse: store.dayUse,
-							startScheduleRank: store.startScheduleRank,
-							finalScheduleRank: store.finalScheduleRank
+							capacity: store.capacity
 						}),
 						headers: {
 							"Content-Type": "application/json"
@@ -552,20 +575,32 @@ const getState = ({ getStore, setStore, getActions }) => {
 						.then(data => {
 							//here is were your code should start after the fetch finishes
 							console.log(data); //this will print on the console the exact object received from the server
-							setStore({
-								classroomName: "",
-								startAgeRank: "",
-								finaltAgeRank: "",
-								selectedUsuarios: [],
-								capacity: "",
-								dayUse: "",
-								startScheduleRank: "",
-								finalScheduleRank: "",
-								id: "",
-								cardEdited: true,
-								selectUSuarios: []
-							});
-							actions.dashboard();
+							if (data.status === false) {
+								setStore({
+									alert: true,
+									editstartAgeRank: data.startAgeRank,
+									editfinaltAgeRank: data.finaltAgeRank
+								});
+							} else {
+								setStore({
+									classroomName: "",
+									startAgeRank: "",
+									finaltAgeRank: "",
+									selectedUsuarios: [],
+									capacity: "",
+									dayUse: "",
+									startScheduleRank: "",
+									finalScheduleRank: "",
+									id: "",
+									cardEdited: true,
+									selectUSuarios: [],
+									startAgeRank: "",
+									finaltAgeRank: "",
+									editstartAgeRank: "",
+									editfinaltAgeRank: ""
+								});
+								actions.dashboard();
+							}
 						})
 						.catch(error => {
 							//error handling
@@ -1352,8 +1387,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 											classroomName: ""
 										},
 										usuarios,
-
-										cardArray: []
+										sDayUse: false
 									});
 									actions.roles();
 									//this will print on the console the exact object received from the server
@@ -1426,8 +1460,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 										index: "",
 										usuarios,
 										showPasswoord: false,
-
-										cardArray: []
+										sDayUse: false
 									});
 									actions.roles();
 								});
