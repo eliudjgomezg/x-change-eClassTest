@@ -53,11 +53,16 @@ const getState = ({ getStore, setStore, getActions }) => {
 				name: "",
 				rut: "",
 				email: "",
-				rol: "",
+				rol: "Elige una opcion...",
 				phone: "",
 				password: "",
 				rPassword: "",
-				logedIn: false
+				logedIn: false,
+				classrooms: "",
+				startScheduleRank: "",
+				finalScheduleRank: "",
+				dayUse: "",
+				classroomName: ""
 			},
 			usuarioLoged: {
 				id: "",
@@ -112,7 +117,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			classroom: true,
 			checkIn: true,
 			configCheckIn: false,
-			selectRol: true,
+			selectRol: false,
 			carddashboard: true,
 			formModalDashboard: false,
 			noClassroom: false,
@@ -122,7 +127,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 			attendance: 0,
 			checkOutHijos: [],
 			status: false,
-			noSon: false
+			noSon: false,
+			set: false,
+			sDayUse: false
 		},
 
 		actions: {
@@ -170,7 +177,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							id: "",
 							cardEdited: true,
 							hijos: [],
-							apoderados: []
+							apoderados: [],
+							alertt: false
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -241,7 +249,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							carddashboard: false,
 							classroom: false,
 							hijos: [],
-							apoderados: []
+							apoderados: [],
+							alertt: false
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -287,7 +296,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							formModalDashboard: false,
 							alert: false,
 							hijos: [],
-							apoderados: []
+							apoderados: [],
+							alertt: false
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -329,9 +339,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 							usuarios: data,
 							hijos: [],
 							apoderados: [],
-							selectRol: true,
+							selectRol: false,
 							carddashboard: false,
-							formModalDashboard: false
+							formModalDashboard: false,
+							alertt: false
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -406,16 +417,23 @@ const getState = ({ getStore, setStore, getActions }) => {
 					checkIn: false,
 					hijos: [],
 					rut: "",
-					selectRol: false,
+					selectRol: true,
 					classroom: false,
 					usuario: {
+						id: store.usuarioLoged.id,
 						name: store.usuarioLoged.name,
 						rut: store.usuarioLoged.rut,
 						email: store.usuarioLoged.email,
 						rol: store.usuarioLoged.rol,
 						phone: store.usuarioLoged.phone,
 						password: store.usuarioLoged.password,
-						rPassword: store.usuarioLoged.password
+						rPassword: store.usuarioLoged.password,
+						classrooms: store.usuarioLoged.classrooms,
+						area: store.usuarioLoged.area,
+						startScheduleRank: store.usuarioLoged.startScheduleRank,
+						finalScheduleRank: store.usuarioLoged.finalScheduleRank,
+						dayUse: store.usuarioLoged.dayUse,
+						classroomName: store.usuarioLoged.classroomName
 					}
 				});
 			},
@@ -1254,13 +1272,39 @@ const getState = ({ getStore, setStore, getActions }) => {
 					});
 			},
 			//Funciones para creacion de profesores
+			setClassRoomInRole: () => {
+				const store = getStore();
+				fetch("http://localhost:3000/api/v1/classrooms", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						setStore({
+							cardArray: data
+						});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
 			setUsuarios: e => {
 				e.preventDefault();
 				const store = getStore();
 				const actions = getActions();
+				let foo = "";
 				if (store.cardEdited) {
 					if (store.usuario.password === store.usuario.rPassword && store.usuario.password.length >= 4) {
 						if (store.usuario.rol != "Elige una opcion...") {
+							if (store.usuario.classrooms === "") {
+								foo = null;
+							} else foo = store.usuario.classrooms;
 							fetch("http://localhost:3000/api/v1/roles", {
 								method: "POST",
 								body: JSON.stringify({
@@ -1270,7 +1314,12 @@ const getState = ({ getStore, setStore, getActions }) => {
 									phone: store.usuario.phone,
 									rol: store.usuario.rol,
 									password: store.usuario.password,
-									area: store.area
+									area: store.area,
+									classrooms: foo,
+									classroomName: store.usuario.classroomName,
+									startScheduleRank: store.usuario.startScheduleRank,
+									finalScheduleRank: store.usuario.finalScheduleRank,
+									dayUse: store.usuario.dayUse
 								}),
 								headers: {
 									"Content-Type": "application/json"
@@ -1295,9 +1344,16 @@ const getState = ({ getStore, setStore, getActions }) => {
 											rol: "",
 											phone: "",
 											password: "",
-											rPassword: ""
+											rPassword: "",
+											classrooms: "",
+											startScheduleRank: "",
+											finalScheduleRank: "",
+											dayUse: "",
+											classroomName: ""
 										},
-										usuarios
+										usuarios,
+
+										cardArray: []
 									});
 									actions.roles();
 									//this will print on the console the exact object received from the server
@@ -1319,6 +1375,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 				} else {
 					if (store.usuario.password === store.usuario.rPassword) {
 						if (store.usuario.rol != "Elige una opcion...") {
+							if (store.usuario.classrooms === "" || store.usuario.classrooms === "Elige una opcion...") {
+								foo = null;
+							} else foo = store.usuario.classrooms;
 							fetch("http://localhost:3000/api/v1/rol/" + store.id, {
 								method: "PUT",
 								body: JSON.stringify({
@@ -1327,7 +1386,13 @@ const getState = ({ getStore, setStore, getActions }) => {
 									email: store.usuario.email,
 									rol: store.usuario.rol,
 									phone: store.usuario.phone,
-									password: store.usuario.password
+									password: store.usuario.password,
+									classrooms: foo,
+									startScheduleRank: store.usuario.startScheduleRank,
+									classroomName: store.usuario.classroomName,
+									finalScheduleRank: store.usuario.finalScheduleRank,
+									startScheduleRank: store.usuario.startScheduleRank,
+									dayUse: store.usuario.dayUse
 								}),
 								headers: {
 									"Content-Type": "application/json"
@@ -1349,13 +1414,20 @@ const getState = ({ getStore, setStore, getActions }) => {
 											rol: "",
 											phone: "",
 											password: "",
-											rPassword: ""
+											rPassword: "",
+											classrooms: "",
+											startScheduleRank: "",
+											finalScheduleRank: "",
+											dayUse: "",
+											classroomName: ""
 										},
 										cardEdited: true,
 										id: "",
 										index: "",
 										usuarios,
-										showPasswoord: false
+										showPasswoord: false,
+
+										cardArray: []
 									});
 									actions.roles();
 								});
@@ -1379,7 +1451,56 @@ const getState = ({ getStore, setStore, getActions }) => {
 				setStore({
 					usuario,
 					contraseña: false,
-					rol: false
+					rol: false,
+					sClassroom: false,
+					sDayUse: false
+				});
+			},
+			handleChangeUsuario2: e => {
+				const store = getStore();
+				console.log(JSON.parse(e.target.value));
+				let usuario = store.usuario;
+				let foo = JSON.parse(e.target.value);
+				usuario["classrooms"] = foo._id;
+				usuario["classroomName"] = foo.classroomName;
+				setStore({
+					usuario,
+					contraseña: false,
+					rol: false,
+					sClassroom: false,
+					rol: false,
+					sDayUse: false
+				});
+			},
+			handleChangeUsuario3: e => {
+				const store = getStore();
+				let usuario = store.usuario;
+				usuario["dayUse"] = e.target.value;
+				setStore({
+					usuario,
+					contraseña: false,
+					rol: false,
+					sClassroom: false,
+					sDayUse: false
+				});
+			},
+			handleChangeUsuario4: e => {
+				const store = getStore();
+				let usuario = store.usuario;
+
+				usuario["rol"] = e.target.value;
+				usuario["dayUse"] = "";
+				usuario["startScheduleRank"] = "";
+				usuario["finalScheduleRank"] = "";
+				usuario["classrooms"] = "";
+				usuario["classroomName"] = "";
+
+				setStore({
+					usuario,
+					contraseña: false,
+					rol: false,
+					sClassroom: false,
+					sDayUse: false
 				});
 			},
 			deleteAddUsuarios: e => {
@@ -1391,19 +1512,28 @@ const getState = ({ getStore, setStore, getActions }) => {
 						rol: "",
 						email: "",
 						password: "",
-						rPassword: ""
+						rPassword: "",
+						classrooms: "",
+						startScheduleRank: "",
+						finalScheduleRank: "",
+						dayUse: ""
 					},
 					cardEdited: true,
 					id: "",
 					index: "",
-					showPasswoord: false
+					showPasswoord: false,
+					classrooms: "",
+					startScheduleRank: "",
+					finalScheduleRank: "",
+					dayUse: "",
+					cardArray: []
 				});
 			},
 			deleteUsuarios: item => {
 				const store = getStore();
 				const actions = getActions();
 
-				fetch("http://localhost:3000/api/v1/rol/" + store.id + "/" + store.test, {
+				fetch("http://localhost:3000/api/v1/rol/" + store.id, {
 					method: "DELETE",
 
 					headers: {
@@ -1435,6 +1565,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 			editRol: (item, i) => {
 				const store = getStore();
+				const actions = getActions();
+				actions.setClassRoomInRole();
 				setStore({
 					usuario: {
 						name: item.name,
@@ -1443,7 +1575,12 @@ const getState = ({ getStore, setStore, getActions }) => {
 						phone: item.phone,
 						rol: item.rol,
 						password: item.password,
-						rPassword: item.password
+						rPassword: item.password,
+						classrooms: item.classrooms,
+						classroomName: item.classroomName,
+						startScheduleRank: item.startScheduleRank,
+						finalScheduleRank: item.finalScheduleRank,
+						dayUse: item.dayUse
 					},
 					area: item.area,
 					index: i,
@@ -1619,7 +1756,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						families: ""
 					},
 					hijos: [],
-					apoderdos: []
+					apoderdos: [],
+					alertt: false
 				});
 			},
 			goBack: e => {
@@ -1687,7 +1825,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						sonName: "",
 						birthDate: "",
 						notes: ""
-					}
+					},
+					alertt: false
 				});
 			},
 			editNewHijo: e => {
@@ -1742,7 +1881,12 @@ const getState = ({ getStore, setStore, getActions }) => {
 									password: data.password,
 									rPassword: data.password,
 									classrooms: data.classrooms,
-									logedIn: true
+									logedIn: true,
+									area: data.area,
+									startScheduleRank: data.startScheduleRank,
+									finalScheduleRank: data.finalScheduleRank,
+									dayUse: data.dayUse,
+									classroomName: data.classroomName
 								},
 								login: {
 									rut: "",
@@ -1939,7 +2083,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 			logedEditRol: e => {
 				const store = getStore();
-				fetch("http://localhost:3000/api/v1/rol/" + store.usuarioLoged.id, {
+				fetch("http://localhost:3000/api/v1/rol/" + store.usuario.id, {
 					method: "PUT",
 					body: JSON.stringify({
 						name: store.usuario.name,
@@ -1947,7 +2091,13 @@ const getState = ({ getStore, setStore, getActions }) => {
 						email: store.usuario.email,
 						rol: store.usuario.rol,
 						phone: store.usuario.phone,
-						password: store.usuario.password
+						password: store.usuario.password,
+						classrooms: store.classrooms,
+						startScheduleRank: store.startScheduleRank,
+						classroomName: store.usuario.classroomName,
+						finalScheduleRank: store.usuario.finalScheduleRank,
+						startScheduleRank: store.usuario.startScheduleRank,
+						dayUse: store.usuario.dayUse
 					}),
 					headers: {
 						"Content-Type": "application/json"
@@ -1967,7 +2117,13 @@ const getState = ({ getStore, setStore, getActions }) => {
 								rol: data.rol,
 								phone: data.phone,
 								password: data.password,
-								rPassword: data.password
+								rPassword: data.password,
+								classrooms: data.classrooms,
+								startScheduleRank: data.startScheduleRank,
+								classroomName: data.classroomName,
+								finalScheduleRank: data.finalScheduleRank,
+								startScheduleRank: data.startScheduleRank,
+								dayUse: data.dayUse
 							},
 							usuarioLoged: {
 								name: data.name,
@@ -1976,7 +2132,13 @@ const getState = ({ getStore, setStore, getActions }) => {
 								rol: data.rol,
 								phone: data.phone,
 								password: data.password,
-								rPassword: data.password
+								rPassword: data.password,
+								classrooms: data.classrooms,
+								startScheduleRank: data.startScheduleRank,
+								classroomName: data.classroomName,
+								finalScheduleRank: data.finalScheduleRank,
+								startScheduleRank: data.startScheduleRank,
+								dayUse: data.dayUse
 							}
 						});
 					});
@@ -2190,8 +2352,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							});
 					});
 					setStore({ checkOutHijos: [] });
-					actions.classroom();
 				} else actions.exitCheckOut();
+				actions.classroom();
 			},
 			wrapper: () => {
 				const classes = document.querySelector("#wrapper");

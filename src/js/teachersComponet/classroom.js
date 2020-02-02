@@ -98,15 +98,24 @@ export class Classroom extends React.Component {
 																		</a>
 																		<a
 																			className="dropdown-item btn btn-primary"
-																			href={"tel:" + item.parentPhone}>
+																			href={
+																				"tel:" + item.area + item.parentPhone
+																			}>
 																			Llamada
 																		</a>
 																		<a
 																			className="dropdown-item btn btn-success"
 																			href={
 																				"https://api.whatsapp.com/send?phone=" +
+																				item.area +
 																				item.parentPhone +
-																				"&text=hola,%20¿qué%20tal%20estás? "
+																				"&text=Estimad@ " +
+																				item.parentName +
+																				" , por favor dirigirse a UneteKids a la " +
+																				store.usuarioLoged.classrooms
+																					.classroomName +
+																				" por " +
+																				item.sonName
 																			}>
 																			whatapp
 																		</a>
@@ -272,27 +281,38 @@ export class Classroom extends React.Component {
 																						<div className="container">
 																							<div className="row justify-content-center">
 																								<div className="col-lg-5 col-sm-12 ">
-																									<button
+																									<a
 																										className="btn btn-primary container"
 																										type="button"
 																										href={
 																											"tel:" +
+																											a.area +
 																											a.phone
 																										}>
 																										LLAMAR
-																									</button>
+																									</a>
 																								</div>
 																								<div className="col-lg-5 col-sm-12">
-																									<button
+																									<a
 																										className="btn btn-success container"
 																										type="button"
 																										href={
 																											"https://api.whatsapp.com/send?phone=" +
+																											a.area +
 																											a.phone +
-																											"&text=hola,%20¿qué%20tal%20estás? "
+																											"&text=Estimad@ " +
+																											a.parentName +
+																											" , por favor dirigirse a UneteKids a la " +
+																											store
+																												.usuarioLoged
+																												.classrooms
+																												.classroomName +
+																											" por " +
+																											store.hijo
+																												.sonName
 																										}>
-																										WHATAPP{" "}
-																									</button>
+																										WHATAPP
+																									</a>
 																								</div>
 																							</div>
 																						</div>

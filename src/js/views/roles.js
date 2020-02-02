@@ -23,7 +23,8 @@ export class Roles extends React.Component {
 												type="button"
 												className="btn btn-primary mt-2  float-right"
 												data-toggle="modal"
-												data-target="#exampleModalScrollablexx">
+												data-target="#exampleModalScrollablexx"
+												onClick={() => actions.setClassRoomInRole()}>
 												Agregar usuario
 											</button>
 										</div>
