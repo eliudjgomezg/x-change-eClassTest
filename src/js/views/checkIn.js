@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import { CheckInComp } from "../checkInComponent/checkInComp";
-
+import PropTypes from "prop-types";
 import { Novedades } from "../views/novedades";
 import { RolesForm } from "../rolesComponent/rolesForm";
 
@@ -63,9 +63,11 @@ export class CheckIn extends React.Component {
 									<div className="collapse navbar-collapse" id="navbarSupportedContent">
 										<ul className="navbar-nav ml-auto mt-2 mt-lg-0">
 											<li className="nav-item active">
-												<Link className="btn btn-primary float-right" to="/">
+												<button
+													className="btn btn-primary float-right"
+													onClick={e => actions.logout(e, this.props.history)}>
 													Logout <span className="sr-only">(current)</span>
-												</Link>
+												</button>
 											</li>
 										</ul>
 									</div>
@@ -103,3 +105,6 @@ export class CheckIn extends React.Component {
 		);
 	}
 }
+CheckIn.propTypes = {
+	history: PropTypes.object
+};

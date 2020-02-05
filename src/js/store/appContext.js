@@ -15,15 +15,21 @@ const injectContext = PassedComponent => {
 			this.state = getState({
 				getStore: () => this.state.store,
 				getActions: () => this.state.actions,
-				setStore: updatedStore =>
+				setStore: updatedStore => {
 					this.setState({
 						store: Object.assign(this.state.store, updatedStore)
-					})
+					});
+					//localStorage.setItem("ikids-store", JSON.stringify(this.state.store));
+				}
 			});
 		}
 
 		componentDidMount() {
+			//const previusStore = localStorage.getItem("ikids-store");
+			//if (previusStore) this.setState({ store: JSON.parse(previusStore) });
+			//if (previusStore) this.setState({ store:{...this.state.store, usuarioLoged:JSON.parse(previusStore)} });
 			/**
+			 console.log(JSON.parse(localStorage.getItem("ikids-store")));
 			 * EDIT THIS!
 			 * This function is the equivalent to "window.onLoad", it only run once on the entire application lifetime
 			 * you should do your ajax requests or fetch api requests here

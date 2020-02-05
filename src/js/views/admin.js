@@ -7,6 +7,7 @@ import { Novedades } from "../views/novedades";
 import { Familias } from "../views/familias";
 import { Roles } from "../views/roles";
 import { Estadistica } from "../views/estadistica";
+import PropTypes from "prop-types";
 
 import "jquery";
 
@@ -69,9 +70,11 @@ export class Admin extends React.Component {
 									<div className="collapse navbar-collapse" id="navbarSupportedContent">
 										<ul className="navbar-nav ml-auto mt-2 mt-lg-0">
 											<li className="nav-item active">
-												<Link className="btn btn-primary float-right" to="/">
+												<button
+													className="btn btn-primary float-right"
+													onClick={e => actions.logout(e, this.props.history)}>
 													Logout <span className="sr-only">(current)</span>
-												</Link>
+												</button>
 											</li>
 										</ul>
 									</div>
@@ -92,3 +95,6 @@ export class Admin extends React.Component {
 		);
 	}
 }
+Admin.propTypes = {
+	history: PropTypes.object
+};

@@ -37,16 +37,24 @@ export class Login extends React.Component {
 										name="password"
 										required
 									/>
-
 									<button
 										type="button"
 										className="btn btn-lg btn-primary btn-block"
 										onClick={e => actions.login(e, this.props.history)}>
 										Sign in
-									</button>
+									</button>{" "}
 									{!!store.alert && (
 										<div className="alert alert-danger" role="alert">
 											Usuario o Contraseña Incorrecto
+										</div>
+									)}
+									{!!store.noTeacherDayWork && (
+										<div className="alert alert-danger" role="alert">
+											<h1 className="text-center">
+												¡¡¡ Upsss no puedes iniciar sesion por dos razones: El dia de hoy no te
+												toca servir o no tienes dia servicio asignado en tu perfil. Contacta al
+												administraror de la app!!!
+											</h1>
 										</div>
 									)}
 								</form>

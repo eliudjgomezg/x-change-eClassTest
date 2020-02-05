@@ -60,11 +60,13 @@ const getState = ({ getStore, setStore, getActions }) => {
 				password: "",
 				rPassword: "",
 				logedIn: false,
-				classrooms: "",
+				classrooms: {},
 				startScheduleRank: "",
 				finalScheduleRank: "",
 				editstartAgeRank: "",
-				editfinaltAgeRank: ""
+				editfinaltAgeRank: "",
+				dayUse: "",
+				classroomName: ""
 			},
 			usuarioLoged: {
 				id: "",
@@ -76,7 +78,13 @@ const getState = ({ getStore, setStore, getActions }) => {
 				password: "",
 				rPassword: "",
 				logedIn: false,
-				classrooms: ""
+				classrooms: {},
+				logedIn: true,
+				area: "",
+				startScheduleRank: "",
+				finalScheduleRank: "",
+				dayUse: "",
+				classroomName: ""
 			},
 
 			usuarios: [],
@@ -131,7 +139,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 			status: false,
 			noSon: false,
 			set: false,
-			sDayUse: false
+			sDayUse: false,
+			noTeacherDayWork: false
 		},
 
 		actions: {
@@ -1926,13 +1935,60 @@ const getState = ({ getStore, setStore, getActions }) => {
 									password: ""
 								}
 							});
-							history.push("/" + data.rol);
+
 							if (data.rol === "Administrador") {
+								history.push("/admin");
 								actions.dashboard();
 							} else if (data.rol === "Profesor") {
-								actions.classroom();
+								//
+								let moment = require("moment");
+								let day = moment().format("dddd");
+								let sDay = "";
+								if (day === "Monday") {
+									sDay = "lunes";
+								} else if (day === "Tuesday") {
+									sDay = "martes";
+								} else if (day === "Wednesday") {
+									sDay = "miercoles";
+								} else if (day === "Thursday") {
+									sDay = "jueves";
+								} else if (day === "Friday") {
+									sDay = "viernes";
+								} else if (day === "Saturday") {
+									sDay = "sabado";
+								} else if (day === "Sunday") {
+									sDay = "sunday";
+								}
+
+								if (data.dayUse.toLowerCase() === sDay) {
+									history.push("/teachers");
+									actions.classroom();
+								} else setStore({ noTeacherDayWork: true });
 							} else if (data.rol === "Check In") {
-								actions.checkIn();
+								//
+								let moment = require("moment");
+								let day = moment().format("dddd");
+								let sDay = "";
+								if (day === "Monday") {
+									sDay = "lunes";
+								} else if (day === "Tuesday") {
+									sDay = "martes";
+								} else if (day === "Wednesday") {
+									sDay = "miercoles";
+								} else if (day === "Thursday") {
+									sDay = "jueves";
+								} else if (day === "Friday") {
+									sDay = "viernes";
+								} else if (day === "Saturday") {
+									sDay = "sabado";
+								} else if (day === "Sunday") {
+									sDay = "sunday";
+								}
+
+								if (data.dayUse.toLowerCase() === sDay) {
+									history.push("/checkIn");
+									actions.checkIn();
+								} else setStore({ noTeacherDayWork: true });
 							}
 						} else setStore({ alert: true });
 
@@ -1963,7 +2019,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				login[name] = value;
 				setStore({
 					login,
-					alert: false
+					alert: false,
+					noTeacherDayWork: false
 				});
 			},
 			//Funciones pra modulo CheckIn
@@ -2125,8 +2182,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						rol: store.usuario.rol,
 						phone: store.usuario.phone,
 						password: store.usuario.password,
-						classrooms: store.classrooms,
-						startScheduleRank: store.startScheduleRank,
+						classrooms: store.usuario.classrooms,
+						startScheduleRank: store.usuario.startScheduleRank,
 						classroomName: store.usuario.classroomName,
 						finalScheduleRank: store.usuario.finalScheduleRank,
 						startScheduleRank: store.usuario.startScheduleRank,
@@ -2347,12 +2404,15 @@ const getState = ({ getStore, setStore, getActions }) => {
 			byeSon: item => {
 				setStore({ sonName: item.sonName, id: item._id });
 			},
-			checkOutHijos: e => {
+			checkOutHijos: () => {
 				const store = getStore();
-				let checkOutHijos = store.hijos.filter(c => c.parentRut === store.rut);
-				if (checkOutHijos.length > 0) {
-					setStore({ checkOutHijos, rut: "" });
-				} else setStore({ status: true });
+				let checkOutHijos = store.hijos.filter(h => {
+					const parentWithRut = h.parentsList.find(p => p.rut === store.rut);
+					if (parentWithRut != undefined) {
+						return true;
+					} else return false;
+				});
+				setStore({ checkOutHijos });
 			},
 			exitCheckOut: () => {
 				setStore({ checkOutHijos: [], rut: "", status: false });
@@ -2384,7 +2444,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 								console.log(error);
 							});
 					});
-					setStore({ checkOutHijos: [] });
+					setStore({ checkOutHijos: [], rut: "" });
 				} else actions.exitCheckOut();
 				actions.classroom();
 			},
@@ -2393,6 +2453,31 @@ const getState = ({ getStore, setStore, getActions }) => {
 				classes.className.indexOf("hola") > -1
 					? (classes.className = classes.className.replace("hola", ""))
 					: (classes.className += " hola");
+			},
+			logout: (e, history) => {
+				localStorage.removeItem("ikids-store");
+				history.push("/");
+				setStore({
+					attendance: "",
+					usuarioLoged: {
+						id: "",
+						name: "",
+						rut: "",
+						email: "",
+						rol: "",
+						phone: "",
+						password: "",
+						rPassword: "",
+						logedIn: false,
+						classrooms: {},
+						logedIn: true,
+						area: "",
+						startScheduleRank: "",
+						finalScheduleRank: "",
+						dayUse: "",
+						classroomName: ""
+					}
+				});
 			}
 		}
 	};

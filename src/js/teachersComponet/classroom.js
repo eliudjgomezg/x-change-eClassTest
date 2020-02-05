@@ -342,14 +342,21 @@ export class Classroom extends React.Component {
 						}
 					}}
 				</Context.Consumer>
+
 				<div className="container">
-					<button
-						type="button"
-						className=" container btn btn-primary float-right"
-						data-toggle="modal"
-						data-target="#exampleModalScrollable2">
-						CHECK OUT
-					</button>
+					<Context.Consumer>
+						{({ store, actions }) => {
+							return (
+								<button
+									type="button"
+									className=" container btn btn-primary float-right"
+									data-toggle="modal"
+									data-target="#exampleModalScrollable2">
+									CHECK OUT
+								</button>
+							);
+						}}
+					</Context.Consumer>
 
 					<div
 						className="modal fade"
@@ -402,7 +409,7 @@ export class Classroom extends React.Component {
 																className="btn btn-primary"
 																type="button"
 																id="button-addon2"
-																onClick={e => actions.checkOutHijos(e)}>
+																onClick={() => actions.checkOutHijos()}>
 																Buscar
 															</button>
 														</div>

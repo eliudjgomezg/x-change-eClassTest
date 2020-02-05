@@ -6,6 +6,7 @@ import { Classroom } from "../teachersComponet/classroom";
 import { EditRol } from "../teachersComponet/editRole";
 import { Novedades } from "../views/novedades";
 import { RolesForm } from "../rolesComponent/rolesForm";
+import PropTypes from "prop-types";
 
 import "jquery";
 
@@ -63,9 +64,11 @@ export class Teacher extends React.Component {
 									<div className="collapse navbar-collapse" id="navbarSupportedContent">
 										<ul className="navbar-nav ml-auto mt-2 mt-lg-0">
 											<li className="nav-item active">
-												<Link className="btn btn-primary float-right" to="/">
+												<button
+													className="btn btn-primary float-right"
+													onClick={e => actions.logout(e, this.props.history)}>
 													Logout <span className="sr-only">(current)</span>
-												</Link>
+												</button>
 											</li>
 										</ul>
 									</div>
@@ -103,3 +106,6 @@ export class Teacher extends React.Component {
 		);
 	}
 }
+Teacher.propTypes = {
+	history: PropTypes.object
+};
