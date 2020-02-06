@@ -140,7 +140,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 			noSon: false,
 			set: false,
 			sDayUse: false,
-			noTeacherDayWork: false
+			noTeacherDayWork: false,
+			parentFamily: false
 		},
 
 		actions: {
@@ -444,6 +445,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 					rut: "",
 					selectRol: true,
 					classroom: false,
+					parentFamily: false,
+					addApoderado: false,
+					addHijo: false,
 					usuario: {
 						id: store.usuarioLoged.id,
 						name: store.usuarioLoged.name,
@@ -1890,6 +1894,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 			//Funciones pra hacer login
 			login: (e, history) => {
+				e.preventDefault();
 				const store = getStore();
 				const actions = getActions();
 				fetch("http://localhost:3000/api/v1/rolesLogin", {
@@ -2450,9 +2455,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 			wrapper: () => {
 				const classes = document.querySelector("#wrapper");
-				classes.className.indexOf("hola") > -1
-					? (classes.className = classes.className.replace("hola", ""))
-					: (classes.className += " hola");
+				classes.className.indexOf("toggled") > -1
+					? (classes.className = classes.className.replace("toggled", ""))
+					: (classes.className += " toggled");
 			},
 			logout: (e, history) => {
 				localStorage.removeItem("ikids-store");
@@ -2478,6 +2483,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 						classroomName: ""
 					}
 				});
+			},
+			parentFamily: e => {
+				setStore({ parentFamily: true, configCheckIn: false, addApoderado: true });
 			}
 		}
 	};

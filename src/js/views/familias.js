@@ -117,55 +117,52 @@ export class Familias extends React.Component {
 								</div>
 							)}
 							{!!store.familyOptions && (
-								<div className="card card-body py-2">
-									<div className="row">
-										<div className="col-3">
-											<button className="btn btn-primary" onClick={e => actions.addApoderado(e)}>
-												Agregar Apoderados
-											</button>
+								<div className="container">
+									<div className="card card-body py-2 mt-2">
+										<div className="row ">
+											<div className="col-6 justify-content-center">
+												<button
+													className="btn btn-primary"
+													onClick={e => actions.addApoderado(e)}>
+													Agregar Apoderados
+												</button>
+											</div>
+											<div className="col-6 justify-content-center">
+												<button className="btn btn-primary" onClick={e => actions.addHijo(e)}>
+													Agregar Hijos
+												</button>
+											</div>
 										</div>
-										<div className="col-3">
-											<button className="btn btn-primary" onClick={e => actions.addHijo(e)}>
-												Agregar Hijos
-											</button>
-										</div>
-										<div className="col-3" />
-										<div className="col-3" />
+										{!!store.alertt && (
+											<div className="alert alert-danger" role="alert">
+												<p className="text-center m-0 p-0">
+													¡¡¡Upsss. Solo puedes agregar Hij@s con edades comprendidas entre{" "}
+													{store.startAgeRank} y {store.finaltAgeRank} años!!!
+												</p>
+											</div>
+										)}
 									</div>
-									{!!store.alertt && (
-										<div className="alert alert-danger" role="alert">
-											<p className="text-center m-0 p-0">
-												¡¡¡Upsss. Solo puedes agregar Hij@s con edades comprendidas entre{" "}
-												{store.startAgeRank} y {store.finaltAgeRank} años!!!
-											</p>
-										</div>
-									)}
 								</div>
 							)}
 							{!!store.familiasss && <FamiliasList />}
 							{!!store.editNewFamilia && (
 								<div className="container">
-									<div className="row my-3 ">
-										<div className="col float-right">
-											<label
-												htmlFor="exampleFormControlInput1"
-												className="float-right"
-												onClick={e => actions.addFamily(e)}>
-												Apellidos de la familia:
-											</label>
-										</div>
-										<div className="col">
-											<input
-												className="form-control"
-												value={store.familyName}
-												name="familyName"
-												onChange={e => actions.getData(e)}
-												placeholder="Ej: Gomez Gonzalez"
-											/>
-										</div>
-										<div className="col">
+									<div className="input-group mb-3 mt-2">
+										<input
+											type="text"
+											className="form-control"
+											placeholder="Ej: Gomez Gonzalez"
+											aria-label="Recipient's username"
+											aria-describedby="button-addon2"
+											value={store.familyName}
+											name="familyName"
+											onChange={e => actions.getData(e)}
+										/>
+										<div className="input-group-append">
 											<button
 												className="btn btn-primary"
+												type="button"
+												id="button-addon2"
 												onClick={e => actions.editFamilyName(e)}>
 												Editar
 											</button>
@@ -174,22 +171,20 @@ export class Familias extends React.Component {
 
 									<div className="card card-body py-2">
 										<div className="row">
-											<div className="col-3">
+											<div className="col-6 justify-content-center">
 												<button
 													className="btn btn-primary"
 													onClick={e => actions.editNewApoderados(e)}>
 													Editar Apoderados
 												</button>
 											</div>
-											<div className="col-3">
+											<div className="col-6 justify-content-center">
 												<button
 													className="btn btn-primary"
 													onClick={e => actions.editNewHijo(e)}>
 													Editar Hijos
 												</button>
 											</div>
-											<div className="col-3" />
-											<div className="col-3" />
 										</div>
 									</div>
 									{!!store.alertt && (
@@ -206,10 +201,10 @@ export class Familias extends React.Component {
 								<Fragment>
 									<div className="container">
 										<div className="row my-0">
-											<div className="col">
+											<div className="col-lg-6 col-sm-12">
 												<AddApoderado />
 											</div>
-											<div className="col">
+											<div className="col-lg-6 col-sm-12">
 												<ListApoderados />
 											</div>
 										</div>
@@ -220,10 +215,10 @@ export class Familias extends React.Component {
 								<Fragment>
 									<div className="container">
 										<div className="row">
-											<div className="col">
+											<div className="col-lg-6 col-sm-12">
 												<AddHijos />
 											</div>
-											<div className="col">
+											<div className="col-lg-6 col-sm-12">
 												<ListHijos />
 											</div>
 										</div>

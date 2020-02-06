@@ -14,8 +14,8 @@ export class FamiliasList extends React.Component {
 									<div className="container">
 										<div className=" card card-body py-1 px-2 mb-1">
 											<div className="row">
-												<div className="col-9">Familia: {item.familyName}</div>
-												<div className="col-3 ">
+												<div className="col-lg-9 col-sm-12">Flia: {item.familyName}</div>
+												<div className="col-lg-3 col-sm-12">
 													<button
 														type="button"
 														className="btn btn-primary float-right mr-2 ml-2"
