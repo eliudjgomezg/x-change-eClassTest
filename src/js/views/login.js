@@ -74,7 +74,7 @@ export class Login extends React.Component {
 											</div>
 										)}
 										{!!store.noTeacherDayWork && (
-											<div className="form-left rounded-pill mt-3 px-4" style={style1}>
+											<div className="form-left rounded-pill mt-3 px-5" style={style1}>
 												<p className="text-1 text-center" style={style2}>
 													¡¡¡Upsss no puedes iniciar sesion por dos razones: El dia de hoy no
 													te toca servir o no tienes dia servicio asignado en tu perfil.
@@ -85,7 +85,7 @@ export class Login extends React.Component {
 
 										<div className="flex-col-c p-t-50">
 											<Link to="createFamily" className="txt2">
-												Crea tu perfil como Apodera@
+												Crea tu perfil como Apoderad@
 											</Link>
 										</div>
 

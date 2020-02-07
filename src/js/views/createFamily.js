@@ -10,8 +10,8 @@ export class CreateFamily extends React.Component {
 		let style4 = { backgroundColor: "#23D5F0" };
 		return (
 			<div className="page-content " style={style4}>
-				<div className="form-v4-content my-3">
-					<div className="form-left" style={style1}>
+				<div className="form-v4-content createParent mt-3">
+					<div className="form-left " style={style1}>
 						<h2>Estimad@ Apoderad@</h2>
 						<p className="text-1" style={style2}>
 							En el siguiente apartado, usted podra crear el perfil de su familia y de esta manera tener
@@ -27,8 +27,8 @@ export class CreateFamily extends React.Component {
 						<h2 style={style3}>REGISTRO</h2>
 
 						<div className="form-row">
-							<label htmlFor="your_email">Apellidos de la familia</label>
-							<input type="text" name="your_email" id="your_email" className="input-text" required />
+							<label htmlFor="">Apellidos de la familia</label>
+							<input type="text" name="" id="" className="input-text" required />
 						</div>
 						<div className="form-row">
 							<label htmlFor="your_email">Email</label>
@@ -44,11 +44,11 @@ export class CreateFamily extends React.Component {
 
 						<div className="form-group">
 							<div className="form-row form-row-1 ">
-								<label htmlFor="password">Password</label>
+								<label htmlFor="password">Contraseña</label>
 								<input type="password" name="password" id="password" className="input-text" required />
 							</div>
 							<div className="form-row form-row-1">
-								<label htmlFor="comfirm-password">Comfirm Password</label>
+								<label htmlFor="comfirm-password"> Repetir Contraseña</label>
 								<input
 									type="password"
 									name="comfirm_password"
