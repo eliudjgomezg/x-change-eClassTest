@@ -66,7 +66,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 				editstartAgeRank: "",
 				editfinaltAgeRank: "",
 				dayUse: "",
-				classroomName: ""
+				classroomName: "",
+				family: "",
+				familyLastName: ""
 			},
 			usuarioLoged: {
 				id: "",
@@ -84,7 +86,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 				startScheduleRank: "",
 				finalScheduleRank: "",
 				dayUse: "",
-				classroomName: ""
+				classroomName: "",
+				family: "",
+				familyLastName: ""
 			},
 
 			usuarios: [],
@@ -141,7 +145,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 			set: false,
 			sDayUse: false,
 			noTeacherDayWork: false,
-			parentFamily: false
+			parentFamily: false,
+			checked: "",
+			registedFamily: false
 		},
 
 		actions: {
@@ -1499,7 +1505,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 					contraseña: false,
 					rol: false,
 					sClassroom: false,
-					sDayUse: false
+					sDayUse: false,
+					alert: false,
+					status: false
 				});
 			},
 			handleChangeUsuario2: e => {
@@ -1897,6 +1905,75 @@ const getState = ({ getStore, setStore, getActions }) => {
 				e.preventDefault();
 				const store = getStore();
 				const actions = getActions();
+				if (store.checked) {
+					actions.loginApoderados(e, history);
+				} else actions.loginUsuarios(e, history);
+			},
+			loginApoderados: (e, history) => {
+				const store = getStore();
+				const actions = getActions();
+				fetch("http://localhost:3000/api/v1/rolesLoginParent", {
+					method: "POST",
+					body: JSON.stringify({
+						rut: store.login.rut,
+						password: store.login.password
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data);
+						if (data != true) {
+							if (data != false) {
+								setStore({
+									usuarioLoged: {
+										id: data._id,
+										name: data.name,
+										rut: data.rut,
+										email: data.email,
+										rol: data.rol,
+										phone: data.phone,
+										password: data.password,
+										rPassword: data.password,
+										classrooms: data.classrooms,
+										logedIn: true,
+										area: data.area,
+										startScheduleRank: data.startScheduleRank,
+										finalScheduleRank: data.finalScheduleRank,
+										dayUse: data.dayUse,
+										classroomName: data.classroomName,
+										family: data.family
+									},
+									login: {
+										rut: "",
+										password: ""
+									},
+									registedFamily: false
+								});
+								history.push("/parent");
+								actions.parentFamily();
+							} else setStore({ alert: true, registedFamily: false });
+						} else setStore({ sDayUse: true, registedFamily: false });
+
+						//this will print on the console the exact object received from the server
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
+
+			loginUsuarios: (e, history) => {
+				const store = getStore();
+				const actions = getActions();
 				fetch("http://localhost:3000/api/v1/rolesLogin", {
 					method: "POST",
 					body: JSON.stringify({
@@ -2025,7 +2102,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 				setStore({
 					login,
 					alert: false,
-					noTeacherDayWork: false
+					noTeacherDayWork: false,
+					sDayUse: false,
+					registedFamily: false
 				});
 			},
 			//Funciones pra modulo CheckIn
@@ -2481,11 +2560,138 @@ const getState = ({ getStore, setStore, getActions }) => {
 						finalScheduleRank: "",
 						dayUse: "",
 						classroomName: ""
-					}
+					},
+					familyName: "",
+					familyId: ""
 				});
 			},
 			parentFamily: e => {
-				setStore({ parentFamily: true, configCheckIn: false, addApoderado: true });
+				const store = getStore();
+				const actions = getActions();
+				fetch("http://localhost:3000/api/v1/parentEdit/" + store.usuarioLoged.family._id, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						setStore({
+							parentFamily: true,
+							configCheckIn: false,
+							addApoderado: true,
+							apoderados: data,
+							familyName: store.usuarioLoged.family.familyName,
+							familyId: store.usuarioLoged.family._id
+						});
+
+						fetch("http://localhost:3000/api/v1/sonEdit/" + store.usuarioLoged.family._id, {
+							method: "GET",
+							headers: {
+								"Content-Type": "application/json"
+							}
+						})
+							.then(resp => {
+								return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+							})
+							.then(data => {
+								console.log(data);
+								setStore({ hijos: data });
+							})
+							.catch(error => {
+								//error handling
+								console.log(error);
+							});
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
+			createParentSession1: (e, history) => {
+				const store = getStore();
+				const actions = getActions();
+				e.preventDefault();
+				if (store.usuario.password === store.usuario.rPassword && store.usuario.password.length >= 8) {
+					const store = getStore();
+					fetch("http://localhost:3000/api/v1/rolEmail/" + store.usuario.email, {
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json"
+						}
+					})
+						.then(resp => {
+							return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+						})
+						.then(data => {
+							console.log(data);
+							if (data.length > 0) {
+								setStore({ status: true });
+							} else {
+								actions.createParentSession();
+								history.push("/");
+								setStore({ registedFamily: true });
+							}
+						})
+						.catch(error => {
+							//error handling
+							console.log(error);
+						});
+				} else {
+					setStore({ alert: true });
+				}
+			},
+			createParentSession: e => {
+				const store = getStore();
+
+				fetch("http://localhost:3000/api/v1/parentSession", {
+					method: "POST",
+					body: JSON.stringify({
+						email: store.usuario.email,
+						password: store.usuario.password,
+						rol: "Apoderado",
+						familyName: store.usuario.name
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(resp => {
+						//console.log(resp.ok); // will be true if the response is successfull
+						//console.log("estatus=", resp.status); // the status code = 200 or code = 400 etc.
+						//console.log(resp.text()); // will try return the exact result as string
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						//here is were your code should start after the fetch finishes
+						console.log(data);
+						setStore({
+							usuario: {
+								email: "",
+								password: "",
+								name: "",
+								rPassword: ""
+							}
+						});
+
+						//this will print on the console the exact object received from the server
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
+			check: e => {
+				setStore({
+					checked: e.target.checked,
+					noTeacherDayWork: false,
+					registedFamily: false,
+					sDayUse: false,
+					alert: false
+				});
 			}
 		}
 	};

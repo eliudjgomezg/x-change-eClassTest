@@ -38,7 +38,13 @@ export class FormModalDashboard extends React.Component {
 										<div className="form-group">
 											<div className="row">
 												<div className="col mr-1 pr-0">
-													<label htmlFor="exampleFormControlInput2">Rango de edades:</label>
+													<div className="container">
+														<div className="row">
+															<label htmlFor="exampleFormControlInput2">
+																Rango de edades:
+															</label>
+														</div>
+													</div>
 													<div className="row">
 														<div className="col mr-1 pr-0">
 															<input

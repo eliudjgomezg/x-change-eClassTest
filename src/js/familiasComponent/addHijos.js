@@ -9,7 +9,7 @@ export class AddHijos extends React.Component {
 					return (
 						<Fragment>
 							<form onSubmit={e => actions.setHijo(e)}>
-								<p>Agregar Apoderado</p>
+								<p>Agregar Hijos</p>
 								<div className="card card-body  py-2">
 									<div className="container">
 										<div className="row">

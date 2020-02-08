@@ -36,8 +36,11 @@ export class AddApoderado extends React.Component {
 										</div>
 
 										<div className="row">
-											<label htmlFor="exampleFormControlInput1">Telefono:</label>
-
+											<div className="container">
+												<div className="row">
+													<label htmlFor="exampleFormControlInput1">Telefono:</label>
+												</div>
+											</div>
 											<div className="row">
 												<div className="col-3 pr-0">
 													<input

@@ -39,8 +39,11 @@ export class RolesForm extends React.Component {
 
 								<div className="row">
 									<div className="col pr-1">
-										<label htmlFor="exampleFormControlInput1">Telefono:</label>
-
+										<div className="container">
+											<div className="row">
+												<label htmlFor="exampleFormControlInput1">Telefono:</label>
+											</div>
+										</div>
 										<div className="row pr-0 mr-0">
 											<div className="col-4 pr-0 mr-0">
 												<input

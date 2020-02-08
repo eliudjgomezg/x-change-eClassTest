@@ -49,11 +49,16 @@ export class Login extends React.Component {
 											<span className="focus-input100" data-symbol="&#xf190;" />
 										</div>
 
-										{!!store.familiass && (
-											<div className="text-right p-t-8 p-b-31">
-												<a href="#">Forgot password?</a>
-											</div>
-										)}
+										<div className="text-right p-t-8 p-b-31">
+											<p className="parpadea">
+												<input
+													className="mt-2"
+													type="checkbox"
+													onChange={e => actions.check(e)}
+												/>{" "}
+												¡¡¡CLICK!!! para acceder como Apoderad@
+											</p>
+										</div>
 
 										<div className="container-login100-form-btn mt-4">
 											<div className="wrap-login100-form-btn">
@@ -70,6 +75,23 @@ export class Login extends React.Component {
 											<div className="form-left rounded-pill mt-3" style={style1}>
 												<p className="text-1 text-center" style={style2}>
 													Usuario o Contraseña Incorrecto
+												</p>
+											</div>
+										)}
+										{!!store.sDayUse && (
+											<div className="form-left rounded-pill mt-3" style={style1}>
+												<p className="text-1 text-center" style={style2}>
+													Estima@ Apodera@, la plataforma solo puede ser usada en dias de
+													servico. Comuniquese con el personal respectivo para ver los
+													horarios de servicio
+												</p>
+											</div>
+										)}
+										{!!store.registedFamily && (
+											<div className="form-left rounded-pill mt-3 px-3" style={style1}>
+												<p className="text-1 text-center" style={style2}>
+													Familia creada correctamente. Ya puedes acceder a tu perfil con las
+													creenciales que utilizaste
 												</p>
 											</div>
 										)}
