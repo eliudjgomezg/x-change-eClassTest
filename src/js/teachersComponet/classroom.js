@@ -65,70 +65,23 @@ export class Classroom extends React.Component {
 												{item.button ? (
 													<div className="container">
 														<div className="row my-3 justify-content-center">
-															{!!item.status && (
-																<div className="col-lg-4 col-sm-12">
-																	<button
-																		className="btn btn-warning container"
-																		type="button"
-																		onClick={e => actions.showBorder(item, i)}>
-																		PRESENTE
-																	</button>
-																</div>
-															)}
-
 															<div className="col-lg-4 col-sm-12">
-																<div className="dropdown">
-																	<button
-																		type="button"
-																		className="btn btn-success dropdown-toggle container"
-																		href="#"
-																		role="button"
-																		id="dropdownMenuLink"
-																		data-toggle="dropdown"
-																		aria-haspopup="true"
-																		aria-expanded="false">
-																		LLAMAR APODERADO
-																	</button>
-																	<div
-																		className="dropdown-menu"
-																		aria-labelledby="dropdownMenuLink">
-																		<a className="dropdown-item">
-																			Apoderad@:
-																			{item.parentName}
-																		</a>
-																		<a
-																			className="dropdown-item btn btn-primary"
-																			href={
-																				"tel:" + item.area + item.parentPhone
-																			}>
-																			Llamada
-																		</a>
-																		<a
-																			className="dropdown-item btn btn-success"
-																			href={
-																				"https://api.whatsapp.com/send?phone=" +
-																				item.area +
-																				item.parentPhone +
-																				"&text=Estimad@ " +
-																				item.parentName +
-																				" , por favor dirigirse a UneteKids a la " +
-																				store.usuarioLoged.classrooms
-																					.classroomName +
-																				" por " +
-																				item.sonName
-																			}>
-																			whatapp
-																		</a>
-																	</div>
-																</div>
+																<button
+																	className="btn btn-warning container"
+																	type="button"
+																	onClick={e => actions.showBorder(item, i)}
+																	disabled={item.status}>
+																	PRESENTE
+																</button>
 															</div>
+
 															<div className="col-lg-4 col-sm-12">
 																<button
 																	type="button"
 																	className=" btn btn-info container"
 																	data-toggle="modal"
 																	data-target="#exampleModalScrollable"
-																	onClick={e => actions.myData(item)}>
+																	onClick={() => actions.myData(item)}>
 																	MIS DATOS
 																</button>
 															</div>
@@ -238,8 +191,11 @@ export class Classroom extends React.Component {
 														<div className="container ">
 															<div className="card card-body pt-1 mb-2">
 																<div className="row">
-																	Hola soy {store.hijo.sonName} y tengo{" "}
-																	{store.hijo.age} años.
+																	Hola soy {store.hijo.sonName}, tengo{" "}
+																	{store.hijo.age} años y hoy me trajo mi apoderad@{" "}
+																	{store.apoderado.parentName}. Sin embargo aqui
+																	puedes ver la lista de personas autorizadas para
+																	retirarme.
 																</div>
 																{!!store.hijo.notes.length > 0 && (
 																	<Fragment>

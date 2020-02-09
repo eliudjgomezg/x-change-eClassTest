@@ -10,63 +10,70 @@ export class RolesForm extends React.Component {
 					return (
 						<Fragment>
 							<div className="container">
-								<div className="row ">
-									<div className="col pr-1">
-										<label htmlFor="exampleFormControlInput1">Nombre</label>
-										<input
-											type="text"
-											className="form-control"
-											id="exampleFormControlInput1"
-											value={store.usuario.name}
-											name="name"
-											onChange={e => actions.handleChangeUsuario(e)}
-											required
-										/>
-									</div>
-									<div className="col pl-1">
-										<label htmlFor="exampleFormControlInput1">Rut</label>
-										<input
-											type="text"
-											className="form-control"
-											id="exampleFormControlInput1"
-											value={store.usuario.rut}
-											name="rut"
-											onChange={e => actions.handleChangeUsuario(e)}
-											required
-										/>
-									</div>
-								</div>
-
-								<div className="row">
-									<div className="col pr-1">
-										<div className="container">
-											<div className="row">
-												<label htmlFor="exampleFormControlInput1">Telefono:</label>
-											</div>
-										</div>
-										<div className="row pr-0 mr-0">
-											<div className="col-4 pr-0 mr-0">
+								{!!store.showRolParams && (
+									<div>
+										<div className="row ">
+											<div className="col pr-1">
+												<label htmlFor="exampleFormControlInput1">Nombre</label>
 												<input
+													type="text"
 													className="form-control"
 													id="exampleFormControlInput1"
-													value={store.area}
-													readOnly
+													value={store.usuario.name}
+													name="name"
+													onChange={e => actions.handleChangeUsuario(e)}
 													required
 												/>
 											</div>
-											<div className="col-8 pl-1 mr-0 pr-0 ">
+											<div className="col pl-1">
+												<label htmlFor="exampleFormControlInput1">Rut</label>
 												<input
-													className="form-control container-fluid"
+													type="text"
+													className="form-control"
 													id="exampleFormControlInput1"
+													value={store.usuario.rut}
+													name="rut"
 													onChange={e => actions.handleChangeUsuario(e)}
-													value={store.usuario.phone}
-													name="phone"
 													required
 												/>
 											</div>
 										</div>
+
+										<div className="row">
+											<div className="container">
+												<div className="container">
+													<div className="row">
+														<label htmlFor="exampleFormControlInput1">Telefono:</label>
+													</div>
+												</div>
+
+												<div className="row pr-0 mr-0">
+													<div className="col-4 pr-0 mr-0">
+														<input
+															className="form-control"
+															id="exampleFormControlInput1"
+															value={store.area}
+															readOnly
+															required
+														/>
+													</div>
+													<div className="col-8 pl-1 mr-0 pr-0 ">
+														<input
+															className="form-control container-fluid"
+															id="exampleFormControlInput1"
+															onChange={e => actions.handleChangeUsuario(e)}
+															value={store.usuario.phone}
+															name="phone"
+															required
+														/>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
-									<div className="col pl-1">
+								)}
+								<div className="container">
+									<div className="row">
 										<label htmlFor="exampleFormControlInput1">Email</label>
 										<input
 											type="email"
@@ -79,24 +86,24 @@ export class RolesForm extends React.Component {
 										/>
 									</div>
 								</div>
-
-								<div>
-									<label htmlFor="exampleFormControlSelect1">Seleccionar Rol</label>
-									<select
-										className="form-control"
-										id="exampleFormControlSelect1"
-										value={store.usuario.rol}
-										name="rol"
-										onChange={e => actions.handleChangeUsuario4(e)}
-										required
-										disabled={store.selectRol}>
-										<option>Elige una opcion...</option>
-										<option>Administrador</option>
-										<option>Profesor</option>
-										<option>Check In</option>
-									</select>
-								</div>
-
+								{!!store.showRolParams && (
+									<div>
+										<label htmlFor="exampleFormControlSelect1">Seleccionar Rol</label>
+										<select
+											className="form-control"
+											id="exampleFormControlSelect1"
+											value={store.usuario.rol}
+											name="rol"
+											onChange={e => actions.handleChangeUsuario4(e)}
+											required
+											disabled={store.selectRol}>
+											<option>Elige una opcion...</option>
+											<option>Administrador</option>
+											<option>Profesor</option>
+											<option>Check In</option>
+										</select>
+									</div>
+								)}
 								{!!(store.usuario.rol === "Profesor") && (
 									<div className="form-group ">
 										<label htmlFor="exampleFormControlSelect1">Seleccionar Aula</label>

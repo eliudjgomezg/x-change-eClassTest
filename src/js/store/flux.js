@@ -68,7 +68,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				dayUse: "",
 				classroomName: "",
 				family: "",
-				familyLastName: ""
+				familyLastName: "",
+				token: ""
 			},
 			usuarioLoged: {
 				id: "",
@@ -88,7 +89,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				dayUse: "",
 				classroomName: "",
 				family: "",
-				familyLastName: ""
+				familyLastName: "",
+				token: ""
 			},
 
 			usuarios: [],
@@ -147,7 +149,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 			noTeacherDayWork: false,
 			parentFamily: false,
 			checked: "",
-			registedFamily: false
+			registedFamily: false,
+			showRolParams: true
 		},
 
 		actions: {
@@ -155,10 +158,12 @@ const getState = ({ getStore, setStore, getActions }) => {
 			dashboard: e => {
 				const store = getStore();
 				const actions = getActions();
+				console.log(store.usuarioLoged.token);
 				fetch("http://localhost:3000/api/v1/classrooms", {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -217,7 +222,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/roles", {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -239,7 +245,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/news", {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -292,7 +299,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/families", {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -341,7 +349,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/roles", {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -410,7 +419,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/classrooms", {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -531,7 +541,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							capacity: store.capacity
 						}),
 						headers: {
-							"Content-Type": "application/json"
+							"Content-Type": "application/json",
+							"access-token": store.usuarioLoged.token
 						}
 					})
 						.then(resp => {
@@ -585,7 +596,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							capacity: store.capacity
 						}),
 						headers: {
-							"Content-Type": "application/json"
+							"Content-Type": "application/json",
+							"access-token": store.usuarioLoged.token
 						}
 					})
 						.then(resp => {
@@ -683,7 +695,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 				} else if (day === "Saturday") {
 					sDay = "sabado";
 				} else if (day === "Sunday") {
-					sDay = "sunday";
+					sDay = "domingo";
 				}
 
 				console.log(sDay);
@@ -702,7 +714,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/classroom/" + store.id, {
 					method: "DELETE",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -753,7 +766,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						timeStamp: store.timeStamp
 					}),
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -828,7 +842,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							area: store.area
 						}),
 						headers: {
-							"Content-Type": "application/json"
+							"Content-Type": "application/json",
+							"access-token": store.usuarioLoged.token
 						}
 					})
 						.then(resp => {
@@ -869,7 +884,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							phone: store.apoderado.phone
 						}),
 						headers: {
-							"Content-Type": "application/json"
+							"Content-Type": "application/json",
+							"access-token": store.usuarioLoged.token
 						}
 					})
 						.then(resp => {
@@ -931,7 +947,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/parent/" + store.id, {
 					method: "DELETE",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -966,7 +983,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							families: store.familyId
 						}),
 						headers: {
-							"Content-Type": "application/json"
+							"Content-Type": "application/json",
+							"access-token": store.usuarioLoged.token
 						}
 					})
 						.then(resp => {
@@ -1013,7 +1031,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							notes: store.hijo.notes
 						}),
 						headers: {
-							"Content-Type": "application/json"
+							"Content-Type": "application/json",
+							"access-token": store.usuarioLoged.token
 						}
 					})
 						.then(resp => {
@@ -1069,7 +1088,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					},
 					cardEdited: true,
 					id: "",
-					index: ""
+					index: "",
+					alertt: false
 				});
 			},
 			deleteHijo: index => {
@@ -1078,7 +1098,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/son/" + store.id, {
 					method: "DELETE",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -1133,7 +1154,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							sons: store.familia.hijos
 						}),
 						headers: {
-							"Content-Type": "application/json"
+							"Content-Type": "application/json",
+							"access-token": store.usuarioLoged.token
 						}
 					})
 						.then(resp => {
@@ -1173,7 +1195,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/parentEdit/" + store.familyId, {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -1198,7 +1221,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						fetch("http://localhost:3000/api/v1/sonEdit/" + store.familyId, {
 							method: "GET",
 							headers: {
-								"Content-Type": "application/json"
+								"Content-Type": "application/json",
+								"access-token": store.usuarioLoged.token
 							}
 						})
 							.then(resp => {
@@ -1247,7 +1271,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/family/" + store.familyId, {
 					method: "DELETE",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -1300,7 +1325,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/family/" + store.id, {
 					method: "DELETE",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -1331,7 +1357,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/classrooms", {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -1376,7 +1403,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 									dayUse: store.usuario.dayUse
 								}),
 								headers: {
-									"Content-Type": "application/json"
+									"Content-Type": "application/json",
+									"access-token": store.usuarioLoged.token
 								}
 							})
 								.then(resp => {
@@ -1448,7 +1476,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 									dayUse: store.usuario.dayUse
 								}),
 								headers: {
-									"Content-Type": "application/json"
+									"Content-Type": "application/json",
+									"access-token": store.usuarioLoged.token
 								}
 							})
 								.then(resp => {
@@ -1591,7 +1620,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					method: "DELETE",
 
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -1649,7 +1679,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/roles", {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -1666,10 +1697,12 @@ const getState = ({ getStore, setStore, getActions }) => {
 					});
 			},
 			familyLastName: e => {
+				const store = getStore();
 				fetch("http://localhost:3000/api/v1/classrooms", {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -1723,7 +1756,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						familyName: store.familyName
 					}),
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -1762,7 +1796,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						familyName: store.familyName
 					}),
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -1819,7 +1854,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/families", {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -1935,28 +1971,33 @@ const getState = ({ getStore, setStore, getActions }) => {
 							if (data != false) {
 								setStore({
 									usuarioLoged: {
-										id: data._id,
-										name: data.name,
-										rut: data.rut,
-										email: data.email,
-										rol: data.rol,
-										phone: data.phone,
-										password: data.password,
-										rPassword: data.password,
-										classrooms: data.classrooms,
+										id: data.rol._id,
+										name: data.rol.name,
+										rut: data.rol.rut,
+										email: data.rol.email,
+										rol: data.rol.rol,
+										phone: data.rol.phone,
+										password: data.rol.password,
+										rPassword: data.rol.password,
+										classrooms: data.rol.classrooms,
 										logedIn: true,
-										area: data.area,
-										startScheduleRank: data.startScheduleRank,
-										finalScheduleRank: data.finalScheduleRank,
-										dayUse: data.dayUse,
-										classroomName: data.classroomName,
-										family: data.family
+										area: data.rol.area,
+										startScheduleRank: data.rol.startScheduleRank,
+										finalScheduleRank: data.rol.finalScheduleRank,
+										dayUse: data.rol.dayUse,
+										classroomName: data.rol.classroomName,
+										family: data.rol.family,
+										token: data.token
 									},
 									login: {
 										rut: "",
 										password: ""
 									},
-									registedFamily: false
+									registedFamily: false,
+									showRolParams: false,
+									noTeacherDayWork: false,
+									sDayUse: false,
+									alert: false
 								});
 								history.push("/parent");
 								actions.parentFamily();
@@ -1996,32 +2037,37 @@ const getState = ({ getStore, setStore, getActions }) => {
 						if (data != false) {
 							setStore({
 								usuarioLoged: {
-									id: data._id,
-									name: data.name,
-									rut: data.rut,
-									email: data.email,
-									rol: data.rol,
-									phone: data.phone,
-									password: data.password,
-									rPassword: data.password,
-									classrooms: data.classrooms,
+									id: data.rol._id,
+									name: data.rol.name,
+									rut: data.rol.rut,
+									email: data.rol.email,
+									rol: data.rol.rol,
+									phone: data.rol.phone,
+									password: data.rol.password,
+									rPassword: data.rol.password,
+									classrooms: data.rol.classrooms,
 									logedIn: true,
-									area: data.area,
-									startScheduleRank: data.startScheduleRank,
-									finalScheduleRank: data.finalScheduleRank,
-									dayUse: data.dayUse,
-									classroomName: data.classroomName
+									area: data.rol.area,
+									startScheduleRank: data.rol.startScheduleRank,
+									finalScheduleRank: data.rol.finalScheduleRank,
+									dayUse: data.rol.dayUse,
+									classroomName: data.rol.classroomName,
+									token: data.token
 								},
 								login: {
 									rut: "",
 									password: ""
-								}
+								},
+								noTeacherDayWork: false,
+								sDayUse: false,
+								alert: false,
+								registedFamily: false
 							});
 
-							if (data.rol === "Administrador") {
+							if (data.rol.rol === "Administrador") {
 								history.push("/admin");
 								actions.dashboard();
-							} else if (data.rol === "Profesor") {
+							} else if (data.rol.rol === "Profesor") {
 								//
 								let moment = require("moment");
 								let day = moment().format("dddd");
@@ -2039,14 +2085,14 @@ const getState = ({ getStore, setStore, getActions }) => {
 								} else if (day === "Saturday") {
 									sDay = "sabado";
 								} else if (day === "Sunday") {
-									sDay = "sunday";
+									sDay = "domingo";
 								}
 
-								if (data.dayUse.toLowerCase() === sDay) {
+								if (data.rol.dayUse.toLowerCase() === sDay) {
 									history.push("/teachers");
 									actions.classroom();
 								} else setStore({ noTeacherDayWork: true });
-							} else if (data.rol === "Check In") {
+							} else if (data.rol.rol === "Check In") {
 								//
 								let moment = require("moment");
 								let day = moment().format("dddd");
@@ -2064,10 +2110,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 								} else if (day === "Saturday") {
 									sDay = "sabado";
 								} else if (day === "Sunday") {
-									sDay = "sunday";
+									sDay = "domingo";
 								}
 
-								if (data.dayUse.toLowerCase() === sDay) {
+								if (data.rol.dayUse.toLowerCase() === sDay) {
 									history.push("/checkIn");
 									actions.checkIn();
 								} else setStore({ noTeacherDayWork: true });
@@ -2115,7 +2161,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					fetch("http://localhost:3000/api/v1/serchRut/" + store.rut, {
 						method: "GET",
 						headers: {
-							"Content-Type": "application/json"
+							"Content-Type": "application/json",
+							"access-token": store.usuarioLoged.token
 						}
 					})
 						.then(resp => {
@@ -2173,7 +2220,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 								sonsInClassroom: newClassroom.sonsInClassroom + 1
 							}),
 							headers: {
-								"Content-Type": "application/json"
+								"Content-Type": "application/json",
+								"access-token": store.usuarioLoged.token
 							}
 						})
 							.then(resp => {
@@ -2208,7 +2256,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							sonsInClassroom: newClassroom.sonsInClassroom - 1
 						}),
 						headers: {
-							"Content-Type": "application/json"
+							"Content-Type": "application/json",
+							"access-token": store.usuarioLoged.token
 						}
 					})
 						.then(resp => {
@@ -2235,7 +2284,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						newClass: store.sonToClassroom
 					}),
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -2274,7 +2324,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						dayUse: store.usuario.dayUse
 					}),
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -2285,6 +2336,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 						console.log(data); //this will print on the console the exact object received from the server
 						setStore({
 							usuario: {
+								id: data._id,
 								name: data.name,
 								rut: data.rut,
 								email: data.email,
@@ -2297,9 +2349,13 @@ const getState = ({ getStore, setStore, getActions }) => {
 								classroomName: data.classroomName,
 								finalScheduleRank: data.finalScheduleRank,
 								startScheduleRank: data.startScheduleRank,
-								dayUse: data.dayUse
+								dayUse: data.dayUse,
+								classroomName: data.classroomName,
+								family: data.family,
+								token: store.usuarioLoged
 							},
 							usuarioLoged: {
+								id: data._id,
 								name: data.name,
 								rut: data.rut,
 								email: data.email,
@@ -2312,7 +2368,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 								classroomName: data.classroomName,
 								finalScheduleRank: data.finalScheduleRank,
 								startScheduleRank: data.startScheduleRank,
-								dayUse: data.dayUse
+								dayUse: data.dayUse,
+								classroomName: data.classroomName,
+								family: data.family,
+								token: store.usuarioLoged.token
 							}
 						});
 					});
@@ -2327,7 +2386,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						sonsInClassroom: foo
 					}),
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -2349,7 +2409,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/currentClassroom/", {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -2397,13 +2458,15 @@ const getState = ({ getStore, setStore, getActions }) => {
 			},
 			button: (item, i) => {
 				const actions = getActions();
+				const store = getStore();
 				fetch("http://localhost:3000/api/v1/currentClassroom/" + item._id, {
 					method: "PUT",
 					body: JSON.stringify({
 						button: true
 					}),
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -2427,10 +2490,11 @@ const getState = ({ getStore, setStore, getActions }) => {
 					method: "PUT",
 					body: JSON.stringify({
 						borderColor: "border-success",
-						status: false
+						status: true
 					}),
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -2458,7 +2522,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					method: "DELETE",
 
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -2482,7 +2547,12 @@ const getState = ({ getStore, setStore, getActions }) => {
 				const store = getStore();
 				setStore({
 					apoderados: item.parentsList,
-					hijo: { sonName: item.sonName, notes: item.notes, age: item.age }
+					hijo: {
+						sonName: item.sonName,
+						notes: item.notes,
+						age: item.age
+					},
+					apoderado: { parentName: item.parentName }
 				});
 			},
 			byeSon: item => {
@@ -2510,7 +2580,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							method: "DELETE",
 
 							headers: {
-								"Content-Type": "application/json"
+								"Content-Type": "application/json",
+								"access-token": store.usuarioLoged.token
 							}
 						})
 							.then(resp => {
@@ -2521,7 +2592,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							})
 							.then(data => {
 								//here is were your code should start after the fetch finishes
-								console.log(data); //this will print on the console the exact object received from the server
+								console.log(data);
+								actions.classroom(); //this will print on the console the exact object received from the server
 							})
 							.catch(error => {
 								//error handling
@@ -2530,7 +2602,6 @@ const getState = ({ getStore, setStore, getActions }) => {
 					});
 					setStore({ checkOutHijos: [], rut: "" });
 				} else actions.exitCheckOut();
-				actions.classroom();
 			},
 			wrapper: () => {
 				const classes = document.querySelector("#wrapper");
@@ -2542,7 +2613,73 @@ const getState = ({ getStore, setStore, getActions }) => {
 				localStorage.removeItem("ikids-store");
 				history.push("/");
 				setStore({
-					attendance: "",
+					id: "",
+					classroomName: "",
+					startAgeRank: "",
+					finaltAgeRank: "",
+					teachers: [],
+					capacity: "",
+					dayUse: "",
+					startScheduleRank: "",
+					finalScheduleRank: "",
+					filterByWord: "",
+					cardArray: [],
+					editstartAgeRank: "",
+					editfinaltAgeRank: "",
+
+					//Variables para creacion de novedades
+					news: "",
+					date: "",
+					timeStamp: "",
+					novedadesArray: [],
+					//Variables para creacion de familias
+					familyName: "",
+					apoderado: {
+						id: "",
+						parentName: "",
+						rut: "",
+						email: "",
+						phone: ""
+					},
+					area: "+56",
+					apoderados: [],
+					hijo: {
+						id: "",
+						sonName: "",
+						birthDate: "",
+						notes: "",
+						age: ""
+					},
+					sonName: "",
+					hijos: [],
+					familia: {
+						apoderados: [],
+						hijos: []
+					},
+					familias: [],
+					familyId: "",
+					//Variables para creacion de Roles
+					usuario: {
+						id: "",
+						name: "",
+						rut: "",
+						email: "",
+						rol: "Elige una opcion...",
+						phone: "",
+						password: "",
+						rPassword: "",
+						logedIn: false,
+						classrooms: {},
+						startScheduleRank: "",
+						finalScheduleRank: "",
+						editstartAgeRank: "",
+						editfinaltAgeRank: "",
+						dayUse: "",
+						classroomName: "",
+						family: "",
+						familyLastName: "",
+						token: ""
+					},
 					usuarioLoged: {
 						id: "",
 						name: "",
@@ -2559,10 +2696,70 @@ const getState = ({ getStore, setStore, getActions }) => {
 						startScheduleRank: "",
 						finalScheduleRank: "",
 						dayUse: "",
-						classroomName: ""
+						classroomName: "",
+						family: "",
+						familyLastName: "",
+						token: ""
 					},
-					familyName: "",
-					familyId: ""
+
+					usuarios: [],
+					selectUSuarios: [],
+					selectedUsuarios: [],
+					//Variables para hacer Loing
+					login: {
+						rut: "",
+						password: ""
+					},
+					//Variables generales
+					alert: false,
+					alertt: false,
+					index: "",
+					cardEdited: true,
+					contraseña: false,
+					rol: false,
+					dashboard: true,
+					novedades: false,
+					familiass: false,
+					familiasss: true,
+					roles: false,
+					estadistica: false,
+					hiddeModal: "",
+					familyLastName: false,
+					familiasss: true,
+					addApoderado: false,
+					familyOptions: false,
+					addHijo: false,
+					menu: true,
+					editNewFamilia: true,
+					goBackNewFamily: false,
+					goBackEditFamily: false,
+					disabledOut: true,
+					disabledin: false,
+					actualRol: "",
+					actualId: "",
+					view: "",
+					rut: "",
+					classroom: true,
+					checkIn: true,
+					configCheckIn: false,
+					selectRol: false,
+					carddashboard: true,
+					formModalDashboard: false,
+					noClassroom: false,
+					showPasswoord: false,
+					test: "",
+					sonToClassroom: [],
+					attendance: 0,
+					checkOutHijos: [],
+					status: false,
+					noSon: false,
+					set: false,
+					sDayUse: false,
+					noTeacherDayWork: false,
+					parentFamily: false,
+					checked: "",
+					registedFamily: false,
+					showRolParams: true
 				});
 			},
 			parentFamily: e => {
@@ -2571,7 +2768,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				fetch("http://localhost:3000/api/v1/parentEdit/" + store.usuarioLoged.family._id, {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
 					}
 				})
 					.then(resp => {
@@ -2591,7 +2789,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						fetch("http://localhost:3000/api/v1/sonEdit/" + store.usuarioLoged.family._id, {
 							method: "GET",
 							headers: {
-								"Content-Type": "application/json"
+								"Content-Type": "application/json",
+								"access-token": store.usuarioLoged.token
 							}
 						})
 							.then(resp => {
