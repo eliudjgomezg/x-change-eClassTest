@@ -12,7 +12,7 @@ export class Roles extends React.Component {
 				<Context.Consumer>
 					{({ store, actions }) => {
 						return (
-							<form onSubmit={e => actions.setUsuarios(e)}>
+							<form onSubmit={e => actions.setUsuarios1(e)}>
 								<div className="container">
 									<div className="row">
 										<div className="col">
@@ -116,6 +116,15 @@ export class Roles extends React.Component {
 											</div>
 
 											<div className="modal-body">
+												{!!store.existingRol && (
+													<div className="alert alert-danger mt-3">
+														<p className="text-center">
+															<strong>Rut o Email asignando a otr@ usuari@.</strong>
+															¡¡¡IMPORTANTE!!!: El Rut y Email son unicos. No se puede
+															registrar dos usuari@s con el mismo rut o Email.
+														</p>
+													</div>
+												)}
 												<RolesForm />
 											</div>
 											<div className="modal-footer">

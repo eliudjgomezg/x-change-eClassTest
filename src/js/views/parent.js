@@ -154,6 +154,11 @@ export class Parent extends React.Component {
 
 									{!!store.configCheckIn && (
 										<Fragment>
+											{!!store.userEdited && (
+												<div className="alert alert-success mt-3">
+													<p className="text-center">Usuario editado correctamente</p>
+												</div>
+											)}
 											<div className="card card-body mt-2 px-1">
 												<p className="ml-3 mb-0">
 													<strong>Editar Perfil</strong>

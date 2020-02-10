@@ -36,6 +36,11 @@ export class Teacher extends React.Component {
 										className="list-group-item list-group-item-action bg-light">
 										Editar Usuari@
 									</button>
+									<button
+										className="list-group-item list-group-item-action bg-light"
+										onClick={e => actions.reportError()}>
+										<strong>¡¡¡REPORTA ERRORES!!!</strong>
+									</button>
 								</div>
 							</div>
 
@@ -80,6 +85,11 @@ export class Teacher extends React.Component {
 									{!!store.configCheckIn && (
 										<Fragment>
 											<div className="card card-body mt-2 px-2">
+												{!!store.userEdited && (
+													<div className="alert alert-success mt-3">
+														<p className="text-center">Usuario editado correctamente</p>
+													</div>
+												)}
 												<p className="mb-0">
 													<strong>Editar Usuari@</strong>
 												</p>
@@ -96,6 +106,22 @@ export class Teacher extends React.Component {
 												</button>
 											</div>
 										</Fragment>
+									)}
+									{!!store.reportar && (
+										<div className="card card-body container mt-3">
+											<p className="text-center">
+												Estimado Usuari@, iKids se presenta como una version Beta o de prueba,
+												donde es necesario su testeo por parte del publico en general para la
+												correccion de errores que no es posible detectarlos en el ambiente
+												controlado de un laboratorio. Por esta razon te insto a que si detectas
+												algun error, describen cuando y como ocurrio. De ser posible envia
+												capturas de pantalla para ayudarnos a corregirlo a la brevedad posible.
+												Atentmente, Equipo de desarrollo iKids Version 1.0Beta
+											</p>
+											<a className="btn btn-primary container" href="mailto:eliud@autobots.cl">
+												Reportar error
+											</a>
+										</div>
 									)}
 								</div>
 							</div>

@@ -8,7 +8,17 @@ export class AddApoderado extends React.Component {
 				{({ store, actions }) => {
 					return (
 						<Fragment>
-							<form onSubmit={e => actions.setApoderado(e)}>
+							<form onSubmit={e => actions.setApoderado1(e)}>
+								{!!store.existingRut && (
+									<div className="alert alert-danger mt-3">
+										<p className="text-center">
+											<strong>Rut asignando a otra familia. </strong>
+											¡¡¡IMPORTANTE!!!: Un apoderad@ solo puede pertenecer a una familia. Si
+											deseas ser Apoderad@ del hij@ de otra persona, debes agregarlo a tu lista de
+											hij@s y ser tu quien l@ registre en el checkIn
+										</p>
+									</div>
+								)}
 								<p>Agregar Apoderado</p>
 								<div className="card card-body  py-2">
 									<div className="container">

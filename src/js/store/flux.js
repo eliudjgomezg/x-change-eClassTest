@@ -150,7 +150,11 @@ const getState = ({ getStore, setStore, getActions }) => {
 			parentFamily: false,
 			checked: "",
 			registedFamily: false,
-			showRolParams: true
+			showRolParams: true,
+			userEdited: false,
+			existingRut: false,
+			existingRol: false,
+			reportar: false
 		},
 
 		actions: {
@@ -204,7 +208,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							alertt: false,
 							sDayUse: false,
 							editstartAgeRank: "",
-							editfinaltAgeRank: ""
+							editfinaltAgeRank: "",
+							reportar: false
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -282,7 +287,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							sDayUse: false,
 							alert: false,
 							editstartAgeRank: "",
-							editfinaltAgeRank: ""
+							editfinaltAgeRank: "",
+							reportar: false
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -333,7 +339,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							alertt: false,
 							sDayUse: false,
 							editstartAgeRank: "",
-							editfinaltAgeRank: ""
+							editfinaltAgeRank: "",
+							reportar: false
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -358,6 +365,9 @@ const getState = ({ getStore, setStore, getActions }) => {
 					})
 					.then(data => {
 						console.log(data);
+						let usuarios = data.filter(
+							d => d.rol === "Administrador" || d.rol === "Profesor" || d.rol === "Check In"
+						);
 
 						setStore({
 							dashboard: false,
@@ -373,7 +383,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 							editNewFamilia: false,
 							goBackNewFamily: false,
 							goBackEditFamily: false,
-							usuarios: data,
+							usuarios,
 							hijos: [],
 							apoderados: [],
 							selectRol: false,
@@ -383,7 +393,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							sDayUse: false,
 							alert: false,
 							editstartAgeRank: "",
-							editfinaltAgeRank: ""
+							editfinaltAgeRank: "",
+							reportar: false
 						});
 						actions.deleteAddHijo();
 						actions.deleteAddApoderado();
@@ -434,7 +445,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 								cardArray: data,
 								checkIn: true,
 								novedades: false,
-								configCheckIn: false
+								configCheckIn: false,
+								reportar: false
 							});
 						} else {
 							setStore({
@@ -464,6 +476,7 @@ const getState = ({ getStore, setStore, getActions }) => {
 					parentFamily: false,
 					addApoderado: false,
 					addHijo: false,
+					reportar: false,
 					usuario: {
 						id: store.usuarioLoged.id,
 						name: store.usuarioLoged.name,
@@ -667,7 +680,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 			indextodeleteClassroon: (item, i) => {
 				setStore({
 					id: item._id,
-					index: i
+					index: i,
+					existingRut: false
 				});
 			},
 			indextodeleteClassroon2: (item, i) => {
@@ -812,7 +826,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 				let apoderado = store.apoderado;
 				apoderado[name] = value;
 				setStore({
-					apoderado
+					apoderado,
+					existingRut: false
 				});
 			},
 			handleChangeHijo: e => {
@@ -826,9 +841,35 @@ const getState = ({ getStore, setStore, getActions }) => {
 				});
 			},
 			//Funciones para crear, editar y eliminar apoderado
+			setApoderado1: e => {
+				e.preventDefault();
+				const store = getStore();
+				const actions = getActions();
+				fetch("http://localhost:3000/api/v1/findExistingRut/" + store.apoderado.rut, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						"access-token": store.usuarioLoged.token
+					}
+				})
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						if (data.length > 0) {
+							setStore({ existingRut: true });
+						} else {
+							actions.setApoderado();
+						}
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
 
 			setApoderado: e => {
-				e.preventDefault();
 				const store = getStore();
 				if (store.cardEdited) {
 					fetch("http://localhost:3000/api/v1/parents", {
@@ -924,7 +965,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 						email: item.email,
 						phone: item.phone
 					},
-					area: item.area
+					area: item.area,
+					existingRut: false
 				});
 			},
 			deleteAddApoderado: e => {
@@ -939,7 +981,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					cardEdited: true,
 					id: "",
 					index: "",
-					area: "+56"
+					area: "+56",
+					existingRut: false
 				});
 			},
 			deleteApoderado: index => {
@@ -1089,7 +1132,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					cardEdited: true,
 					id: "",
 					index: "",
-					alertt: false
+					alertt: false,
+					existingRut: false
 				});
 			},
 			deleteHijo: index => {
@@ -1375,15 +1419,45 @@ const getState = ({ getStore, setStore, getActions }) => {
 						console.log(error);
 					});
 			},
-			setUsuarios: e => {
+			setUsuarios1: e => {
 				e.preventDefault();
+				const store = getStore();
+				const actions = getActions();
+
+				fetch(
+					"http://localhost:3000/api/v1/existingRutEmail/" + store.usuario.email + "/" + store.usuario.rut,
+					{
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+							"access-token": store.usuarioLoged.token
+						}
+					}
+				)
+					.then(resp => {
+						return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+					})
+					.then(data => {
+						console.log(data);
+						if (data.length > 0) {
+							setStore({ existingRol: true });
+						} else {
+							actions.setUsuarios();
+						}
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
+			},
+			setUsuarios: e => {
 				const store = getStore();
 				const actions = getActions();
 				let foo = "";
 				if (store.cardEdited) {
 					if (store.usuario.password === store.usuario.rPassword && store.usuario.password.length >= 4) {
 						if (store.usuario.rol != "Elige una opcion...") {
-							if (store.usuario.classrooms === "") {
+							if (store.usuario.classrooms === "" || store.usuario.classrooms === "Elige una opcion...") {
 								foo = null;
 							} else foo = store.usuario.classrooms;
 							fetch("http://localhost:3000/api/v1/roles", {
@@ -1536,7 +1610,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					sClassroom: false,
 					sDayUse: false,
 					alert: false,
-					status: false
+					status: false,
+					existingRol: false
 				});
 			},
 			handleChangeUsuario2: e => {
@@ -1552,7 +1627,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					rol: false,
 					sClassroom: false,
 					rol: false,
-					sDayUse: false
+					sDayUse: false,
+					existingRol: false
 				});
 			},
 			handleChangeUsuario3: e => {
@@ -1564,7 +1640,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					contraseña: false,
 					rol: false,
 					sClassroom: false,
-					sDayUse: false
+					sDayUse: false,
+					existingRol: false
 				});
 			},
 			handleChangeUsuario4: e => {
@@ -1583,7 +1660,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					contraseña: false,
 					rol: false,
 					sClassroom: false,
-					sDayUse: false
+					sDayUse: false,
+					existingRol: false
 				});
 			},
 			deleteAddUsuarios: e => {
@@ -1609,7 +1687,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 					startScheduleRank: "",
 					finalScheduleRank: "",
 					dayUse: "",
-					cardArray: []
+					cardArray: [],
+					existingRol: false
 				});
 			},
 			deleteUsuarios: item => {
@@ -2372,8 +2451,10 @@ const getState = ({ getStore, setStore, getActions }) => {
 								classroomName: data.classroomName,
 								family: data.family,
 								token: store.usuarioLoged.token
-							}
+							},
+							userEdited: true
 						});
+						setTimeout(() => setStore({ userEdited: false }), 2000);
 					});
 			},
 			capacityClassroon: () => {
@@ -2429,7 +2510,8 @@ const getState = ({ getStore, setStore, getActions }) => {
 							hijos,
 							classroom: true,
 							novedades: false,
-							configCheckIn: false
+							configCheckIn: false,
+							reportar: false
 						});
 						actions.capacityClassroon();
 					})
@@ -2890,6 +2972,39 @@ const getState = ({ getStore, setStore, getActions }) => {
 					registedFamily: false,
 					sDayUse: false,
 					alert: false
+				});
+			},
+			goBackLogin: (e, history) => {
+				history.push("/");
+				setStore({
+					alert: false,
+					sDayUse: false,
+					registedFamily: false,
+					noTeacherDayWork: false,
+					status: false
+				});
+			},
+			goRegister: (e, history) => {
+				history.push("/createFamily");
+				setStore({
+					alert: false,
+					sDayUse: false,
+					registedFamily: false,
+					noTeacherDayWork: false,
+					status: false
+				});
+			},
+			reportError: e => {
+				setStore({
+					reportar: true,
+					dashboard: false,
+					novedades: false,
+					familiass: false,
+					roles: false,
+					estadistica: false,
+					checkIn: false,
+					classroom: false,
+					configCheckIn: false
 				});
 			}
 		}

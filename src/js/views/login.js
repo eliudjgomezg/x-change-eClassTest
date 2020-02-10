@@ -106,9 +106,12 @@ export class Login extends React.Component {
 										)}
 
 										<div className="flex-col-c p-t-50">
-											<Link to="createFamily" className="txt2">
+											<a
+												to="#"
+												onClick={e => actions.goRegister(e, this.props.history)}
+												className="txt2">
 												Crea tu perfil como Apoderad@
-											</Link>
+											</a>
 										</div>
 
 										<div className="txt1 text-center p-t-54 p-b-3">

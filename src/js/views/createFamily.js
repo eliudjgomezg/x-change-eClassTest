@@ -7,7 +7,7 @@ export class CreateFamily extends React.Component {
 	render() {
 		let style1 = { backgroundColor: "#C408BC" };
 		let style2 = { color: "white" };
-		let style3 = { color: "#C408BC" };
+		let style3 = { color: "#C408BC", width: "100%" };
 		let style4 = { backgroundColor: "#23D5F0" };
 		return (
 			<Context.Consumer>
@@ -30,7 +30,21 @@ export class CreateFamily extends React.Component {
 								<form
 									className="form-detail"
 									onSubmit={e => actions.createParentSession1(e, this.props.history)}>
-									<h2 style={style3}>REGISTRO</h2>
+									<div className="container pl-0">
+										<div className="float-left">
+											<h2 style={style3}>REGISTRO</h2>
+										</div>
+										<div className="float-right">
+											<h2
+												style={style3}
+												onClick={e => actions.goBackLogin(e, this.props.history)}>
+												<i
+													className="fa fa-arrow-left float-right d-inline"
+													aria-hidden="true"
+												/>
+											</h2>
+										</div>
+									</div>
 
 									<div className="form-row">
 										<label htmlFor="">Apellidos de la familia</label>
