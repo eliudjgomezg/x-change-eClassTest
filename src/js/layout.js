@@ -1,14 +1,8 @@
+//Componente que gestiona las vistas y renderiza en el DOM
 import React, { Fragment } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Link } from "react-router-dom";
-
-import { Admin } from "./views/admin";
-import { Login } from "./views/login";
-import { Teacher } from "./views/teacher";
-import { CheckIn } from "./views/checkIn";
-import { Parent } from "./views/parent";
-import { CreateFamily } from "./views/createFamily";
-
+import { Home } from "./views/home";
+import Register from "./views/register";
 import injectContext, { Context } from "./store/appContext";
 
 import "jquery";
@@ -23,13 +17,8 @@ export class Layout extends React.Component {
 		return (
 			<BrowserRouter basename={basename}>
 				<Switch>
-					Parent
-					<Route exact path="/" component={Login} />
-					<Route path="/admin" component={Admin} />
-					<Route path="/teachers" component={Teacher} />
-					<Route path="/checkIn" component={CheckIn} />
-					<Route path="/parent" component={Parent} />
-					<Route path="/createFamily" component={CreateFamily} />
+					<Route exact path="/" component={Home} />
+					<Route path="/register" component={Register} />
 					<Route render={() => <h1>Not found!</h1>} />
 				</Switch>
 			</BrowserRouter>
