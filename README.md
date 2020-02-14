@@ -5,3 +5,7 @@ En los diferentes componentes busque usar todo lo que actualmente conozco sobre 
 A demas de mostrar la data como la pide elejercicio, se implemento otras vistas par adornar la app, la bandera segun la moneda que renderiza y la simulacion de un formulario de suscripcion.
 
 La app es 100% Responsive para todas la pantallas disponibles.
+
+Espero sea de su agrado, a demas de estar atento a todas las correcciones que pueda darme, ya que esto repercute positivamente en mi crecimiento profesional.
+
+Saludos
