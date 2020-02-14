@@ -9,7 +9,7 @@ La app es 100% Responsive para todas la pantallas disponibles.
 Una ves clonado el repositorio, escribir los siguientes comandos:
 
 npm install
-npm run start
+npm run start 
 
 Espero sea de su agrado, a demas de estar atento a todas las correcciones que pueda darme, ya que esto repercute positivamente en mi crecimiento profesional.
 
